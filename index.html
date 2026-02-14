@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoVerif QC — Plan d'affaires & Proposition de coentreprise</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f2b46;
+            --primary-light: #1a3d5c;
+            --accent: #00b4d8;
+            --accent-dark: #0096b7;
+            --gold: #f4a61c;
+            --gold-dark: #d4910a;
+            --red: #e63946;
+            --green: #2a9d8f;
+            --bg: #f8f9fb;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ---- PRINT STYLES ---- */
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+            section { break-inside: avoid; page-break-inside: avoid; }
+            .hero { min-height: auto; padding: 40px 20px; }
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(15, 43, 70, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 0 40px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px;
+        }
+        .nav-logo {
+            font-size: 1.4rem; font-weight: 800; color: white;
+            letter-spacing: -0.5px;
+        }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 24px; list-style: none; }
+        .nav-links a {
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            font-size: 0.85rem; font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: white; }
+        .nav-badge {
+            background: var(--gold); color: var(--primary);
+            padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 16px; }
+            .nav-links { display: none; }
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #0a1628 50%, var(--primary-light) 100%);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 100px 20px 60px;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(0,180,216,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 30%, rgba(244,166,28,0.06) 0%, transparent 50%);
+        }
+        .hero-content { position: relative; max-width: 900px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0,180,216,0.15); border: 1px solid rgba(0,180,216,0.3);
+            padding: 8px 20px; border-radius: 30px;
+            font-size: 0.85rem; color: var(--accent); font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .hero-badge .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 900; color: white;
+            line-height: 1.1; margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.15rem; color: rgba(255,255,255,0.65);
+            max-width: 650px; margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+        .hero-stats {
+            display: flex; justify-content: center; gap: 48px;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat .number {
+            font-size: 2.4rem; font-weight: 800; color: white;
+            display: block; line-height: 1;
+        }
+        .hero-stat .number.accent { color: var(--accent); }
+        .hero-stat .number.gold { color: var(--gold); }
+        .hero-stat .label {
+            font-size: 0.8rem; color: rgba(255,255,255,0.5);
+            margin-top: 6px; display: block; font-weight: 500;
+        }
+
+        /* ---- SECTIONS ---- */
+        section { padding: 80px 20px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(0,180,216,0.1); color: var(--accent);
+            padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 800; letter-spacing: -1px;
+            margin-bottom: 16px; line-height: 1.15;
+        }
+        .section-subtitle {
+            font-size: 1.05rem; color: var(--text-light);
+            max-width: 700px; margin-bottom: 48px;
+            line-height: 1.7;
+        }
+
+        /* ---- CARDS ---- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+        .card-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; margin-bottom: 16px;
+        }
+        .card-icon.blue { background: rgba(0,180,216,0.1); }
+        .card-icon.gold { background: rgba(244,166,28,0.1); }
+        .card-icon.green { background: rgba(42,157,143,0.1); }
+        .card-icon.red { background: rgba(230,57,70,0.1); }
+        .card h3 {
+            font-size: 1.1rem; font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .card p {
+            font-size: 0.9rem; color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* ---- TABLES ---- */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin: 24px 0;
+        }
+        table {
+            width: 100%; border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        thead { background: var(--primary); color: white; }
+        th {
+            padding: 14px 20px; text-align: left;
+            font-weight: 600; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        tbody tr:hover { background: rgba(0,180,216,0.03); }
+        .badge {
+            display: inline-block; padding: 3px 10px;
+            border-radius: 12px; font-size: 0.75rem; font-weight: 600;
+        }
+        .badge-green { background: rgba(42,157,143,0.1); color: var(--green); }
+        .badge-gold { background: rgba(244,166,28,0.1); color: var(--gold-dark); }
+        .badge-red { background: rgba(230,57,70,0.1); color: var(--red); }
+        .badge-blue { background: rgba(0,180,216,0.1); color: var(--accent-dark); }
+
+        /* ---- PRICING ---- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .pricing-card {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+        .pricing-card.featured {
+            border-color: var(--accent);
+            background: linear-gradient(180deg, rgba(0,180,216,0.03) 0%, white 40%);
+        }
+        .pricing-card.featured::before {
+            content: 'POPULAIRE';
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: white;
+            padding: 4px 20px; border-radius: 20px;
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
+        }
+        .pricing-plan {
+            font-size: 0.85rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--text-light); margin-bottom: 12px;
+        }
+        .pricing-price {
+            font-size: 3rem; font-weight: 900;
+            color: var(--text); line-height: 1;
+            margin-bottom: 4px;
+        }
+        .pricing-price sup { font-size: 1.2rem; top: -1.2em; }
+        .pricing-period {
+            font-size: 0.85rem; color: var(--text-light);
+            margin-bottom: 24px;
+        }
+        .pricing-features {
+            list-style: none; text-align: left;
+            margin-bottom: 32px;
+        }
+        .pricing-features li {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            display: flex; align-items: flex-start; gap: 10px;
+        }
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--green); font-weight: 700;
+            flex-shrink: 0;
+        }
+        .pricing-btn {
+            display: block; width: 100%;
+            padding: 14px; border-radius: 12px;
+            font-size: 0.95rem; font-weight: 700;
+            text-decoration: none; text-align: center;
+            transition: all 0.2s; cursor: pointer; border: none;
+        }
+        .pricing-btn.primary {
+            background: var(--accent); color: white;
+        }
+        .pricing-btn.primary:hover { background: var(--accent-dark); }
+        .pricing-btn.outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        .pricing-btn.outline:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ---- TIMELINE ---- */
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline::before {
+            content: '';
+            position: absolute; left: 15px; top: 0; bottom: 0;
+            width: 2px; background: var(--border);
+        }
+        .timeline-item {
+            position: relative; margin-bottom: 40px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 32px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute; left: -33px; top: 32px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid var(--bg);
+        }
+        .timeline-item.active::before { background: var(--green); }
+        .timeline-item.pending::before { background: var(--gold); }
+        .timeline-phase {
+            font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--accent); margin-bottom: 6px;
+        }
+        .timeline-item h3 {
+            font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;
+        }
+        .timeline-item p {
+            font-size: 0.9rem; color: var(--text-light); line-height: 1.6;
+        }
+        .timeline-item ul {
+            margin-top: 12px; padding-left: 20px;
+        }
+        .timeline-item li {
+            font-size: 0.88rem; color: var(--text-light);
+            margin-bottom: 4px; line-height: 1.5;
+        }
+
+        /* ---- LEGAL SECTION ---- */
+        .legal-block {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        .legal-block h3 {
+            font-size: 1.1rem; font-weight: 700;
+            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .legal-block p, .legal-block li {
+            font-size: 0.9rem; color: var(--text-light);
+            line-height: 1.7;
+        }
+        .legal-block ul { padding-left: 20px; margin-top: 8px; }
+        .legal-block li { margin-bottom: 6px; }
+        .legal-quote {
+            border-left: 3px solid var(--accent);
+            padding: 12px 20px;
+            background: rgba(0,180,216,0.04);
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        /* ---- FINANCIAL ---- */
+        .finance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px; margin: 24px 0;
+        }
+        .finance-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+        .finance-card .amount {
+            font-size: 2rem; font-weight: 800;
+            color: var(--primary); line-height: 1;
+        }
+        .finance-card .amount.green { color: var(--green); }
+        .finance-card .desc {
+            font-size: 0.8rem; color: var(--text-light);
+            margin-top: 6px; font-weight: 500;
+        }
+
+        /* ---- RISK MATRIX ---- */
+        .risk-high { color: var(--red); font-weight: 600; }
+        .risk-med { color: var(--gold-dark); font-weight: 600; }
+        .risk-low { color: var(--green); font-weight: 600; }
+
+        /* ---- PARTNER CTA ---- */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+            margin: 40px 0;
+        }
+        .cta-section h2 {
+            font-size: 2rem; font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .cta-section p {
+            color: rgba(255,255,255,0.7);
+            max-width: 600px; margin: 0 auto 32px;
+            font-size: 1rem;
+        }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .cta-btn {
+            padding: 16px 32px; border-radius: 12px;
+            font-size: 1rem; font-weight: 700;
+            text-decoration: none; transition: all 0.2s;
+            border: none; cursor: pointer;
+        }
+        .cta-btn.primary { background: var(--accent); color: white; }
+        .cta-btn.primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+        .cta-btn.gold { background: var(--gold); color: var(--primary); }
+        .cta-btn.gold:hover { background: var(--gold-dark); transform: translateY(-2px); }
+
+        /* ---- FOOTER ---- */
+        footer {
+            background: var(--primary);
+            color: rgba(255,255,255,0.5);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        footer strong { color: white; }
+
+        /* ---- ACCORDION ---- */
+        .accordion-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .accordion-header {
+            padding: 20px 24px;
+            font-weight: 600; font-size: 0.95rem;
+            cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .accordion-header:hover { background: rgba(0,180,216,0.02); }
+        .accordion-header .arrow {
+            transition: transform 0.3s;
+            font-size: 0.8rem; color: var(--text-light);
+        }
+        .accordion-item.open .arrow { transform: rotate(180deg); }
+        .accordion-body {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .accordion-body-inner {
+            padding: 0 24px 20px;
+            font-size: 0.9rem; color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ---- HIGHLIGHT BOX ---- */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0,180,216,0.06), rgba(244,166,28,0.06));
+            border: 1px solid rgba(0,180,216,0.2);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+        .highlight-box h3 {
+            font-size: 1.2rem; font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        /* ---- CONFIDENTIAL BANNER ---- */
+        .confidential {
+            background: var(--red);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<!-- CONFIDENTIAL BANNER -->
+<div class="confidential">DOCUMENT CONFIDENTIEL — PROPOSITION DE COENTREPRISE</div>
+
+<!-- NAV -->
+<nav class="no-print">
+    <div class="nav-logo">Auto<span>Verif</span> QC</div>
+    <ul class="nav-links">
+        <li><a href="#probleme">Probleme</a></li>
+        <li><a href="#solution">Solution</a></li>
+        <li><a href="#donnees">Donnees</a></li>
+        <li><a href="#legal">Legal</a></li>
+        <li><a href="#prix">Prix</a></li>
+        <li><a href="#finances">Finances</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+    </ul>
+    <a href="#proposition" class="nav-badge no-print">Proposition</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Proposition de coentreprise — Fevrier 2026
+        </div>
+        <h1>La premiere plateforme <span class="gradient">quebecoise</span> de verification vehiculaire</h1>
+        <p>CARFAX, une compagnie americaine, detient un monopole sur les donnees vehiculaires au Quebec. Nous proposons de batir la premiere alternative 100% quebecoise, a une fraction du prix, avec un acces legal aux donnees publiques de la SAAQ.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="number accent">6.2M</span>
+                <span class="label">Vehicules immatricules au QC</span>
+            </div>
+            <div class="hero-stat">
+                <span class="number gold">$650M</span>
+                <span class="label">Prix paye pour CARFAX Canada</span>
+            </div>
+            <div class="hero-stat">
+                <span class="number">$44</span>
+                <span class="label">Prix CARFAX par rapport</span>
+            </div>
+            <div class="hero-stat">
+                <span class="number accent">$0</span>
+                <span class="label">Alternative quebecoise actuelle</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROBLEME -->
+<section id="probleme">
+    <div class="container">
+        <span class="section-label">Le probleme</span>
+        <h2 class="section-title">CARFAX: un monopole americain sur les donnees des Quebecois</h2>
+        <p class="section-subtitle">Chaque annee, des centaines de milliers de Quebecois achetent un vehicule d'occasion sans pouvoir verifier son historique a un prix raisonnable.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon red">&#9888;</div>
+                <h3>Monopole de fait</h3>
+                <p>CARFAX Canada (propriete de S&P Global, entreprise americaine de $44 milliards) est la seule source de donnees vehiculaires completes au Canada. Aucune alternative quebecoise n'existe.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon gold">&#36;</div>
+                <h3>Prix excessifs</h3>
+                <p>$43.95 pour un rapport de base, $77.95 avec verification de liens. Les consommateurs paient cher pour acceder a des donnees qui proviennent en grande partie d'organismes publics comme la SAAQ.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon blue">&#128274;</div>
+                <h3>Donnees publiques privatisees</h3>
+                <p>Les donnees de branding (salvage/reconstruit), d'odometres et d'inspections sont collectees par la SAAQ avec l'argent des contribuables, mais revendues exclusivement par une compagnie americaine.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon green">&#127468;&#127463;</div>
+                <h3>Aucune souverainete des donnees</h3>
+                <p>Les donnees vehiculaires des Quebecois transitent par des serveurs americains. Aucune entreprise quebecoise n'a acces equivalent a ces donnees.</p>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Le marche en chiffres</h3>
+            <div class="finance-grid">
+                <div class="finance-card">
+                    <div class="amount">850K+</div>
+                    <div class="desc">Transactions vehicules d'occasion par annee au QC</div>
+                </div>
+                <div class="finance-card">
+                    <div class="amount">$37M</div>
+                    <div class="desc">Marche potentiel (850K x $44 CARFAX)</div>
+                </div>
+                <div class="finance-card">
+                    <div class="amount">4,200+</div>
+                    <div class="desc">Concessionnaires au Quebec</div>
+                </div>
+                <div class="finance-card">
+                    <div class="amount">0</div>
+                    <div class="desc">Competiteurs quebecois actuels</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution" style="background: white;">
+    <div class="container">
+        <span class="section-label">La solution</span>
+        <h2 class="section-title">AutoVerif QC: la premiere alternative quebecoise</h2>
+        <p class="section-subtitle">Un service de verification vehiculaire 100% quebecois, propulse par l'intelligence artificielle, a un prix 3x inferieur a CARFAX.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon blue">&#128270;</div>
+                <h3>Rapport vehiculaire complet</h3>
+                <p>Historique de branding (salvage/reconstruit/irreparable), lectures d'odometre, nombre de proprietaires, inspections mecaniques, rappels de securite, verification de vol.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon gold">&#129302;</div>
+                <h3>Analyse par intelligence artificielle</h3>
+                <p>Score de risque AI exclusif (0-100), detection automatique de fraude d'odometre, estimation de la valeur marchande, recommandation d'achat personnalisee.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon green">&#128176;</div>
+                <h3>Prix competitif</h3>
+                <p>$19.99 par rapport pour les consommateurs vs $43.95 chez CARFAX. Abonnement concessionnaire a $699.99/mois vs $399-$949 chez CARFAX (avec plus de donnees locales).</p>
+            </div>
+            <div class="card">
+                <div class="card-icon red">&#127993;</div>
+                <h3>Focus Quebec</h3>
+                <p>Donnees directement de la SAAQ (pas de middleman americain). Interface 100% francaise. Support local. Expertise du marche quebecois.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SOURCES DE DONNEES -->
+<section id="donnees">
+    <div class="container">
+        <span class="section-label">Sources de donnees</span>
+        <h2 class="section-title">D'ou viennent les donnees?</h2>
+        <p class="section-subtitle">Notre systeme combine des sources gouvernementales officielles, des APIs gratuites et des bases de donnees publiques pour constituer le rapport le plus complet possible.</p>
+
+        <h3 style="font-weight: 700; margin-bottom: 16px;">Sources gratuites (cout = $0)</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Donnees fournies</th>
+                        <th>Type d'acces</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>NHTSA vPIC</strong></td>
+                        <td>Decodage VIN complet (140+ attributs: marque, modele, annee, moteur, transmission, carrosserie, poids, origine)</td>
+                        <td>API REST gratuite, aucune cle</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transport Canada</strong></td>
+                        <td>Rappels de securite pour tous les vehicules canadiens</td>
+                        <td>CSV mensuel gratuit + API (cle gratuite)</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>NHTSA Recalls</strong></td>
+                        <td>Rappels americains (couvre vehicules importes)</td>
+                        <td>API REST gratuite, aucune cle</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>NHTSA Complaints</strong></td>
+                        <td>Plaintes consommateurs par modele/annee</td>
+                        <td>API REST gratuite, aucune cle</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>NHTSA Safety Ratings</strong></td>
+                        <td>Resultats crash tests (etoiles NCAP)</td>
+                        <td>API REST gratuite, aucune cle</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>CPIC / CIPC</strong></td>
+                        <td>Verification vehicule vole (base de donnees policiere)</td>
+                        <td>Formulaire web, automatisable</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>IBC VIN Verify</strong></td>
+                        <td>Branding assurance: salvage, flood, fire, irreparable (AB, ON, Atlantique)</td>
+                        <td>Application web, automatisable</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bidfax / Stat.vin</strong></td>
+                        <td>Historique ventes aux encheres salvage (Copart, IAAI) — photos et prix</td>
+                        <td>Web scraping, 30M+ vehicules</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>EPA FuelEconomy.gov</strong></td>
+                        <td>Consommation d'essence par modele (depuis 1984)</td>
+                        <td>API REST gratuite + CSV bulk</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>SAAQ Donnees ouvertes</strong></td>
+                        <td>Statistiques vehicules en circulation, accidents par region, infractions</td>
+                        <td>CKAN API, CSV, licence CC-BY</td>
+                        <td><span class="badge badge-green">Disponible</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="font-weight: 700; margin: 32px 0 16px;">Sources premium (acces a negocier)</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Donnees fournies</th>
+                        <th>Methode d'acces</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>SAAQ — Fichier vehiculaire</strong></td>
+                        <td>Branding QC (salvage/reconstruit/irreparable), odometres, transferts, inspections</td>
+                        <td>Demande d'acces a l'information (Loi A-2.1)</td>
+                        <td><span class="badge badge-gold">A demander</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>IBC / DASH</strong></td>
+                        <td>Reclamations assurance, montants de dommages, branding national</td>
+                        <td>Adhesion membre affilie IBC</td>
+                        <td><span class="badge badge-gold">A negocier</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>RDPRM</strong></td>
+                        <td>Liens et dettes sur vehicules (Quebec)</td>
+                        <td>Interface web, $4/recherche par VIN</td>
+                        <td><span class="badge badge-blue">Accessible</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auctions (ADESA, Copart)</strong></td>
+                        <td>API officielle avec donnees completes</td>
+                        <td>Partenariat commercial</td>
+                        <td><span class="badge badge-gold">A negocier</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Architecture technique du systeme</h3>
+            <p style="font-size: 0.9rem; color: var(--text-light); line-height: 1.8; font-family: monospace; white-space: pre-wrap;">
+Client (web/mobile)  →  API AutoVerif (serveur QC)
+                              │
+    ┌─────────────────────────┼─────────────────────────┐
+    │          │              │              │           │
+  NHTSA    Transport      SAAQ DB       IBC VIN       CPIC
+  vPIC     Canada         (locale)      Verify      (vol check)
+    │       Recalls           │              │           │
+    │          │              │              │           │
+    └─────────┴──────────────┴──────────────┴───────────┘
+                              │
+                      Moteur AI (analyse)
+                              │
+                      Score de risque +
+                      Rapport PDF genere
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- PLAN LEGAL COMPLET -->
+<section id="legal" style="background: white;">
+    <div class="container">
+        <span class="section-label">Plan legal</span>
+        <h2 class="section-title">Strategie juridique complete: acces aux donnees SAAQ</h2>
+        <p class="section-subtitle">Plan detaille de A a Z pour obtenir un acces legal aux donnees vehiculaires de la Societe de l'assurance automobile du Quebec.</p>
+
+        <!-- ÉTAPE 1 -->
+        <div class="legal-block">
+            <h3>&#9312; Fondement legal: Loi sur l'acces aux documents (RLRQ, c. A-2.1)</h3>
+            <div class="legal-quote">
+                <strong>Article 9:</strong> « Toute personne qui en fait la demande a droit d'acces aux documents d'un organisme public. »
+            </div>
+            <p>La SAAQ est un <strong>organisme public</strong> au sens de cette loi. Toute personne physique ou morale peut demander l'acces a ses documents. La SAAQ doit repondre dans un delai de <strong>20 jours ouvrables</strong> (art. 47).</p>
+        </div>
+
+        <!-- ÉTAPE 2 -->
+        <div class="legal-block">
+            <h3>&#9313; Argument central: donnees non nominatives</h3>
+            <p>Les donnees demandees portent sur des <strong>vehicules</strong>, pas sur des personnes:</p>
+            <ul>
+                <li>Le NIV (numero d'identification du vehicule) est un identifiant <strong>industriel</strong> attribue par le fabricant — ce n'est pas un renseignement personnel</li>
+                <li>Le statut vehiculaire (salvage/reconstruit) est un attribut du <strong>bien mobilier</strong></li>
+                <li>L'odometre est une propriete <strong>mecanique</strong> du vehicule</li>
+                <li>Aucun nom, adresse, permis de conduire ou date de naissance n'est demande</li>
+            </ul>
+            <div class="legal-quote">
+                <strong>Article 54:</strong> Les restrictions ne s'appliquent qu'aux « renseignements personnels » — definis comme ceux qui « concernent une personne physique et permettent de l'identifier ».
+            </div>
+            <p>Un NIV seul ne permet <strong>pas</strong> d'identifier une personne physique. Le lien NIV → proprietaire est dans un fichier separe.</p>
+        </div>
+
+        <!-- ÉTAPE 3 -->
+        <div class="legal-block">
+            <h3>&#9314; Arguments de soutien</h3>
+
+            <p><strong>A) Protection du consommateur (LPC, art. 228)</strong></p>
+            <div class="legal-quote">
+                « Le commercant doit, avant de conclure un contrat de vente d'une automobile d'occasion, indiquer au consommateur, par ecrit, tout defaut dont il a connaissance. »
+            </div>
+            <p>Si la loi <strong>oblige</strong> la divulgation des defauts, il est contradictoire de <strong>restreindre</strong> l'acces aux donnees qui permettent cette verification.</p>
+
+            <p style="margin-top: 16px;"><strong>B) Lutte contre la fraude (Code criminel, art. 380)</strong></p>
+            <p>Le recul d'odometre est un acte criminel. L'acces aux lectures historiques d'odometre est le seul moyen efficace de detecter cette fraude. Refuser l'acces revient a proteger les fraudeurs.</p>
+
+            <p style="margin-top: 16px;"><strong>C) Precedents provinciaux</strong></p>
+            <ul>
+                <li><strong>Ontario:</strong> UVIP (Used Vehicle Information Package) obligatoire a chaque vente privee</li>
+                <li><strong>Alberta:</strong> Vehicle Information Report accessible a tous</li>
+                <li><strong>Colombie-Britannique:</strong> ICBC publie le statut vehiculaire en ligne gratuitement</li>
+            </ul>
+            <p>Le Quebec est en retard sur ces trois provinces.</p>
+
+            <p style="margin-top: 16px;"><strong>D) Argument anticoncurrentiel</strong></p>
+            <p>Si la SAAQ accorde un acces a CARFAX (compagnie americaine, S&P Global) mais refuse aux entreprises quebecoises, c'est:</p>
+            <ul>
+                <li>Contraire a l'esprit de la Loi sur l'acces</li>
+                <li>Potentiellement contestable sous la <strong>Loi sur la concurrence</strong> federale</li>
+                <li>Contraire a la politique d'achat quebecois et a la souverainete numerique</li>
+            </ul>
+        </div>
+
+        <!-- ÉTAPE 4 -->
+        <div class="legal-block">
+            <h3>&#9315; Procedure etape par etape</h3>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Etape</th>
+                            <th>Action</th>
+                            <th>Delai</th>
+                            <th>Cout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>Incorporer l'entreprise (NEQ Quebec)</td>
+                            <td>1-5 jours</td>
+                            <td>~$400</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>Envoyer la demande d'acces a l'information a la SAAQ (courriel + recommande)</td>
+                            <td>1 jour</td>
+                            <td>~$20</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>Attendre la reponse de la SAAQ</td>
+                            <td>20 jours ouvrables</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4a</strong></td>
+                            <td><span class="badge badge-green">Si OUI</span> — Negocier l'entente de partage de donnees</td>
+                            <td>30-90 jours</td>
+                            <td>$2,000-5,000 (avocat)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4b</strong></td>
+                            <td><span class="badge badge-red">Si NON</span> — Demande de revision a la Commission d'acces a l'information</td>
+                            <td>30-90 jours</td>
+                            <td>$0 (gratuit)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>Decision de la Commission</td>
+                            <td>60-180 jours</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6a</strong></td>
+                            <td><span class="badge badge-green">Si Commission dit OUI</span> — SAAQ obligee de fournir</td>
+                            <td>30 jours</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6b</strong></td>
+                            <td><span class="badge badge-gold">Si Commission dit NON</span> — Appel au Tribunal administratif du Quebec</td>
+                            <td>6-12 mois</td>
+                            <td>$3,000-8,000 (avocat)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7</strong></td>
+                            <td>Strategies paralleles: pression mediatique, depute provincial, Office de protection du consommateur</td>
+                            <td>En continu</td>
+                            <td>$0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ÉTAPE 5 -->
+        <div class="legal-block">
+            <h3>&#9316; Conformite Loi 25 (obligatoire)</h3>
+            <p>La <strong>Loi 25</strong> (Loi modernisant la protection des renseignements personnels) est en vigueur depuis septembre 2024. Notre entreprise s'engage a:</p>
+            <ul>
+                <li>Nommer un <strong>responsable de la protection des renseignements personnels</strong></li>
+                <li>Realiser une <strong>evaluation des facteurs relatifs a la vie privee</strong> (EFVP) avant le lancement</li>
+                <li>Ne <strong>jamais</strong> tenter de reidentifier des personnes a partir des donnees vehiculaires</li>
+                <li>Chiffrer toutes les donnees au repos et en transit</li>
+                <li>Implementer une politique de <strong>retention et destruction</strong> des donnees</li>
+                <li>Obtenir le consentement explicite des utilisateurs du service</li>
+                <li>Publier une <strong>politique de confidentialite</strong> conforme</li>
+            </ul>
+            <p style="margin-top: 12px;">Penalites en cas de non-conformite: jusqu'a <strong>$25 millions</strong> ou 4% du chiffre d'affaires mondial.</p>
+        </div>
+
+        <!-- ÉTAPE 6 -->
+        <div class="legal-block">
+            <h3>&#9317; Acces aux donnees d'assurance (IBC / DASH)</h3>
+            <p>En parallele de la demande SAAQ, nous demandons l'adhesion au <strong>Bureau d'assurance du Canada (IBC)</strong> comme membre affilie:</p>
+            <ul>
+                <li>Categorie: « fournisseur de services a l'industrie »</li>
+                <li>Acces au systeme <strong>DASH</strong> (Driver and Auto Search History) — base de donnees centralisee des reclamations auto</li>
+                <li>Frais d'adhesion estimes: $2,000-5,000/an</li>
+                <li>Contact: <strong>memberservices@ibc.ca</strong></li>
+                <li>Delai realiste: 6-12 mois</li>
+            </ul>
+        </div>
+
+        <!-- ÉTAPE 7 -->
+        <div class="legal-block">
+            <h3>&#9318; Recours et strategies alternatives</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Strategie</th>
+                            <th>Description</th>
+                            <th>Cout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Commission d'acces a l'information</strong></td>
+                            <td>Organisme independant qui peut ordonner a la SAAQ de divulguer. Decision executoire.</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Depute provincial</strong></td>
+                            <td>Interpellation en chambre: « Pourquoi la SAAQ protege-t-elle le monopole d'une compagnie americaine? »</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Medias</strong></td>
+                            <td>« La SAAQ refuse de donner aux Quebecois les outils pour se proteger contre la fraude automobile »</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Office de la protection du consommateur</strong></td>
+                            <td>Plainte formelle: les consommateurs n'ont pas acces aux donnees necessaires pour verifier l'art. 228 LPC</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Petition a l'Assemblee nationale</strong></td>
+                            <td>Pour un equivalent quebecois du UVIP ontarien — transparence vehiculaire obligatoire</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tribunal administratif du Quebec</strong></td>
+                            <td>Dernier recours si la Commission refuse. Necessite un avocat.</td>
+                            <td>$3,000-8,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section id="prix">
+    <div class="container">
+        <span class="section-label">Tarification</span>
+        <h2 class="section-title">Modele de prix</h2>
+        <p class="section-subtitle">Prix competitifs concus pour capturer rapidement le marche quebecois tout en maintenant des marges saines.</p>
+
+        <div class="pricing-grid">
+            <!-- GRATUIT -->
+            <div class="pricing-card">
+                <div class="pricing-plan">Gratuit</div>
+                <div class="pricing-price"><sup>$</sup>0</div>
+                <div class="pricing-period">pour toujours</div>
+                <ul class="pricing-features">
+                    <li>Decodage VIN complet (specs vehicule)</li>
+                    <li>Rappels de securite Canada + USA</li>
+                    <li>Verification vol (CPIC)</li>
+                    <li>Crash test rating (etoiles)</li>
+                    <li>Plaintes connues sur le modele</li>
+                    <li>Consommation d'essence</li>
+                </ul>
+                <button class="pricing-btn outline">Attirer les utilisateurs</button>
+            </div>
+
+            <!-- PRO -->
+            <div class="pricing-card featured">
+                <div class="pricing-plan">Rapport Pro</div>
+                <div class="pricing-price"><sup>$</sup>19<sup>.99</sup></div>
+                <div class="pricing-period">par rapport</div>
+                <ul class="pricing-features">
+                    <li>Tout le plan Gratuit inclus</li>
+                    <li>Historique branding SAAQ (salvage/reconstruit)</li>
+                    <li>Lectures d'odometre historiques</li>
+                    <li>Nombre de proprietaires</li>
+                    <li>Historique encheres salvage (photos)</li>
+                    <li>Branding assurance national (IBC)</li>
+                    <li>Verification liens RDPRM</li>
+                    <li>Score de risque AI (0-100)</li>
+                    <li>Rapport PDF telechargeable</li>
+                </ul>
+                <button class="pricing-btn primary">$19.99 vs $43.95 CARFAX</button>
+            </div>
+
+            <!-- DEALER -->
+            <div class="pricing-card">
+                <div class="pricing-plan">Concessionnaire</div>
+                <div class="pricing-price"><sup>$</sup>699<sup>.99</sup></div>
+                <div class="pricing-period">par mois</div>
+                <ul class="pricing-features">
+                    <li>Rapports Pro <strong>illimites</strong></li>
+                    <li>API d'integration (DMS)</li>
+                    <li>Tableau de bord concessionnaire</li>
+                    <li>Rapports en lot (batch VIN)</li>
+                    <li>Badge « Verifie AutoVerif » pour annonces</li>
+                    <li>Support prioritaire</li>
+                    <li>Formation equipe incluse</li>
+                    <li>Facturation mensuelle, sans contrat</li>
+                </ul>
+                <button class="pricing-btn outline">$699 vs $399-949 CARFAX</button>
+            </div>
+        </div>
+
+        <div class="highlight-box" style="margin-top: 40px;">
+            <h3>Comparaison directe avec CARFAX</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Critere</th>
+                            <th>CARFAX Canada</th>
+                            <th>AutoVerif QC</th>
+                            <th>Avantage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rapport consommateur</td>
+                            <td>$43.95 - $77.95</td>
+                            <td><strong>$19.99</strong></td>
+                            <td><span class="badge badge-green">-55%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Abonnement dealer</td>
+                            <td>$399 - $949/mois</td>
+                            <td><strong>$699.99/mois illimite</strong></td>
+                            <td><span class="badge badge-green">Previsible</span></td>
+                        </tr>
+                        <tr>
+                            <td>Rapport gratuit</td>
+                            <td>Aucun</td>
+                            <td><strong>Oui (6 verifications)</strong></td>
+                            <td><span class="badge badge-green">Unique</span></td>
+                        </tr>
+                        <tr>
+                            <td>Analyse AI</td>
+                            <td>Non</td>
+                            <td><strong>Score de risque AI</strong></td>
+                            <td><span class="badge badge-green">Exclusif</span></td>
+                        </tr>
+                        <tr>
+                            <td>Langue</td>
+                            <td>Bilingue (traduit)</td>
+                            <td><strong>Francais natif</strong></td>
+                            <td><span class="badge badge-green">QC first</span></td>
+                        </tr>
+                        <tr>
+                            <td>Proprietaire</td>
+                            <td>S&P Global (USA, $44B)</td>
+                            <td><strong>Entreprise quebecoise</strong></td>
+                            <td><span class="badge badge-green">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Focus donnees QC</td>
+                            <td>National (QC = 1 province sur 13)</td>
+                            <td><strong>Quebec en priorite</strong></td>
+                            <td><span class="badge badge-green">Specialise</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTIONS FINANCIERES -->
+<section id="finances" style="background: white;">
+    <div class="container">
+        <span class="section-label">Projections financieres</span>
+        <h2 class="section-title">Modele de revenus sur 24 mois</h2>
+        <p class="section-subtitle">Projections conservatrices basees sur une capture de moins de 1% du marche quebecois des transactions vehiculaires.</p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metrique</th>
+                        <th>Mois 3</th>
+                        <th>Mois 6</th>
+                        <th>Mois 12</th>
+                        <th>Mois 24</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Utilisateurs gratuits</strong></td>
+                        <td>2,000</td>
+                        <td>10,000</td>
+                        <td>50,000</td>
+                        <td>200,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rapports Pro vendus/mois</strong></td>
+                        <td>60</td>
+                        <td>300</td>
+                        <td>1,500</td>
+                        <td>6,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Revenu Pro ($19.99)</strong></td>
+                        <td>$1,199</td>
+                        <td>$5,997</td>
+                        <td>$29,985</td>
+                        <td>$119,940</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Concessionnaires abonnes</strong></td>
+                        <td>1</td>
+                        <td>5</td>
+                        <td>25</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Revenu dealers ($699.99)</strong></td>
+                        <td>$700</td>
+                        <td>$3,500</td>
+                        <td>$17,500</td>
+                        <td>$70,000</td>
+                    </tr>
+                    <tr style="background: rgba(0,180,216,0.05);">
+                        <td><strong>REVENU TOTAL / MOIS</strong></td>
+                        <td><strong>$1,899</strong></td>
+                        <td><strong>$9,497</strong></td>
+                        <td><strong>$47,485</strong></td>
+                        <td><strong>$189,940</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Couts donnees (RDPRM + VinAudit)</strong></td>
+                        <td>-$300</td>
+                        <td>-$1,500</td>
+                        <td>-$7,500</td>
+                        <td>-$15,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Couts infrastructure</strong></td>
+                        <td>-$200</td>
+                        <td>-$500</td>
+                        <td>-$1,500</td>
+                        <td>-$3,000</td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.08);">
+                        <td><strong>MARGE NETTE / MOIS</strong></td>
+                        <td><strong>$1,399</strong></td>
+                        <td><strong>$7,497</strong></td>
+                        <td><strong>$38,485</strong></td>
+                        <td><strong>$171,940</strong></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.12);">
+                        <td><strong>REVENU ANNUALISE</strong></td>
+                        <td><strong>$16,788</strong></td>
+                        <td><strong>$89,964</strong></td>
+                        <td><strong>$461,820</strong></td>
+                        <td><strong>$2,063,280</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="font-weight: 700; margin: 40px 0 16px;">Investissement initial requis</h3>
+        <div class="finance-grid">
+            <div class="finance-card">
+                <div class="amount">$400</div>
+                <div class="desc">Incorporation (NEQ)</div>
+            </div>
+            <div class="finance-card">
+                <div class="amount">$3K-5K</div>
+                <div class="desc">Avocat (entente + Loi 25)</div>
+            </div>
+            <div class="finance-card">
+                <div class="amount">$2K-5K</div>
+                <div class="desc">Adhesion IBC (annuel)</div>
+            </div>
+            <div class="finance-card">
+                <div class="amount">$0</div>
+                <div class="desc">Developpement (interne)</div>
+            </div>
+            <div class="finance-card">
+                <div class="amount">$100/m</div>
+                <div class="desc">Hebergement serveur</div>
+            </div>
+            <div class="finance-card">
+                <div class="amount green">$6K-11K</div>
+                <div class="desc">TOTAL INVESTISSEMENT</div>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Retour sur investissement</h3>
+            <p style="font-size: 1rem; color: var(--text-light);">
+                Avec un investissement initial de <strong>$6,000-$11,000</strong>, le projet atteint la rentabilite des le <strong>mois 4-5</strong>.
+                A mois 12, le revenu annualise depasse <strong>$460,000</strong>.
+                A mois 24, le revenu annualise depasse <strong>$2 millions</strong>.
+                Rappelons que CARPROOF a ete vendu <strong>$650 millions</strong> en 2015 pour le marche canadien complet.
+                Une fraction de ce marche au Quebec seulement represente une opportunite de <strong>plusieurs dizaines de millions</strong>.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ANALYSE DE RISQUES -->
+<section id="risques">
+    <div class="container">
+        <span class="section-label">Risques</span>
+        <h2 class="section-title">Analyse des risques et mitigations</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Risque</th>
+                        <th>Probabilite</th>
+                        <th>Impact</th>
+                        <th>Mitigation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SAAQ refuse l'acces aux donnees</td>
+                        <td><span class="risk-med">Moyen (40%)</span></td>
+                        <td><span class="risk-high">Eleve</span></td>
+                        <td>Commission d'acces (gratuit), pression mediatique, VinAudit comme source interim</td>
+                    </tr>
+                    <tr>
+                        <td>CARFAX baisse ses prix en reaction</td>
+                        <td><span class="risk-med">Moyen (30%)</span></td>
+                        <td><span class="risk-low">Faible</span></td>
+                        <td>Nos couts sont structurellement plus bas; une guerre de prix nous avantage</td>
+                    </tr>
+                    <tr>
+                        <td>Non-conformite Loi 25</td>
+                        <td><span class="risk-low">Faible (10%)</span></td>
+                        <td><span class="risk-high">Eleve ($25M)</span></td>
+                        <td>Avocat specialise, EFVP avant lancement, politique de confidentialite robuste</td>
+                    </tr>
+                    <tr>
+                        <td>Difficulte a acquerir des dealers</td>
+                        <td><span class="risk-med">Moyen (35%)</span></td>
+                        <td><span class="risk-med">Moyen</span></td>
+                        <td>Prix 25-50% inferieur, essai gratuit 30 jours, focus B2C d'abord</td>
+                    </tr>
+                    <tr>
+                        <td>CARFAX a une clause d'exclusivite avec la SAAQ</td>
+                        <td><span class="risk-low">Faible (15%)</span></td>
+                        <td><span class="risk-high">Eleve</span></td>
+                        <td>Contestable sous la Loi sur la concurrence; demande d'acces a l'information pour obtenir le contrat</td>
+                    </tr>
+                    <tr>
+                        <td>Problemes techniques (scalabilite)</td>
+                        <td><span class="risk-low">Faible (10%)</span></td>
+                        <td><span class="risk-low">Faible</span></td>
+                        <td>Architecture cloud scalable, base de donnees locale (pas de dependance API en temps reel)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" style="background: white;">
+    <div class="container">
+        <span class="section-label">Feuille de route</span>
+        <h2 class="section-title">Plan d'execution sur 18 mois</h2>
+
+        <div class="timeline">
+            <div class="timeline-item active">
+                <div class="timeline-phase">Phase 1 — Mois 1-2</div>
+                <h3>Fondation legale + MVP gratuit</h3>
+                <p>Mettre en place l'entite juridique et lancer le service gratuit pour generer du trafic.</p>
+                <ul>
+                    <li>Incorporer l'entreprise (NEQ Quebec)</li>
+                    <li>Envoyer la demande d'acces a la SAAQ</li>
+                    <li>Envoyer la demande d'adhesion IBC</li>
+                    <li>Developper et deployer le site web (rapport gratuit: VIN decode, rappels, vol, crash test)</li>
+                    <li>Integrer les 10 sources de donnees gratuites</li>
+                    <li>Lancer le marketing SEO (« verification vehicule Quebec gratuit »)</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item pending">
+                <div class="timeline-phase">Phase 2 — Mois 3-6</div>
+                <h3>Monetisation + donnees premium</h3>
+                <p>Lancer le rapport payant et integrer les premieres sources premium.</p>
+                <ul>
+                    <li>Integrer VinAudit Canada comme source interim ($0.25-1/rapport)</li>
+                    <li>Automatiser les lookups RDPRM (liens, $4/requete)</li>
+                    <li>Lancer le rapport Pro a $19.99</li>
+                    <li>Developper le score de risque AI</li>
+                    <li>Generer les rapports PDF</li>
+                    <li>Premiere campagne marketing ciblee</li>
+                    <li>Suivre les demandes SAAQ et IBC</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item pending">
+                <div class="timeline-phase">Phase 3 — Mois 6-12</div>
+                <h3>Donnees SAAQ + premiers dealers</h3>
+                <p>Integrer les donnees officielles et lancer l'offre concessionnaire.</p>
+                <ul>
+                    <li>Finaliser l'entente avec la SAAQ (ou Commission d'acces si refus)</li>
+                    <li>Integrer les donnees SAAQ dans la base locale</li>
+                    <li>Finaliser adhesion IBC / DASH</li>
+                    <li>Lancer l'abonnement concessionnaire ($699.99/mois)</li>
+                    <li>Developper l'API B2B pour integration DMS</li>
+                    <li>Objectif: 25 concessionnaires abonnes</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item pending">
+                <div class="timeline-phase">Phase 4 — Mois 12-18</div>
+                <h3>Croissance + expansion</h3>
+                <p>Scaler le produit et preparer l'expansion hors Quebec.</p>
+                <ul>
+                    <li>100 concessionnaires abonnes</li>
+                    <li>6,000+ rapports Pro par mois</li>
+                    <li>Application mobile (iOS + Android)</li>
+                    <li>Partenariats avec assureurs quebecois</li>
+                    <li>Debut des negociations avec d'autres provinces</li>
+                    <li>Exploration d'une levee de fonds si necessaire</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROPOSITION COENTREPRISE -->
+<section id="proposition">
+    <div class="container">
+        <span class="section-label">Proposition</span>
+        <h2 class="section-title">Proposition de coentreprise</h2>
+        <p class="section-subtitle">Termes proposes pour le partenariat entre les cofondateurs.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon blue">&#128188;</div>
+                <h3>Structure juridique</h3>
+                <p>Societe par actions (SPA) incorporee au Quebec. Convention d'actionnaires a rediger par un avocat. Parts reparties selon l'investissement et les contributions de chaque partenaire.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon gold">&#128176;</div>
+                <h3>Investissement initial</h3>
+                <p>Budget total estime: $6,000 - $11,000. Reparti entre les partenaires selon entente. Couvre: incorporation, avocat, adhesion IBC, infrastructure.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon green">&#9878;</div>
+                <h3>Repartition des roles</h3>
+                <p>A definir entre les partenaires: developpement technique, demarchage commercial (dealers), relations gouvernementales (SAAQ/IBC), marketing, finances.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon red">&#128200;</div>
+                <h3>Objectif commun</h3>
+                <p>Devenir la reference quebecoise en verification vehiculaire. Objectif 24 mois: $2M+ de revenus annualises, 100+ concessionnaires, 200,000+ utilisateurs.</p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Pret a briser le monopole?</h2>
+            <p>Les Quebecois meritent une alternative locale, abordable et transparente pour verifier l'historique de leurs vehicules. Ensemble, nous pouvons la batir.</p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-btn primary">Accepter la proposition</a>
+                <a href="#" class="cta-btn gold">Planifier une rencontre</a>
+            </div>
+            <p style="margin-top: 24px; font-size: 0.8rem; opacity: 0.6;">Document confidentiel — Ne pas distribuer sans autorisation</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background: white;">
+    <div class="container">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Questions frequentes</h2>
+
+        <div class="accordion-item open">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                Est-ce legal de concurrencer CARFAX?
+                <span class="arrow">&#9660;</span>
+            </div>
+            <div class="accordion-body" style="max-height: 300px;">
+                <div class="accordion-body-inner">
+                    <strong>Oui, absolument.</strong> CARFAX n'a pas de brevet sur la verification vehiculaire. C'est un service d'agregation de donnees publiques et privees. La Loi sur l'acces aux documents (c. A-2.1) garantit le droit de tout citoyen d'acceder aux documents des organismes publics comme la SAAQ. Si CARFAX a obtenu cet acces, toute entreprise quebecoise a le meme droit.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                Et si la SAAQ refuse de partager les donnees?
+                <span class="arrow">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    Nous avons plusieurs recours: 1) Appel gratuit a la Commission d'acces a l'information, 2) Pression mediatique, 3) Intervention d'un depute, 4) Tribunal administratif du Quebec. En parallele, nous utilisons des sources alternatives (VinAudit, IBC VIN Verify, encheres salvage) pour operer le service pendant la negociation.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                Pourquoi CARFAX ne pourrait pas nous ecraser?
+                <span class="arrow">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    CARFAX est une multinationale de $44 milliards qui gere 13 provinces + 50 etats americains. Le Quebec represente une petite fraction de leur marche. Ils ne vont pas declencher une guerre de prix au Quebec pour un concurrent local. De plus, notre avantage est structural: prix plus bas, focus Quebec, francais natif, analyse AI. Meme s'ils baissent leurs prix, nos couts d'exploitation sont une fraction des leurs.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                Combien ca coute pour demarrer?
+                <span class="arrow">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    Entre <strong>$6,000 et $11,000</strong> pour le lancement complet. Incorporation ($400), avocat ($3-5K), adhesion IBC ($2-5K/an), hebergement ($100/mois). Le developpement technique est fait a l'interne. Pas besoin de levee de fonds — le projet est autofinancable des le mois 4-5.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                Quel est le potentiel de revente?
+                <span class="arrow">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    CARPROOF (Canada seulement) a ete vendu <strong>$650 millions</strong> en 2015. Meme une fraction de cette valeur pour un service Quebec-only represente un potentiel de sortie de <strong>$10-50 millions+</strong> a moyen terme. Les acquereurs potentiels: assureurs, groupes automobiles, fintech, ou CARFAX eux-memes.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                C'est quoi le score de risque AI?
+                <span class="arrow">&#9660;</span>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    Un algorithme exclusif qui combine toutes les donnees disponibles (branding, odometre, rappels, plaintes, encheres salvage, age, modele, region) pour generer un <strong>score de 0 a 100</strong>. Plus le score est bas, plus le vehicule est risque. C'est une valeur ajoutee unique que CARFAX n'offre pas — ils donnent des donnees brutes, nous donnons une <strong>recommandation intelligente</strong>.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>AutoVerif QC</strong> — Document confidentiel</p>
+        <p style="margin-top: 8px;">Proposition de coentreprise — Fevrier 2026</p>
+        <p style="margin-top: 16px; font-size: 0.75rem;">Ce document contient des informations confidentielles et proprietaires. Il est destine uniquement aux parties nommees dans la proposition de coentreprise. Toute reproduction, distribution ou divulgation non autorisee est strictement interdite.</p>
+    </div>
+</footer>
+
+<script>
+    // Accordion
+    function toggleAccordion(header) {
+        const item = header.parentElement;
+        const body = item.querySelector('.accordion-body');
+        const isOpen = item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.accordion-item').forEach(i => {
+            i.classList.remove('open');
+            i.querySelector('.accordion-body').style.maxHeight = '0';
+        });
+
+        // Open clicked if was closed
+        if (!isOpen) {
+            item.classList.add('open');
+            body.style.maxHeight = body.scrollHeight + 'px';
+        }
+    }
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card, .legal-block, .pricing-card, .timeline-item, .accordion-item, .finance-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>
