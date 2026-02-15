@@ -340,27 +340,66 @@
             color: var(--accent); letter-spacing: 2px; font-weight: 600;
         }
 
-        /* SCORE GAUGE */
-        .score-gauge { position: relative; z-index: 1; }
-        .gauge-canvas { display: block; }
+        /* SCORE GAUGE — Prestige Double Ring */
+        .score-gauge {
+            position: relative; z-index: 1;
+            width: 160px; height: 160px;
+            flex-shrink: 0;
+        }
+        .score-gauge svg { width: 100%; height: 100%; }
         .gauge-center {
             position: absolute; inset: 0;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
+            pointer-events: none;
         }
         .gauge-number {
-            font-size: 2.8rem; font-weight: 900; color: var(--green);
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-size: 2.2rem; font-weight: 900; color: white;
             line-height: 1;
+            text-shadow: 0 0 15px rgba(0,180,216,0.3);
         }
         .gauge-label {
-            font-size: 0.6rem; color: rgba(255,255,255,0.45);
-            text-transform: uppercase; letter-spacing: 1.5px;
+            font-size: 0.5rem; color: rgba(0,180,216,0.5);
+            text-transform: uppercase; letter-spacing: 2px;
             margin-top: 2px; font-weight: 700;
         }
         .gauge-tag {
-            margin-top: 6px; font-size: 0.7rem; font-weight: 800;
+            margin-top: 4px; font-size: 0.6rem; font-weight: 800;
             color: var(--green); background: rgba(42,157,143,0.15);
-            padding: 2px 12px; border-radius: 10px;
+            padding: 2px 10px; border-radius: 10px;
+        }
+        /* Needle animation */
+        .gauge-needle {
+            transform-origin: 115px 125px;
+            animation: reportNeedle 3s ease-out forwards;
+        }
+        @keyframes reportNeedle {
+            0% { transform: rotate(-120deg); }
+            30% { transform: rotate(55deg); }
+            50% { transform: rotate(30deg); }
+            70% { transform: rotate(48deg); }
+            85% { transform: rotate(40deg); }
+            100% { transform: rotate(42deg); }
+        }
+        /* Conic ring spin */
+        .gauge-conic-ring {
+            animation: gaugeSpin 12s linear infinite;
+            transform-origin: center;
+        }
+        @keyframes gaugeSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .gauge-conic-ring-2 {
+            animation: gaugeSpin2 18s linear infinite;
+            transform-origin: center;
+        }
+        @keyframes gaugeSpin2 { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+        /* Pulse outer */
+        .gauge-outer-ring {
+            animation: gaugeRingPulse 4s ease-in-out infinite;
+        }
+        @keyframes gaugeRingPulse {
+            0%, 100% { filter: drop-shadow(0 0 4px rgba(0,180,216,0.15)); }
+            50% { filter: drop-shadow(0 0 10px rgba(0,180,216,0.3)) drop-shadow(0 0 20px rgba(244,166,28,0.1)); }
         }
 
         /* DOC BODY */
@@ -614,7 +653,8 @@
             .ent-ico { width: 32px; height: 32px; font-size: 0.9rem; }
             .download-bar { padding: 16px; flex-direction: column; gap: 10px; }
             .dl-btn { width: 100%; justify-content: center; padding: 14px 24px; font-size: 0.9rem; }
-            .gauge-number { font-size: 2rem; }
+            .score-gauge { width: 130px; height: 130px; }
+            .gauge-number { font-size: 1.7rem; }
             .valeur-amount { font-size: 2rem; }
             .valeur-card { padding: 20px; }
             .success-banner h2 { font-size: 1.2rem; }
@@ -649,18 +689,29 @@
 <!-- NAV -->
 <nav>
     <a href="index.html" class="nav-logo">
-        <svg class="logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
+        <svg class="logo-icon" viewBox="0 0 230 230" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
             <defs>
-                <linearGradient id="logoGrad" x1="0" y1="0" x2="44" y2="44">
-                    <stop offset="0%" stop-color="#00b4d8"/>
-                    <stop offset="50%" stop-color="#2a9d8f"/>
-                    <stop offset="100%" stop-color="#f4a61c"/>
-                </linearGradient>
+                <linearGradient id="navLO" x1="0" y1="0" x2="230" y2="230"><stop stop-color="#00b4d8"/><stop offset=".5" stop-color="#2a9d8f"/><stop offset="1" stop-color="#f4a61c"/></linearGradient>
+                <linearGradient id="navLC" x1="0" y1="0" x2="230" y2="230"><stop stop-color="#00b4d8"/><stop offset=".25" stop-color="#2a9d8f"/><stop offset=".5" stop-color="#f4a61c"/><stop offset=".75" stop-color="#e63946"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
+                <linearGradient id="navLA" x1="38" y1="167" x2="192" y2="28"><stop stop-color="#e63946"/><stop offset=".3" stop-color="#f4a61c"/><stop offset=".6" stop-color="#2a9d8f"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
             </defs>
-            <rect width="44" height="44" rx="12" fill="url(#logoGrad)"/>
-            <path d="M13 30L22 10L31 30" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M16 24H28" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M28 17L31.5 20.5L36 14" stroke="#f4a61c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="115" cy="115" r="108" fill="none" stroke="rgba(0,180,216,0.08)" stroke-width="1"/>
+            <circle cx="115" cy="115" r="104" fill="#060a14" stroke="url(#navLC)" stroke-width="1.5"/>
+            <circle cx="115" cy="115" r="100" fill="#060a14" stroke="url(#navLO)" stroke-width="3.5"/>
+            <circle cx="115" cy="115" r="94" fill="none" stroke="url(#navLC)" stroke-width="1.5" opacity=".6"/>
+            <circle cx="115" cy="115" r="88" fill="none" stroke="rgba(0,180,216,0.18)" stroke-width="1.5"/>
+            <circle cx="115" cy="115" r="82" fill="#0a1222"/>
+            <path d="M38 167 A88 88 0 1 1 192 167" fill="none" stroke="url(#navLA)" stroke-width="2.5" stroke-linecap="round" opacity=".45"/>
+            <text x="115" y="105" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="38" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+            <line x1="115" y1="125" x2="115" y2="48" stroke="#f4a61c" stroke-width="2" stroke-linecap="round" transform="rotate(50, 115, 125)"/>
+            <circle cx="115" cy="125" r="6" fill="#1a2640" stroke="rgba(244,166,28,0.3)" stroke-width="1.5"/>
+            <circle cx="115" cy="125" r="2.5" fill="#f4a61c"/>
+            <g transform="translate(115,115)" opacity=".35">
+                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(90)"/>
+                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(180)"/>
+                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(270)"/>
+            </g>
         </svg>
         Auto<span>Verif</span> QC
     </a>
@@ -747,10 +798,62 @@
                 <span class="vin-tag">2HGFC2F59MH528491</span>
             </div>
             <div class="score-gauge">
-                <canvas class="gauge-canvas" id="gaugeCanvas" width="140" height="140"></canvas>
+                <svg viewBox="0 0 230 230" fill="none">
+                    <defs>
+                        <linearGradient id="gLO" x1="0" y1="0" x2="230" y2="230"><stop stop-color="#00b4d8"/><stop offset=".5" stop-color="#2a9d8f"/><stop offset="1" stop-color="#f4a61c"/></linearGradient>
+                        <linearGradient id="gLC" x1="0" y1="0" x2="230" y2="230"><stop stop-color="#00b4d8"/><stop offset=".25" stop-color="#2a9d8f"/><stop offset=".5" stop-color="#f4a61c"/><stop offset=".75" stop-color="#e63946"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
+                        <linearGradient id="gLA" x1="38" y1="167" x2="192" y2="28"><stop stop-color="#e63946"/><stop offset=".3" stop-color="#f4a61c"/><stop offset=".6" stop-color="#2a9d8f"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
+                    </defs>
+                    <!-- Glow rings -->
+                    <circle cx="115" cy="115" r="112" fill="none" stroke="rgba(0,180,216,0.06)" stroke-width="1"/>
+                    <circle cx="115" cy="115" r="108" fill="none" stroke="rgba(244,166,28,0.04)" stroke-width="1"/>
+                    <!-- Double conic (counter-rotate) -->
+                    <circle class="gauge-conic-ring-2" cx="115" cy="115" r="104" fill="#060a14" stroke="url(#gLC)" stroke-width="1.5" opacity=".4"/>
+                    <!-- Outer ring -->
+                    <circle class="gauge-outer-ring" cx="115" cy="115" r="100" fill="#060a14" stroke="url(#gLO)" stroke-width="3.5"/>
+                    <!-- Conic ring -->
+                    <circle class="gauge-conic-ring" cx="115" cy="115" r="94" fill="none" stroke="url(#gLC)" stroke-width="1.5" opacity=".6"/>
+                    <!-- Inner ring -->
+                    <circle cx="115" cy="115" r="88" fill="none" stroke="rgba(0,180,216,0.18)" stroke-width="1.5"/>
+                    <!-- Dial face -->
+                    <circle cx="115" cy="115" r="82" fill="#0a1222"/>
+                    <!-- Gauge arc -->
+                    <path d="M38 167 A88 88 0 1 1 192 167" fill="none" stroke="url(#gLA)" stroke-width="2.5" stroke-linecap="round" opacity=".45"/>
+                    <!-- Fine interior ticks -->
+                    <g transform="translate(115,115)">
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-120)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-73" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-100)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-80)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-73" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-60)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-40)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-73" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-20)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(0)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-73" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(20)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(42,157,143,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(40)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-73" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(60)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(80)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-73" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(100)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(120)"/>
+                    </g>
+                    <!-- External ticks -->
+                    <g transform="translate(115,115)" opacity=".35">
+                        <line x1="0" y1="-101" x2="0" y2="-96" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="0" y1="-101" x2="0" y2="-98" stroke="#00b4d8" stroke-width="0.5" transform="rotate(15)"/>
+                        <line x1="0" y1="-101" x2="0" y2="-96" stroke="#00b4d8" stroke-width="1" transform="rotate(30)"/>
+                        <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(90)"/>
+                        <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(180)"/>
+                        <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(270)"/>
+                    </g>
+                    <!-- Needle -->
+                    <g class="gauge-needle">
+                        <line x1="115" y1="125" x2="115" y2="48" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="115" cy="125" r="7" fill="#1a2640" stroke="rgba(244,166,28,0.3)" stroke-width="1.5"/>
+                        <circle cx="115" cy="125" r="2.5" fill="#f4a61c"/>
+                    </g>
+                </svg>
                 <div class="gauge-center">
                     <div class="gauge-number" id="scoreNum">0</div>
-                    <div class="gauge-label">Score AI</div>
+                    <div class="gauge-label">AUTOVERIF SCORE</div>
                     <div class="gauge-tag">Fiable</div>
                 </div>
             </div>
@@ -923,33 +1026,7 @@ function startScan(){
     setTimeout(next, 400);
 }
 
-// ===== GAUGE =====
-function drawGauge(score){
-    const canvas = document.getElementById('gaugeCanvas');
-    const ctx = canvas.getContext('2d');
-    const cx = 70, cy = 70, r = 60;
-    ctx.clearRect(0,0,140,140);
-    // bg
-    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI*0.75,Math.PI*0.75);
-    ctx.lineWidth = 8; ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.stroke();
-    // value
-    const range = Math.PI * 1.5;
-    const end = -Math.PI*0.75 + (score/100)*range;
-    const grad = ctx.createLinearGradient(0,0,140,140);
-    grad.addColorStop(0, '#00b4d8');
-    grad.addColorStop(0.5, '#2a9d8f');
-    grad.addColorStop(1, '#f4a61c');
-    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI*0.75,end);
-    ctx.lineWidth = 8; ctx.lineCap = 'round';
-    ctx.strokeStyle = grad; ctx.stroke();
-    // glow
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = 'rgba(0,180,216,0.3)';
-    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI*0.75,end);
-    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,180,216,0.15)'; ctx.stroke();
-    ctx.shadowBlur = 0;
-}
+// ===== GAUGE (Prestige logo — no canvas needed, CSS animated) =====
 
 // ===== COUNT UP =====
 function countUp(el, target, prefix, suffix, duration){
@@ -973,13 +1050,7 @@ function showReport(){
     rp.classList.add('active');
     window.scrollTo({top: 0});
 
-    // Animate gauge
-    let g = 0;
-    const gi = setInterval(()=>{
-        g += 2;
-        if(g > 82){ g = 82; clearInterval(gi); }
-        drawGauge(g);
-    }, 20);
+    // Needle animation is handled by CSS @keyframes reportNeedle
 
     // Count ups
     countUp(document.getElementById('scoreNum'), 82, '', '', 1200);
