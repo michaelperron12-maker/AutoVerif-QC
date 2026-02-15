@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoVerif QC — Demo Rapport Vehiculaire</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
         :root {
             --primary: #0f2b46;
@@ -21,558 +23,553 @@
             --text-light: #6b7280;
             --border: #e5e7eb;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            background: var(--bg); color: var(--text);
+            line-height: 1.6; overflow-x: hidden;
         }
 
         /* NAV */
         nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: rgba(15, 43, 70, 0.97);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 0 40px;
-            display: flex; align-items: center; justify-content: space-between;
-            height: 64px;
+            background: rgba(15, 43, 70, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0 40px; display: flex; align-items: center;
+            justify-content: space-between; height: 64px;
         }
         .nav-logo {
             font-size: 1.6rem; font-weight: 900; color: white;
-            letter-spacing: -0.5px;
-            display: flex; align-items: center; gap: 10px;
-            text-decoration: none;
+            display: flex; align-items: center; gap: 10px; text-decoration: none;
         }
         .nav-logo .logo-icon {
             width: 36px; height: 36px;
             background: linear-gradient(135deg, var(--accent), var(--gold));
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; font-weight: 900; color: var(--primary);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 1.1rem; font-weight: 900;
+            color: var(--primary);
         }
         .nav-logo span { color: var(--accent); }
-        .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-right { display: flex; gap: 12px; }
         .nav-link {
-            color: rgba(255,255,255,0.7); text-decoration: none;
-            font-size: 0.85rem; font-weight: 500;
+            color: rgba(255,255,255,0.6); text-decoration: none;
+            font-size: 0.85rem; font-weight: 500; padding: 6px 14px;
+            border-radius: 8px; transition: all 0.3s;
         }
-        .nav-link:hover { color: white; }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.08); }
         .nav-badge {
             background: var(--gold); color: var(--primary);
             padding: 6px 16px; border-radius: 20px;
-            font-size: 0.8rem; font-weight: 700;
-            text-decoration: none;
+            font-size: 0.8rem; font-weight: 700; text-decoration: none;
         }
 
-        /* SCANNER SECTION */
-        .scanner-section {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--primary) 0%, #0a1628 50%, var(--primary-light) 100%);
+        /* PARTICLES CANVAS */
+        #particles {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        }
+
+        /* SCANNER HERO */
+        .scanner-hero {
+            min-height: 100vh; position: relative; z-index: 1;
+            background: linear-gradient(160deg, #060e1a 0%, var(--primary) 40%, #0d2137 100%);
             display: flex; align-items: center; justify-content: center;
-            padding: 100px 20px 60px;
-            position: relative; overflow: hidden;
+            padding: 100px 20px 60px; overflow: hidden;
         }
-        .scanner-section::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 30% 50%, rgba(0,180,216,0.08) 0%, transparent 60%),
-                        radial-gradient(ellipse at 70% 30%, rgba(244,166,28,0.06) 0%, transparent 50%);
+        .scanner-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0,180,216,0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(244,166,28,0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 80%, rgba(42,157,143,0.06) 0%, transparent 40%);
         }
-        .scanner-container {
-            position: relative;
-            max-width: 640px; width: 100%;
+        .glow-orb {
+            position: absolute; border-radius: 50%; filter: blur(80px);
+            opacity: 0.15; pointer-events: none;
+        }
+        .glow-orb.blue { width: 400px; height: 400px; background: var(--accent); top: 10%; left: 5%; }
+        .glow-orb.gold { width: 300px; height: 300px; background: var(--gold); bottom: 10%; right: 10%; }
+
+        .scanner-wrap {
+            position: relative; max-width: 580px; width: 100%; z-index: 2;
         }
         .scanner-header {
             text-align: center; margin-bottom: 40px;
         }
-        .scanner-header h1 {
-            font-size: 2.2rem; font-weight: 900; color: white;
-            margin-bottom: 12px; letter-spacing: -1px;
+        .scanner-header .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0,180,216,0.12); border: 1px solid rgba(0,180,216,0.25);
+            padding: 6px 18px; border-radius: 30px; font-size: 0.8rem;
+            color: var(--accent); font-weight: 600; margin-bottom: 20px;
         }
-        .scanner-header h1 .gradient {
+        .badge .live-dot {
+            width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+            animation: blink 2s infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+        .scanner-header h1 {
+            font-size: clamp(1.8rem,4.5vw,2.6rem); font-weight: 900;
+            color: white; line-height: 1.1; margin-bottom: 14px; letter-spacing: -1px;
+        }
+        .scanner-header h1 .grad {
             background: linear-gradient(135deg, var(--accent), var(--gold));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .scanner-header p {
-            color: rgba(255,255,255,0.6); font-size: 1rem;
-        }
+        .scanner-header p { color: rgba(255,255,255,0.5); font-size: 0.95rem; }
 
-        /* INPUT BOX */
-        .input-box {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-        }
-        .input-group {
-            margin-bottom: 20px;
+        /* GLASS CARD */
+        .glass-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 36px;
+            backdrop-filter: blur(24px);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
         }
         .input-label {
-            display: block; color: rgba(255,255,255,0.7);
-            font-size: 0.8rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px;
+            display: block; color: rgba(255,255,255,0.5); font-size: 0.72rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
             margin-bottom: 8px;
         }
         .vin-input {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(255,255,255,0.08);
-            border: 2px solid rgba(255,255,255,0.15);
-            border-radius: 12px;
-            color: white;
-            font-family: 'Inter', monospace;
-            font-size: 1.3rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-align: center;
-            outline: none;
-            transition: all 0.3s;
+            width: 100%; padding: 18px 20px;
+            background: rgba(255,255,255,0.06);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 14px; color: white;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 1.35rem; font-weight: 700;
+            letter-spacing: 4px; text-transform: uppercase;
+            text-align: center; outline: none; transition: all 0.4s;
         }
         .vin-input::placeholder {
-            color: rgba(255,255,255,0.25);
-            letter-spacing: 2px;
-            font-size: 1rem;
+            color: rgba(255,255,255,0.18); letter-spacing: 2px; font-size: 0.95rem;
         }
         .vin-input:focus {
             border-color: var(--accent);
-            background: rgba(0,180,216,0.08);
-            box-shadow: 0 0 30px rgba(0,180,216,0.15);
+            background: rgba(0,180,216,0.06);
+            box-shadow: 0 0 40px rgba(0,180,216,0.12), 0 0 0 4px rgba(0,180,216,0.08);
         }
 
-        /* PHOTO UPLOAD */
-        .photo-upload {
-            border: 2px dashed rgba(255,255,255,0.15);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 24px;
+        .photo-zone {
+            border: 2px dashed rgba(255,255,255,0.1);
+            border-radius: 14px; padding: 20px; text-align: center;
+            cursor: pointer; transition: all 0.3s; margin: 20px 0 28px;
         }
-        .photo-upload:hover {
-            border-color: var(--accent);
-            background: rgba(0,180,216,0.05);
+        .photo-zone:hover {
+            border-color: var(--accent); background: rgba(0,180,216,0.04);
         }
-        .photo-upload .icon {
-            font-size: 2rem; margin-bottom: 8px;
-        }
-        .photo-upload p {
-            color: rgba(255,255,255,0.5); font-size: 0.85rem;
-        }
-        .photo-upload .or-text {
-            color: rgba(255,255,255,0.3); font-size: 0.75rem;
-            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .photo-zone .cam { font-size: 1.8rem; margin-bottom: 4px; }
+        .photo-zone p { color: rgba(255,255,255,0.35); font-size: 0.82rem; }
 
-        /* SCAN BUTTON */
-        .scan-btn {
-            width: 100%;
-            padding: 18px;
+        .btn-scan {
+            width: 100%; padding: 18px; border: none; border-radius: 14px;
+            font-family: 'Inter'; font-size: 1.1rem; font-weight: 800;
+            cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .btn-scan.primary {
             background: linear-gradient(135deg, var(--accent), #0096b7);
-            border: none;
-            border-radius: 14px;
             color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
         }
-        .scan-btn:hover {
+        .btn-scan.primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,180,216,0.4);
+            box-shadow: 0 8px 30px rgba(0,180,216,0.35);
         }
-        .scan-btn:active { transform: translateY(0); }
-        .scan-btn.demo-btn {
+        .btn-scan.gold {
             background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: var(--primary);
-            margin-top: 12px;
-            font-size: 0.95rem;
+            color: var(--primary); margin-top: 12px; font-size: 0.95rem;
         }
-
-        /* LOADING ANIMATION */
-        .loading-overlay {
-            display: none;
-            position: fixed; inset: 0;
-            background: rgba(10,22,40,0.97);
-            z-index: 2000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
+        .btn-scan .shimmer {
+            position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            animation: shimmer 3s infinite;
         }
-        .loading-overlay.active { display: flex; }
+        @keyframes shimmer { 100%{left:100%} }
 
-        .loading-ring {
-            width: 120px; height: 120px;
+        /* ========== LOADING ========== */
+        .loading-screen {
+            display: none; position: fixed; inset: 0;
+            background: #060e1a; z-index: 3000;
+            flex-direction: column; align-items: center;
+            justify-content: center; padding: 40px 20px;
+        }
+        .loading-screen.active { display: flex; }
+
+        .scanner-anim {
+            width: 160px; height: 160px; position: relative;
+            margin-bottom: 36px;
+        }
+        .ring-outer {
+            position: absolute; inset: 0;
+            border: 3px solid rgba(0,180,216,0.1);
+            border-top: 3px solid var(--accent);
             border-radius: 50%;
-            border: 4px solid rgba(0,180,216,0.15);
-            border-top: 4px solid var(--accent);
-            border-right: 4px solid var(--gold);
-            animation: spin 1.2s linear infinite;
-            margin-bottom: 32px;
-            position: relative;
+            animation: spin 1.5s linear infinite;
         }
-        .loading-ring::after {
-            content: 'AV';
-            position: absolute; inset: 8px;
-            background: rgba(0,180,216,0.08);
+        .ring-middle {
+            position: absolute; inset: 14px;
+            border: 3px solid rgba(244,166,28,0.1);
+            border-bottom: 3px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 2s linear infinite reverse;
+        }
+        .ring-inner {
+            position: absolute; inset: 28px;
+            border: 3px solid rgba(42,157,143,0.1);
+            border-top: 3px solid var(--green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .ring-center {
+            position: absolute; inset: 42px;
+            background: rgba(0,180,216,0.06);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem; font-weight: 900; color: var(--accent);
-            font-family: 'Inter', sans-serif;
+            font-size: 2rem; font-weight: 900; color: var(--accent);
+            font-family: 'Inter';
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .loading-title {
-            font-size: 1.5rem; font-weight: 800; color: white;
-            margin-bottom: 8px; text-align: center;
+            font-size: 1.4rem; font-weight: 800; color: white;
+            margin-bottom: 6px; text-align: center;
         }
         .loading-vin {
-            font-family: monospace; font-size: 1.1rem;
+            font-family: monospace; font-size: 1rem;
             color: var(--accent); font-weight: 700;
-            letter-spacing: 3px; margin-bottom: 32px;
+            letter-spacing: 3px; margin-bottom: 36px;
         }
 
-        .loading-steps {
-            max-width: 500px; width: 100%;
+        .steps-list { max-width: 460px; width: 100%; }
+        .step-row {
+            display: flex; align-items: center; gap: 14px;
+            padding: 9px 0; opacity: 0.2; transition: all 0.6s;
         }
-        .loading-step {
-            display: flex; align-items: center; gap: 12px;
-            padding: 10px 0;
-            opacity: 0.3;
-            transition: all 0.5s;
-        }
-        .loading-step.active {
-            opacity: 1;
-        }
-        .loading-step.done {
-            opacity: 0.6;
-        }
-        .loading-step .step-icon {
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
+        .step-row.active { opacity: 1; }
+        .step-row.done { opacity: 0.5; }
+        .step-dot {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.1);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; flex-shrink: 0;
-            transition: all 0.5s;
+            font-size: 0.7rem; color: rgba(255,255,255,0.4);
+            font-weight: 700; flex-shrink: 0; transition: all 0.5s;
         }
-        .loading-step.active .step-icon {
-            background: var(--accent);
-            animation: pulse-icon 1s infinite;
-        }
-        .loading-step.done .step-icon {
-            background: var(--green);
-        }
-        @keyframes pulse-icon {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0,180,216,0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(0,180,216,0); }
-        }
-        .loading-step .step-text {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.88rem; font-weight: 500;
-        }
-        .loading-step.active .step-text { color: white; font-weight: 600; }
-
-        .loading-progress {
-            max-width: 500px; width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            margin-top: 24px;
-            overflow: hidden;
-        }
-        .loading-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--gold));
-            border-radius: 4px;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        /* REPORT SECTION */
-        .report-section {
-            display: none;
-            padding: 100px 20px 60px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .report-section.active { display: block; }
-
-        .report-success {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .report-success .checkmark {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, var(--green), #1a8a7e);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; color: white;
-            margin: 0 auto 20px;
-            animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes pop-in {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-        .report-success h2 {
-            font-size: 1.8rem; font-weight: 800; margin-bottom: 8px;
-        }
-        .report-success p {
-            color: var(--text-light); font-size: 1rem;
-        }
-
-        /* REPORT CARD */
-        .report-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.06);
-            margin-bottom: 24px;
-        }
-        .report-card-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            padding: 32px;
+        .step-row.active .step-dot {
+            background: var(--accent); border-color: var(--accent);
             color: white;
-            display: flex; align-items: center; justify-content: space-between;
-            flex-wrap: wrap; gap: 20px;
+            box-shadow: 0 0 20px rgba(0,180,216,0.4);
+            animation: pulse-dot 1.2s infinite;
         }
-        .report-vehicle-info h3 {
-            font-size: 1.5rem; font-weight: 800; margin-bottom: 4px;
+        .step-row.done .step-dot {
+            background: var(--green); border-color: var(--green); color: white;
         }
-        .report-vehicle-info p {
-            color: rgba(255,255,255,0.6); font-size: 0.9rem;
+        @keyframes pulse-dot {
+            0%,100%{box-shadow:0 0 0 0 rgba(0,180,216,0.4)}
+            50%{box-shadow:0 0 0 10px rgba(0,180,216,0)}
         }
-        .report-vehicle-info .vin-display {
-            font-family: monospace; font-size: 0.8rem;
-            color: var(--accent); letter-spacing: 2px;
-            margin-top: 4px; font-weight: 600;
+        .step-text {
+            color: rgba(255,255,255,0.4); font-size: 0.85rem;
+            font-weight: 500; transition: all 0.5s;
+        }
+        .step-row.active .step-text { color: white; font-weight: 600; }
+
+        .progress-track {
+            max-width: 460px; width: 100%; height: 3px;
+            background: rgba(255,255,255,0.06); border-radius: 3px;
+            margin-top: 28px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--gold), var(--green));
+            border-radius: 3px; transition: width 0.6s ease;
+        }
+        .loading-percent {
+            color: rgba(255,255,255,0.3); font-size: 0.8rem;
+            margin-top: 10px; font-weight: 600;
         }
 
-        /* SCORE */
-        .score-circle {
-            width: 100px; height: 100px;
-            border-radius: 50%;
-            background: conic-gradient(var(--green) 0% 82%, rgba(255,255,255,0.15) 82% 100%);
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
+        /* ========== REPORT ========== */
+        .report-page {
+            display: none; padding: 90px 20px 60px;
         }
-        .score-circle-inner {
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex; align-items: center; justify-content: center;
-            flex-direction: column;
+        .report-page.active { display: block; }
+
+        .report-container { max-width: 860px; margin: 0 auto; }
+
+        /* SUCCESS BANNER */
+        .success-banner {
+            text-align: center; margin-bottom: 40px;
         }
-        .score-number {
-            font-size: 1.8rem; font-weight: 900; color: var(--green);
+        .success-check {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), #1a8a7e);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: white; margin: 0 auto 16px;
+            box-shadow: 0 8px 30px rgba(42,157,143,0.3);
+        }
+        .success-banner h2 {
+            font-size: 1.6rem; font-weight: 800; margin-bottom: 6px;
+        }
+        .success-banner p { color: var(--text-light); font-size: 0.92rem; }
+
+        /* REPORT DOCUMENT */
+        .report-doc {
+            background: white; border-radius: 24px; overflow: hidden;
+            box-shadow: 0 4px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+        }
+
+        /* DOC HEADER */
+        .doc-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0d2137 60%, var(--primary-light) 100%);
+            padding: 36px 40px; color: white;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 24px; flex-wrap: wrap; position: relative; overflow: hidden;
+        }
+        .doc-header::after {
+            content: ''; position: absolute; right: -40px; top: -40px;
+            width: 200px; height: 200px; border-radius: 50%;
+            background: rgba(0,180,216,0.06);
+        }
+        .vehicle-info h3 {
+            font-size: 1.6rem; font-weight: 900; margin-bottom: 4px;
+        }
+        .vehicle-info .sub {
+            color: rgba(255,255,255,0.55); font-size: 0.88rem;
+        }
+        .vehicle-info .vin-tag {
+            display: inline-block; margin-top: 8px;
+            background: rgba(0,180,216,0.15); border: 1px solid rgba(0,180,216,0.25);
+            padding: 4px 14px; border-radius: 8px;
+            font-family: monospace; font-size: 0.78rem;
+            color: var(--accent); letter-spacing: 2px; font-weight: 600;
+        }
+
+        /* SCORE GAUGE */
+        .score-gauge { position: relative; z-index: 1; }
+        .gauge-canvas { display: block; }
+        .gauge-center {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .gauge-number {
+            font-size: 2.8rem; font-weight: 900; color: var(--green);
             line-height: 1;
         }
-        .score-label {
-            font-size: 0.55rem; color: rgba(255,255,255,0.5);
-            text-transform: uppercase; letter-spacing: 1px;
-            margin-top: 2px;
+        .gauge-label {
+            font-size: 0.6rem; color: rgba(255,255,255,0.45);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-top: 2px; font-weight: 700;
+        }
+        .gauge-tag {
+            margin-top: 6px; font-size: 0.7rem; font-weight: 800;
+            color: var(--green); background: rgba(42,157,143,0.15);
+            padding: 2px 12px; border-radius: 10px;
         }
 
-        /* REPORT BODY */
-        .report-body { padding: 32px; }
+        /* DOC BODY */
+        .doc-body { padding: 36px 40px; }
 
-        .report-verdict {
-            background: linear-gradient(135deg, rgba(42,157,143,0.08), rgba(42,157,143,0.02));
-            border: 1px solid rgba(42,157,143,0.2);
-            border-radius: 14px;
-            padding: 24px;
-            margin-bottom: 28px;
+        /* VERDICT */
+        .verdict-bar {
             display: flex; align-items: center; gap: 16px;
+            background: linear-gradient(135deg, rgba(42,157,143,0.06), rgba(42,157,143,0.02));
+            border: 1px solid rgba(42,157,143,0.15);
+            border-radius: 16px; padding: 20px 24px; margin-bottom: 32px;
         }
         .verdict-icon {
-            width: 52px; height: 52px;
-            background: var(--green);
-            border-radius: 50%;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), #1a8a7e);
             display: flex; align-items: center; justify-content: center;
             font-size: 1.5rem; color: white; flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(42,157,143,0.25);
         }
-        .verdict-text h4 {
-            font-size: 1.1rem; font-weight: 800; color: var(--green);
+        .verdict-content h4 {
+            font-size: 1.05rem; font-weight: 800; color: var(--green);
             margin-bottom: 2px;
         }
-        .verdict-text p {
-            font-size: 0.88rem; color: var(--text-light);
-        }
+        .verdict-content p { font-size: 0.85rem; color: var(--text-light); }
 
-        /* DATA GRID */
-        .data-grid {
+        /* SECTION TITLES */
+        .section-head {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.95rem; font-weight: 800; margin-bottom: 16px;
+            margin-top: 32px;
+        }
+        .section-head .ico {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem;
+        }
+        .section-head .ico.blue { background: rgba(0,180,216,0.1); }
+        .section-head .ico.green { background: rgba(42,157,143,0.1); }
+        .section-head .ico.gold { background: rgba(244,166,28,0.1); }
+        .section-head .ico.red { background: rgba(230,57,70,0.1); }
+
+        /* DATA CARDS */
+        .data-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 28px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
         }
-        .data-item {
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 16px;
+        .d-card {
+            background: var(--bg); border-radius: 14px;
+            padding: 16px; transition: all 0.3s;
         }
-        .data-item .data-label {
-            font-size: 0.7rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            color: var(--text-light); margin-bottom: 4px;
+        .d-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         }
-        .data-item .data-value {
-            font-size: 1rem; font-weight: 700; color: var(--text);
+        .d-card .d-label {
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 4px;
         }
-        .data-item .data-value.green { color: var(--green); }
-        .data-item .data-value.red { color: var(--red); }
-        .data-item .data-value.gold { color: var(--gold-dark); }
+        .d-card .d-val {
+            font-size: 1.05rem; font-weight: 800; color: var(--text);
+        }
+        .d-val.ok { color: var(--green); }
+        .d-val.warn { color: var(--gold-dark); }
+        .d-val.bad { color: var(--red); }
 
         /* CHECK LIST */
-        .check-section {
-            margin-bottom: 28px;
+        .check-list { list-style: none; margin-top: 8px; }
+        .check-row {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+            transition: all 0.3s;
         }
-        .check-section h4 {
-            font-size: 0.95rem; font-weight: 700;
-            margin-bottom: 12px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .check-list { list-style: none; }
-        .check-list li {
-            display: flex; align-items: center; gap: 10px;
-            padding: 8px 0;
-            font-size: 0.9rem;
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-        }
-        .check-list li:last-child { border-bottom: none; }
-        .check-icon {
-            width: 24px; height: 24px;
-            border-radius: 50%;
+        .check-row:last-child { border-bottom: none; }
+        .check-row:hover { background: rgba(0,180,216,0.02); border-radius: 8px; padding-left: 8px; }
+        .chk {
+            width: 26px; height: 26px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; flex-shrink: 0; font-weight: 700;
+            font-size: 0.72rem; font-weight: 800; flex-shrink: 0; margin-top: 2px;
         }
-        .check-icon.pass { background: rgba(42,157,143,0.1); color: var(--green); }
-        .check-icon.warn { background: rgba(244,166,28,0.1); color: var(--gold-dark); }
-        .check-icon.fail { background: rgba(230,57,70,0.1); color: var(--red); }
+        .chk.pass { background: rgba(42,157,143,0.1); color: var(--green); }
+        .chk.warn { background: rgba(244,166,28,0.1); color: var(--gold-dark); }
+        .chk.fail { background: rgba(230,57,70,0.1); color: var(--red); }
+        .check-text { font-size: 0.88rem; }
+        .check-text strong { font-weight: 700; }
+
+        /* VALEUR BOX */
+        .valeur-card {
+            background: linear-gradient(135deg, rgba(244,166,28,0.05), rgba(0,180,216,0.05));
+            border: 1px solid rgba(244,166,28,0.15);
+            border-radius: 18px; padding: 28px; text-align: center;
+            margin-top: 32px; position: relative; overflow: hidden;
+        }
+        .valeur-card::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 200px; height: 200px; border-radius: 50%;
+            background: rgba(244,166,28,0.04);
+        }
+        .valeur-title {
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--text-light); margin-bottom: 8px;
+        }
+        .valeur-amount {
+            font-size: 3rem; font-weight: 900; color: var(--primary);
+            line-height: 1; position: relative; z-index: 1;
+        }
+        .valeur-range {
+            font-size: 0.85rem; color: var(--text-light); margin-top: 6px;
+        }
 
         /* ENTRETIEN */
         .entretien-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 10px; margin-top: 12px;
         }
-        .entretien-item {
-            background: var(--bg);
-            border-radius: 10px;
-            padding: 14px;
-            display: flex; align-items: center; gap: 12px;
-        }
-        .entretien-icon {
-            width: 36px; height: 36px;
-            border-radius: 8px;
-            background: rgba(0,180,216,0.1);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1rem; flex-shrink: 0;
-        }
-        .entretien-info .ent-label {
-            font-size: 0.78rem; font-weight: 700; color: var(--text);
-        }
-        .entretien-info .ent-detail {
-            font-size: 0.72rem; color: var(--text-light);
-        }
-
-        /* VALEUR */
-        .valeur-box {
-            background: linear-gradient(135deg, rgba(244,166,28,0.06), rgba(0,180,216,0.06));
-            border: 1px solid rgba(244,166,28,0.2);
-            border-radius: 14px;
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 28px;
-        }
-        .valeur-box h4 {
-            font-size: 0.85rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px;
-            color: var(--text-light); margin-bottom: 8px;
-        }
-        .valeur-price {
-            font-size: 2.5rem; font-weight: 900;
-            color: var(--primary); line-height: 1;
-        }
-        .valeur-range {
-            font-size: 0.85rem; color: var(--text-light);
-            margin-top: 4px;
-        }
-
-        /* DOWNLOAD */
-        .download-section {
-            text-align: center;
-            padding: 32px;
-            border-top: 1px solid var(--border);
-        }
-        .download-btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 16px 40px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-            border: none; border-radius: 14px;
-            color: white; font-size: 1.05rem; font-weight: 800;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
+        .ent-card {
+            background: var(--bg); border-radius: 12px;
+            padding: 14px 16px; display: flex; align-items: center; gap: 12px;
             transition: all 0.3s;
+        }
+        .ent-card:hover { transform: translateX(4px); }
+        .ent-ico {
+            width: 38px; height: 38px; border-radius: 10px;
+            background: rgba(0,180,216,0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .ent-label { font-size: 0.82rem; font-weight: 700; }
+        .ent-detail { font-size: 0.72rem; color: var(--text-light); }
+        .ent-total {
+            text-align: center; margin-top: 16px;
+            font-size: 0.85rem; color: var(--text-light);
+        }
+
+        /* DISCLAIMER */
+        .disclaimer {
+            background: var(--bg); border-radius: 12px;
+            padding: 16px 20px; margin-top: 32px;
+            font-size: 0.73rem; color: var(--text-light); line-height: 1.7;
+        }
+
+        /* DOWNLOAD BAR */
+        .download-bar {
+            padding: 28px 40px;
+            border-top: 1px solid var(--border);
+            display: flex; align-items: center;
+            justify-content: center; gap: 20px;
+            flex-wrap: wrap;
+        }
+        .dl-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 16px 36px; border-radius: 14px;
+            font-family: 'Inter'; font-size: 1rem; font-weight: 800;
+            cursor: pointer; border: none; transition: all 0.3s;
             text-decoration: none;
         }
-        .download-btn:hover {
+        .dl-btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,180,216,0.2);
+        }
+        .dl-btn.primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,180,216,0.3);
+            box-shadow: 0 8px 30px rgba(0,180,216,0.35);
         }
-        .download-btn .dl-icon {
-            font-size: 1.2rem;
+        .dl-btn.outline {
+            background: transparent;
+            border: 2px solid var(--border); color: var(--text);
         }
-        .download-sub {
-            margin-top: 12px;
-            font-size: 0.8rem; color: var(--text-light);
+        .dl-btn.outline:hover { border-color: var(--accent); color: var(--accent); }
+        .dl-sub {
+            text-align: center; margin-top: 8px;
+            font-size: 0.78rem; color: var(--text-light); width: 100%;
         }
 
-        /* POWERED BY */
-        .powered-by {
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 0.8rem;
-            color: var(--text-light);
+        /* FOOTER */
+        .report-footer {
+            text-align: center; padding: 32px 20px;
+            font-size: 0.78rem; color: var(--text-light);
         }
-        .powered-by a {
-            color: var(--accent); text-decoration: none; font-weight: 600;
-        }
+        .report-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
             nav { padding: 0 16px; }
+            .nav-right { display: none; }
             .scanner-header h1 { font-size: 1.6rem; }
-            .input-box { padding: 24px; }
-            .vin-input { font-size: 1rem; letter-spacing: 2px; padding: 14px 16px; }
-            .report-card-header { padding: 24px; flex-direction: column; align-items: flex-start; }
-            .score-circle { width: 80px; height: 80px; }
-            .score-circle-inner { width: 64px; height: 64px; }
-            .score-number { font-size: 1.4rem; }
-            .report-body { padding: 20px; }
-            .data-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .glass-card { padding: 24px; }
+            .vin-input { font-size: 1rem; letter-spacing: 2px; }
+            .doc-header { padding: 24px; flex-direction: column; align-items: flex-start; }
+            .doc-body { padding: 24px; }
+            .data-cards { grid-template-columns: 1fr 1fr; }
             .entretien-grid { grid-template-columns: 1fr; }
-            .valeur-price { font-size: 2rem; }
-            .loading-title { font-size: 1.2rem; }
+            .download-bar { padding: 20px; flex-direction: column; }
+            .dl-btn { width: 100%; justify-content: center; }
+            .gauge-number { font-size: 2.2rem; }
+            .valeur-amount { font-size: 2.2rem; }
         }
         @media (max-width: 400px) {
-            .data-grid { grid-template-columns: 1fr; }
+            .data-cards { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+
+<canvas id="particles"></canvas>
 
 <!-- NAV -->
 <nav>
@@ -584,366 +581,354 @@
 </nav>
 
 <!-- SCANNER -->
-<section class="scanner-section" id="scanner">
-    <div class="scanner-container">
+<section class="scanner-hero" id="scanner">
+    <div class="glow-orb blue"></div>
+    <div class="glow-orb gold"></div>
+    <div class="scanner-wrap">
         <div class="scanner-header">
-            <h1>Verifiez votre vehicule <span class="gradient">en 30 secondes</span></h1>
-            <p>Entrez un numero VIN ou prenez une photo pour obtenir le rapport complet.</p>
+            <div class="badge"><span class="live-dot"></span> Systeme operationnel — 10 sources connectees</div>
+            <h1>Verifiez n'importe quel<br>vehicule <span class="grad">en 30 secondes</span></h1>
+            <p>Entrez un VIN ou prenez une photo. Notre AI analyse 10 bases de donnees instantanement.</p>
         </div>
 
-        <div class="input-box">
-            <div class="input-group">
-                <label class="input-label">Numero VIN (17 caracteres)</label>
-                <input type="text" class="vin-input" id="vinInput" maxlength="17"
-                       placeholder="Ex: 2HGFC2F59MH..."
-                       value="2HGFC2F59MH528491">
+        <div class="glass-card">
+            <label class="input-label">Numero VIN (17 caracteres)</label>
+            <input type="text" class="vin-input" id="vinInput" maxlength="17"
+                   placeholder="Ex: 2HGFC2F59MH528491" value="2HGFC2F59MH528491">
+
+            <div class="photo-zone" onclick="document.getElementById('photoFile').click()">
+                <div class="cam">&#128247;</div>
+                <p>Ou prenez une photo du VIN — detection automatique AI</p>
+                <input type="file" id="photoFile" accept="image/*" style="display:none">
             </div>
 
-            <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
-                <div class="icon">&#128247;</div>
-                <p class="or-text">ou bien</p>
-                <p>Prenez une photo du VIN — notre AI le detecte automatiquement</p>
-                <input type="file" id="photoInput" accept="image/*" style="display: none;">
-            </div>
-
-            <button class="scan-btn" onclick="startScan()">
-                &#128270; &nbsp;Analyser ce vehicule — $19.99
+            <button class="btn-scan primary" onclick="startScan()">
+                <span class="shimmer"></span>
+                &#128270; &nbsp;Analyser — $19.99
             </button>
-            <button class="scan-btn demo-btn" onclick="startScan()">
+            <button class="btn-scan gold" onclick="startScan()">
                 &#9889; &nbsp;Demo gratuite — Voir un exemple de rapport
             </button>
         </div>
     </div>
 </section>
 
-<!-- LOADING OVERLAY -->
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-ring"></div>
+<!-- LOADING -->
+<div class="loading-screen" id="loadScreen">
+    <div class="scanner-anim">
+        <div class="ring-outer"></div>
+        <div class="ring-middle"></div>
+        <div class="ring-inner"></div>
+        <div class="ring-center">AV</div>
+    </div>
     <div class="loading-title">Analyse en cours...</div>
-    <div class="loading-vin" id="loadingVin">2HGFC2F59MH528491</div>
+    <div class="loading-vin" id="loadVin">2HGFC2F59MH528491</div>
 
-    <div class="loading-steps">
-        <div class="loading-step" id="step1">
-            <div class="step-icon">1</div>
-            <div class="step-text">Decodage VIN — identification du vehicule...</div>
-        </div>
-        <div class="loading-step" id="step2">
-            <div class="step-icon">2</div>
-            <div class="step-text">Verification vehicule vole (CPIC)...</div>
-        </div>
-        <div class="loading-step" id="step3">
-            <div class="step-icon">3</div>
-            <div class="step-text">Rappels de securite Canada + USA...</div>
-        </div>
-        <div class="loading-step" id="step4">
-            <div class="step-icon">4</div>
-            <div class="step-text">Branding SAAQ — salvage / reconstruit...</div>
-        </div>
-        <div class="loading-step" id="step5">
-            <div class="step-icon">5</div>
-            <div class="step-text">Historique odometre — detection fraude...</div>
-        </div>
-        <div class="loading-step" id="step6">
-            <div class="step-icon">6</div>
-            <div class="step-text">Encheres salvage — Copart / IAAI...</div>
-        </div>
-        <div class="loading-step" id="step7">
-            <div class="step-icon">7</div>
-            <div class="step-text">Liens financiers RDPRM...</div>
-        </div>
-        <div class="loading-step" id="step8">
-            <div class="step-icon">8</div>
-            <div class="step-text">Score de risque AI — analyse finale...</div>
-        </div>
+    <div class="steps-list">
+        <div class="step-row" data-step="1"><div class="step-dot">1</div><div class="step-text">Decodage VIN — identification vehicule</div></div>
+        <div class="step-row" data-step="2"><div class="step-dot">2</div><div class="step-text">Verification vol — base CPIC policiere</div></div>
+        <div class="step-row" data-step="3"><div class="step-dot">3</div><div class="step-text">Rappels de securite — Canada + USA</div></div>
+        <div class="step-row" data-step="4"><div class="step-dot">4</div><div class="step-text">Branding SAAQ — salvage / reconstruit</div></div>
+        <div class="step-row" data-step="5"><div class="step-dot">5</div><div class="step-text">Odometre historique — detection fraude AI</div></div>
+        <div class="step-row" data-step="6"><div class="step-dot">6</div><div class="step-text">Encheres salvage — Copart / IAAI</div></div>
+        <div class="step-row" data-step="7"><div class="step-dot">7</div><div class="step-text">Liens financiers — RDPRM Quebec</div></div>
+        <div class="step-row" data-step="8"><div class="step-dot">8</div><div class="step-text">Score de risque AI — analyse finale</div></div>
     </div>
 
-    <div class="loading-progress">
-        <div class="loading-progress-bar" id="progressBar"></div>
-    </div>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    <div class="loading-percent" id="loadPct">0%</div>
 </div>
 
 <!-- REPORT -->
-<section class="report-section" id="reportSection">
-    <div class="report-success">
-        <div class="checkmark">&#10003;</div>
+<section class="report-page" id="reportPage">
+<div class="report-container">
+    <div class="success-banner">
+        <div class="success-check">&#10003;</div>
         <h2>Rapport genere avec succes</h2>
-        <p>Analyse completee en 28 secondes — 10 sources de donnees verifiees</p>
+        <p>Analyse completee en 28 secondes — 10 sources verifiees — Score AI: <strong style="color:var(--green)">82/100</strong></p>
     </div>
 
-    <div class="report-card">
+    <div class="report-doc">
         <!-- HEADER -->
-        <div class="report-card-header">
-            <div class="report-vehicle-info">
+        <div class="doc-header">
+            <div class="vehicle-info">
                 <h3>Honda Civic EX 2021</h3>
-                <p>Berline 4 portes — 2.0L 4 cylindres — CVT — Traction avant</p>
-                <div class="vin-display">VIN: 2HGFC2F59MH528491</div>
+                <p class="sub">Berline 4 portes — 2.0L 4 cyl. i-VTEC — CVT — Traction</p>
+                <span class="vin-tag">2HGFC2F59MH528491</span>
             </div>
-            <div class="score-circle">
-                <div class="score-circle-inner">
-                    <div class="score-number">82</div>
-                    <div class="score-label">Score AI</div>
+            <div class="score-gauge">
+                <canvas class="gauge-canvas" id="gaugeCanvas" width="140" height="140"></canvas>
+                <div class="gauge-center">
+                    <div class="gauge-number" id="scoreNum">0</div>
+                    <div class="gauge-label">Score AI</div>
+                    <div class="gauge-tag">Fiable</div>
                 </div>
             </div>
         </div>
 
-        <div class="report-body">
-            <!-- VERDICT AI -->
-            <div class="report-verdict">
+        <div class="doc-body">
+            <!-- VERDICT -->
+            <div class="verdict-bar">
                 <div class="verdict-icon">&#9989;</div>
-                <div class="verdict-text">
-                    <h4>Recommandation: ACHETER avec confiance</h4>
-                    <p>Ce vehicule presente un profil de risque faible. Aucun drapeau rouge majeur detecte. Score de confiance: 82/100. Negociation possible sur le prix selon la valeur marchande.</p>
+                <div class="verdict-content">
+                    <h4>Recommandation AI: ACHETER avec confiance</h4>
+                    <p>Profil de risque faible. Aucun drapeau rouge critique. Historique coherent. Negociez le prix selon la valeur marchande estimee.</p>
                 </div>
             </div>
 
-            <!-- DATA GRID -->
-            <div class="data-grid">
-                <div class="data-item">
-                    <div class="data-label">Odometre</div>
-                    <div class="data-value">47,832 km</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-label">Proprietaires</div>
-                    <div class="data-value">1</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-label">Branding</div>
-                    <div class="data-value green">Aucun &#10003;</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-label">Vol (CPIC)</div>
-                    <div class="data-value green">Non recherche &#10003;</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-label">Liens RDPRM</div>
-                    <div class="data-value green">Aucun lien &#10003;</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-label">Province</div>
-                    <div class="data-value">Quebec (QC)</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-label">Couleur</div>
-                    <div class="data-value">Argent lunaire</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-label">Carburant</div>
-                    <div class="data-value">Essence — 7.1L/100km</div>
-                </div>
+            <!-- DATA -->
+            <div class="section-head"><div class="ico blue">&#128202;</div> Donnees du vehicule</div>
+            <div class="data-cards">
+                <div class="d-card"><div class="d-label">Odometre</div><div class="d-val" id="odoVal">0 km</div></div>
+                <div class="d-card"><div class="d-label">Proprietaires</div><div class="d-val">1</div></div>
+                <div class="d-card"><div class="d-label">Branding SAAQ</div><div class="d-val ok">Aucun &#10003;</div></div>
+                <div class="d-card"><div class="d-label">Vol (CPIC)</div><div class="d-val ok">Non recherche &#10003;</div></div>
+                <div class="d-card"><div class="d-label">Liens RDPRM</div><div class="d-val ok">Aucun &#10003;</div></div>
+                <div class="d-card"><div class="d-label">Province</div><div class="d-val">Quebec (QC)</div></div>
+                <div class="d-card"><div class="d-label">Couleur</div><div class="d-val">Argent lunaire</div></div>
+                <div class="d-card"><div class="d-label">Carburant</div><div class="d-val">Essence 7.1 L/100km</div></div>
             </div>
 
-            <!-- VERIFICATIONS -->
-            <div class="check-section">
-                <h4>&#128737; Verifications de securite (8/8)</h4>
-                <ul class="check-list">
-                    <li>
-                        <span class="check-icon pass">&#10003;</span>
-                        <span><strong>Odometre valide</strong> — Aucune anomalie detectee. Progression coherente: 47,832 km en 4 ans.</span>
-                    </li>
-                    <li>
-                        <span class="check-icon pass">&#10003;</span>
-                        <span><strong>Pas de branding salvage/reconstruit</strong> — Le vehicule n'a jamais ete declare perte totale.</span>
-                    </li>
-                    <li>
-                        <span class="check-icon pass">&#10003;</span>
-                        <span><strong>Vehicule non vole</strong> — Verification CPIC negative. VIN non recherche.</span>
-                    </li>
-                    <li>
-                        <span class="check-icon pass">&#10003;</span>
-                        <span><strong>Aucun lien financier</strong> — Aucune dette ou privilege enregistre au RDPRM.</span>
-                    </li>
-                    <li>
-                        <span class="check-icon pass">&#10003;</span>
-                        <span><strong>Pas d'historique d'encheres salvage</strong> — Aucune trace sur Copart, IAAI ou Bidfax.</span>
-                    </li>
-                    <li>
-                        <span class="check-icon warn">&#9888;</span>
-                        <span><strong>1 rappel de securite</strong> — Rappel TC-2023-045: Probleme potentiel avec le systeme de freinage. <strong>A verifier avec le concessionnaire Honda.</strong></span>
-                    </li>
-                    <li>
-                        <span class="check-icon pass">&#10003;</span>
-                        <span><strong>Crash test: 5 etoiles NCAP</strong> — Excellent resultat en collision frontale et laterale.</span>
-                    </li>
-                    <li>
-                        <span class="check-icon pass">&#10003;</span>
-                        <span><strong>Plaintes consommateurs: faible</strong> — 12 plaintes pour ce modele/annee (moyenne nationale: 45).</span>
-                    </li>
-                </ul>
-            </div>
+            <!-- CHECKS -->
+            <div class="section-head"><div class="ico green">&#128737;</div> Verifications de securite (8/8)</div>
+            <ul class="check-list">
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Odometre valide</strong> — Progression coherente: 47,832 km en 4 ans. Aucune anomalie.</span></li>
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Aucun branding salvage</strong> — Jamais declare perte totale par un assureur.</span></li>
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Vehicule non vole</strong> — Verification CPIC negative. VIN non recherche.</span></li>
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Aucun lien financier</strong> — Pas de dette ou privilege au RDPRM.</span></li>
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Pas d'encheres salvage</strong> — Aucune trace Copart, IAAI ou Bidfax.</span></li>
+                <li class="check-row"><span class="chk warn">&#9888;</span><span class="check-text"><strong>1 rappel de securite</strong> — TC-2023-045: Systeme de freinage. <strong>Verifier avec Honda.</strong></span></li>
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Crash test: 5 etoiles</strong> — Excellent en collision frontale et laterale.</span></li>
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Plaintes: faible</strong> — 12 plaintes vs moyenne de 45 pour ce modele.</span></li>
+            </ul>
 
-            <!-- VALEUR MARCHANDE -->
-            <div class="valeur-box">
-                <h4>Estimation valeur marchande AI</h4>
-                <div class="valeur-price">$24,500</div>
-                <div class="valeur-range">Fourchette estimee: $22,800 — $26,200 (selon etat et region QC)</div>
+            <!-- VALEUR -->
+            <div class="valeur-card">
+                <div class="valeur-title">Estimation valeur marchande AI</div>
+                <div class="valeur-amount" id="valeurNum">$0</div>
+                <div class="valeur-range">Fourchette: $22,800 — $26,200 (selon etat et region QC)</div>
             </div>
 
             <!-- ENTRETIEN -->
-            <div class="check-section">
-                <h4>&#128295; Calendrier d'entretien recommande</h4>
-                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 12px;">Base sur le modele Honda Civic 2021 a 47,832 km</p>
-                <div class="entretien-grid">
-                    <div class="entretien-item">
-                        <div class="entretien-icon">&#128167;</div>
-                        <div class="entretien-info">
-                            <div class="ent-label">Huile moteur</div>
-                            <div class="ent-detail">Prochain: 50,000 km (~$60-80)</div>
-                        </div>
-                    </div>
-                    <div class="entretien-item">
-                        <div class="entretien-icon">&#9881;</div>
-                        <div class="entretien-info">
-                            <div class="ent-label">Freins avant</div>
-                            <div class="ent-detail">Inspection: 50,000 km (~$250-400)</div>
-                        </div>
-                    </div>
-                    <div class="entretien-item">
-                        <div class="entretien-icon">&#127777;</div>
-                        <div class="entretien-info">
-                            <div class="ent-label">Liquide refroidissement</div>
-                            <div class="ent-detail">Remplacement: 60,000 km (~$100-150)</div>
-                        </div>
-                    </div>
-                    <div class="entretien-item">
-                        <div class="entretien-icon">&#128168;</div>
-                        <div class="entretien-info">
-                            <div class="ent-label">Filtre a air</div>
-                            <div class="ent-detail">Remplacement: 50,000 km (~$30-50)</div>
-                        </div>
-                    </div>
-                    <div class="entretien-item">
-                        <div class="entretien-icon">&#9889;</div>
-                        <div class="entretien-info">
-                            <div class="ent-label">Bougies d'allumage</div>
-                            <div class="ent-detail">Remplacement: 100,000 km (~$80-120)</div>
-                        </div>
-                    </div>
-                    <div class="entretien-item">
-                        <div class="entretien-icon">&#128258;</div>
-                        <div class="entretien-info">
-                            <div class="ent-label">Fluide transmission CVT</div>
-                            <div class="ent-detail">Remplacement: 60,000 km (~$150-250)</div>
-                        </div>
-                    </div>
-                </div>
-                <p style="font-size: 0.78rem; color: var(--text-light); margin-top: 12px; font-style: italic;">
-                    Cout total entretien estime prochains 20,000 km: <strong>$670 — $1,050</strong>
-                </p>
+            <div class="section-head"><div class="ico gold">&#128295;</div> Calendrier d'entretien recommande</div>
+            <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:4px;">Honda Civic 2021 — 47,832 km</p>
+            <div class="entretien-grid">
+                <div class="ent-card"><div class="ent-ico">&#128167;</div><div><div class="ent-label">Huile moteur</div><div class="ent-detail">Prochain: 50,000 km (~$60-80)</div></div></div>
+                <div class="ent-card"><div class="ent-ico">&#9881;</div><div><div class="ent-label">Freins avant</div><div class="ent-detail">Inspection: 50,000 km (~$250-400)</div></div></div>
+                <div class="ent-card"><div class="ent-ico">&#127777;</div><div><div class="ent-label">Liquide refroidissement</div><div class="ent-detail">Remplacement: 60,000 km (~$100-150)</div></div></div>
+                <div class="ent-card"><div class="ent-ico">&#128168;</div><div><div class="ent-label">Filtre a air</div><div class="ent-detail">Remplacement: 50,000 km (~$30-50)</div></div></div>
+                <div class="ent-card"><div class="ent-ico">&#9889;</div><div><div class="ent-label">Bougies d'allumage</div><div class="ent-detail">Remplacement: 100,000 km (~$80-120)</div></div></div>
+                <div class="ent-card"><div class="ent-ico">&#128258;</div><div><div class="ent-label">Fluide CVT</div><div class="ent-detail">Remplacement: 60,000 km (~$150-250)</div></div></div>
             </div>
+            <p class="ent-total">Cout entretien estime prochains 20,000 km: <strong>$670 — $1,050</strong></p>
 
-            <!-- DISCLAIMER -->
-            <div style="background: var(--bg); border-radius: 10px; padding: 16px; margin-top: 24px;">
-                <p style="font-size: 0.75rem; color: var(--text-light); line-height: 1.6;">
-                    <strong>Avertissement:</strong> Ce rapport est genere a des fins d'information seulement. AutoVerif QC recommande toujours une inspection mecanique professionnelle avant l'achat. Les donnees proviennent de sources gouvernementales et publiques. L'estimation de la valeur marchande est fournie a titre indicatif. AutoVerif QC n'est pas responsable des decisions d'achat basees sur ce rapport.
-                </p>
+            <div class="disclaimer">
+                <strong>Avertissement:</strong> Ce rapport est genere a titre indicatif. AutoVerif QC recommande toujours une inspection mecanique professionnelle avant l'achat. Donnees provenant de sources gouvernementales et publiques. AutoVerif QC n'est pas responsable des decisions d'achat basees sur ce rapport.
             </div>
         </div>
 
         <!-- DOWNLOAD -->
-        <div class="download-section">
-            <a href="#" class="download-btn" onclick="animateDownload(event)">
-                <span class="dl-icon">&#128196;</span>
-                Telecharger le rapport PDF
-            </a>
-            <p class="download-sub">Rapport complet de 4 pages — genere le 14 fevrier 2026</p>
-            <p class="download-sub" style="margin-top: 16px;">
-                <a href="#" onclick="resetDemo(event)" style="color: var(--accent); text-decoration: none; font-weight: 600;">&#8592; Analyser un autre vehicule</a>
-            </p>
+        <div class="download-bar">
+            <button class="dl-btn primary" id="dlBtn" onclick="animDl()">
+                &#128196; &nbsp;Telecharger le rapport PDF
+            </button>
+            <button class="dl-btn outline" onclick="resetAll()">
+                &#8592; &nbsp;Analyser un autre vehicule
+            </button>
+            <p class="dl-sub">Rapport 4 pages — genere le 14 fevrier 2026 — AutoVerif QC + SeoParAI</p>
         </div>
     </div>
 
-    <!-- POWERED BY -->
-    <div class="powered-by">
+    <div class="report-footer">
         <p>Rapport genere par <strong>AutoVerif QC</strong> — Propulse par <a href="https://www.seoparai.com" target="_blank">SeoParAI</a></p>
-        <p style="margin-top: 4px;">10 sources de donnees | AI predictive | 100% quebecois</p>
+        <p style="margin-top:4px;">10 sources | AI predictive | 100% quebecois</p>
     </div>
+</div>
 </section>
 
 <script>
-    function startScan() {
-        const vin = document.getElementById('vinInput').value || '2HGFC2F59MH528491';
-        document.getElementById('loadingVin').textContent = vin.toUpperCase();
-
-        const overlay = document.getElementById('loadingOverlay');
-        overlay.classList.add('active');
-        document.querySelector('.scanner-section').style.display = 'none';
-
-        const steps = ['step1','step2','step3','step4','step5','step6','step7','step8'];
-        const progressBar = document.getElementById('progressBar');
-        let current = 0;
-
-        function nextStep() {
-            if (current > 0) {
-                document.getElementById(steps[current - 1]).classList.remove('active');
-                document.getElementById(steps[current - 1]).classList.add('done');
-                document.getElementById(steps[current - 1]).querySelector('.step-icon').textContent = '✓';
-            }
-
-            if (current < steps.length) {
-                document.getElementById(steps[current]).classList.add('active');
-                progressBar.style.width = ((current + 1) / steps.length * 100) + '%';
-                current++;
-                setTimeout(nextStep, 800 + Math.random() * 600);
-            } else {
-                progressBar.style.width = '100%';
-                setTimeout(showReport, 600);
-            }
-        }
-
-        setTimeout(nextStep, 500);
-    }
-
-    function showReport() {
-        document.getElementById('loadingOverlay').classList.remove('active');
-        document.getElementById('reportSection').classList.add('active');
-        document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
-
-        // Animate data items
-        document.querySelectorAll('.data-item, .check-list li, .entretien-item').forEach((el, i) => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(10px)';
-            el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-            setTimeout(() => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-            }, 100 + i * 60);
+// ===== PARTICLES =====
+(function(){
+    const c = document.getElementById('particles');
+    const ctx = c.getContext('2d');
+    let w, h, dots = [];
+    function resize(){ w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    for(let i = 0; i < 60; i++){
+        dots.push({
+            x: Math.random()*w, y: Math.random()*h,
+            r: Math.random()*1.5 + 0.3,
+            dx: (Math.random()-0.5)*0.4,
+            dy: (Math.random()-0.5)*0.4,
+            o: Math.random()*0.3 + 0.05
         });
     }
-
-    function animateDownload(e) {
-        e.preventDefault();
-        const btn = e.currentTarget;
-        btn.innerHTML = '<span class="dl-icon">&#9889;</span> Telechargement en cours...';
-        btn.style.opacity = '0.7';
-
-        setTimeout(() => {
-            btn.innerHTML = '<span class="dl-icon">&#10003;</span> Rapport telecharge!';
-            btn.style.background = 'linear-gradient(135deg, var(--green), #1a8a7e)';
-            btn.style.opacity = '1';
-        }, 1500);
-
-        setTimeout(() => {
-            btn.innerHTML = '<span class="dl-icon">&#128196;</span> Telecharger le rapport PDF';
-            btn.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
-        }, 4000);
-    }
-
-    function resetDemo(e) {
-        e.preventDefault();
-        document.getElementById('reportSection').classList.remove('active');
-        document.querySelector('.scanner-section').style.display = 'flex';
-
-        // Reset loading steps
-        for (let i = 1; i <= 8; i++) {
-            const step = document.getElementById('step' + i);
-            step.classList.remove('active', 'done');
-            step.querySelector('.step-icon').textContent = i;
+    function draw(){
+        ctx.clearRect(0,0,w,h);
+        dots.forEach(d => {
+            d.x += d.dx; d.y += d.dy;
+            if(d.x < 0) d.x = w; if(d.x > w) d.x = 0;
+            if(d.y < 0) d.y = h; if(d.y > h) d.y = 0;
+            ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+            ctx.fillStyle = `rgba(0,180,216,${d.o})`; ctx.fill();
+        });
+        // lines
+        for(let i=0;i<dots.length;i++){
+            for(let j=i+1;j<dots.length;j++){
+                const dx=dots[i].x-dots[j].x, dy=dots[i].y-dots[j].y;
+                const dist=Math.sqrt(dx*dx+dy*dy);
+                if(dist < 120){
+                    ctx.beginPath();
+                    ctx.moveTo(dots[i].x,dots[i].y);
+                    ctx.lineTo(dots[j].x,dots[j].y);
+                    ctx.strokeStyle = `rgba(0,180,216,${0.04*(1-dist/120)})`;
+                    ctx.stroke();
+                }
+            }
         }
-        document.getElementById('progressBar').style.width = '0%';
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        requestAnimationFrame(draw);
     }
-</script>
+    draw();
+})();
 
+// ===== SCAN =====
+function startScan(){
+    const vin = document.getElementById('vinInput').value || '2HGFC2F59MH528491';
+    document.getElementById('loadVin').textContent = vin.toUpperCase();
+    document.getElementById('loadScreen').classList.add('active');
+    document.querySelector('.scanner-hero').style.display = 'none';
+
+    const rows = document.querySelectorAll('.step-row');
+    const fill = document.getElementById('progFill');
+    const pct = document.getElementById('loadPct');
+    let cur = 0;
+
+    function next(){
+        if(cur > 0){
+            rows[cur-1].classList.remove('active');
+            rows[cur-1].classList.add('done');
+            rows[cur-1].querySelector('.step-dot').textContent = '✓';
+        }
+        if(cur < rows.length){
+            rows[cur].classList.add('active');
+            const p = Math.round((cur+1)/rows.length*100);
+            fill.style.width = p + '%';
+            pct.textContent = p + '%';
+            cur++;
+            setTimeout(next, 700 + Math.random()*500);
+        } else {
+            fill.style.width = '100%';
+            pct.textContent = '100%';
+            setTimeout(showReport, 500);
+        }
+    }
+    setTimeout(next, 400);
+}
+
+// ===== GAUGE =====
+function drawGauge(score){
+    const canvas = document.getElementById('gaugeCanvas');
+    const ctx = canvas.getContext('2d');
+    const cx = 70, cy = 70, r = 60;
+    ctx.clearRect(0,0,140,140);
+    // bg
+    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI*0.75,Math.PI*0.75);
+    ctx.lineWidth = 8; ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.stroke();
+    // value
+    const range = Math.PI * 1.5;
+    const end = -Math.PI*0.75 + (score/100)*range;
+    const grad = ctx.createLinearGradient(0,0,140,140);
+    grad.addColorStop(0, '#00b4d8');
+    grad.addColorStop(0.5, '#2a9d8f');
+    grad.addColorStop(1, '#f4a61c');
+    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI*0.75,end);
+    ctx.lineWidth = 8; ctx.lineCap = 'round';
+    ctx.strokeStyle = grad; ctx.stroke();
+    // glow
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = 'rgba(0,180,216,0.3)';
+    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI*0.75,end);
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,180,216,0.15)'; ctx.stroke();
+    ctx.shadowBlur = 0;
+}
+
+// ===== COUNT UP =====
+function countUp(el, target, prefix, suffix, duration){
+    const start = 0;
+    const startTime = performance.now();
+    function update(now){
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (target - start) * eased);
+        el.textContent = prefix + current.toLocaleString() + suffix;
+        if(progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+}
+
+// ===== SHOW REPORT =====
+function showReport(){
+    document.getElementById('loadScreen').classList.remove('active');
+    const rp = document.getElementById('reportPage');
+    rp.classList.add('active');
+    window.scrollTo({top: 0});
+
+    // Animate gauge
+    let g = 0;
+    const gi = setInterval(()=>{
+        g += 2;
+        if(g > 82){ g = 82; clearInterval(gi); }
+        drawGauge(g);
+    }, 20);
+
+    // Count ups
+    countUp(document.getElementById('scoreNum'), 82, '', '', 1200);
+    countUp(document.getElementById('odoVal'), 47832, '', ' km', 1000);
+    countUp(document.getElementById('valeurNum'), 24500, '$', '', 1400);
+
+    // GSAP animate elements
+    gsap.from('.success-check', {scale:0, duration:0.6, ease:'back.out(1.7)', delay:0.1});
+    gsap.from('.success-banner h2', {y:20, opacity:0, duration:0.5, delay:0.3});
+    gsap.from('.success-banner p', {y:20, opacity:0, duration:0.5, delay:0.4});
+    gsap.from('.doc-header', {y:30, opacity:0, duration:0.6, delay:0.5});
+    gsap.from('.verdict-bar', {x:-30, opacity:0, duration:0.5, delay:0.7});
+    gsap.from('.d-card', {y:20, opacity:0, duration:0.4, stagger:0.06, delay:0.9});
+    gsap.from('.check-row', {x:-20, opacity:0, duration:0.3, stagger:0.05, delay:1.2});
+    gsap.from('.valeur-card', {scale:0.9, opacity:0, duration:0.5, delay:1.6});
+    gsap.from('.ent-card', {y:15, opacity:0, duration:0.3, stagger:0.06, delay:1.8});
+    gsap.from('.download-bar', {y:20, opacity:0, duration:0.5, delay:2.2});
+}
+
+// ===== DOWNLOAD ANIM =====
+function animDl(){
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '&#9889; &nbsp;Preparation du PDF...';
+    btn.style.opacity = '0.7';
+    setTimeout(()=>{
+        btn.innerHTML = '&#10003; &nbsp;Rapport telecharge!';
+        btn.style.background = 'linear-gradient(135deg, var(--green), #1a8a7e)';
+        btn.style.opacity = '1';
+    }, 1500);
+    setTimeout(()=>{
+        btn.innerHTML = '&#128196; &nbsp;Telecharger le rapport PDF';
+        btn.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
+    }, 4000);
+}
+
+// ===== RESET =====
+function resetAll(){
+    document.getElementById('reportPage').classList.remove('active');
+    document.querySelector('.scanner-hero').style.display = 'flex';
+    document.querySelectorAll('.step-row').forEach((r,i) => {
+        r.classList.remove('active','done');
+        r.querySelector('.step-dot').textContent = i+1;
+    });
+    document.getElementById('progFill').style.width = '0%';
+    document.getElementById('loadPct').textContent = '0%';
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
 </body>
 </html>
