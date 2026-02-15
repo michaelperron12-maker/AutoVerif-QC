@@ -72,6 +72,46 @@
         @media (max-width: 768px) {
             nav { padding: 0 16px; }
             .nav-links { display: none; }
+            .hero { min-height: auto; padding: 100px 16px 48px; }
+            .hero h1 { font-size: 1.8rem; letter-spacing: -0.5px; }
+            .hero p { font-size: 0.95rem; margin-bottom: 28px; }
+            .hero-stats { gap: 20px; }
+            .hero-stat .number { font-size: 1.6rem; }
+            .hero-stat .label { font-size: 0.7rem; }
+            section { padding: 48px 16px; }
+            .section-title { font-size: 1.5rem; }
+            .section-subtitle { font-size: 0.95rem; margin-bottom: 32px; }
+            .card-grid { grid-template-columns: 1fr; gap: 16px; }
+            .card { padding: 24px; }
+            .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
+            .pricing-card { padding: 28px 20px; }
+            .pricing-price { font-size: 2.2rem; }
+            .finance-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .finance-card { padding: 16px; }
+            .finance-card .amount { font-size: 1.4rem; }
+            .finance-card .desc { font-size: 0.72rem; }
+            .table-wrapper { margin: 16px -16px; border-radius: 0; border-left: none; border-right: none; }
+            table { font-size: 0.78rem; }
+            th, td { padding: 10px 12px; }
+            .timeline { padding-left: 28px; }
+            .timeline-item { padding: 20px; }
+            .timeline-item::before { left: -21px; width: 10px; height: 10px; }
+            .legal-block { padding: 20px; }
+            .legal-quote { padding: 10px 14px; font-size: 0.85rem; }
+            .highlight-box { padding: 20px; margin: 20px 0; }
+            .cta-section { padding: 40px 20px; border-radius: 16px; }
+            .cta-section h2 { font-size: 1.5rem; }
+            .cta-buttons { flex-direction: column; gap: 12px; }
+            .cta-btn { width: 100%; text-align: center; }
+            .accordion-header { padding: 16px; font-size: 0.88rem; }
+            .accordion-body-inner { padding: 0 16px 16px; }
+            .container { padding: 0; }
+            .confidential { font-size: 0.65rem; letter-spacing: 1px; padding: 6px; }
+        }
+        @media (max-width: 400px) {
+            .hero-stats { flex-direction: column; gap: 16px; }
+            .finance-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.5rem; }
         }
 
         /* ---- HERO ---- */
@@ -628,7 +668,7 @@
             <div class="card">
                 <div class="card-icon green">&#128176;</div>
                 <h3>Prix competitif</h3>
-                <p>$19.99 par rapport pour les consommateurs vs $43.95 chez CARFAX. Abonnement concessionnaire a $699.99/mois vs $399-$949 chez CARFAX (avec plus de donnees locales).</p>
+                <p>$19.99 par rapport pour les consommateurs vs $43.95 chez CARFAX. Abonnement concessionnaire a $699.99/mois vs $2,000/mois chez CARFAX (avec plus de donnees locales).</p>
             </div>
             <div class="card">
                 <div class="card-icon red">&#127993;</div>
@@ -1057,7 +1097,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
                     <li>Formation equipe incluse</li>
                     <li>Facturation mensuelle, sans contrat</li>
                 </ul>
-                <button class="pricing-btn outline">$699 vs $399-949 CARFAX</button>
+                <button class="pricing-btn outline">$699 vs $2,000 CARFAX</button>
             </div>
         </div>
 
@@ -1082,7 +1122,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
                         </tr>
                         <tr>
                             <td>Abonnement dealer</td>
-                            <td>$399 - $949/mois</td>
+                            <td>$2,000/mois</td>
                             <td><strong>$699.99/mois illimite</strong></td>
                             <td><span class="badge badge-green">Previsible</span></td>
                         </tr>
@@ -1330,17 +1370,27 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
 
         <div class="timeline">
             <div class="timeline-item active">
-                <div class="timeline-phase">Phase 1 — Mois 1-3</div>
-                <h3>Fondation legale + MVP ($15,000 — 500h SeoParAI)</h3>
-                <p>Mettre en place l'entite juridique et developper le MVP complet avec notre partenaire technologique SeoParAI.</p>
+                <div class="timeline-phase">Phase 1A — Mois 1-3</div>
+                <h3>Developpement MVP — $15,000 (500h SeoParAI)</h3>
+                <p>Construction complete de la plateforme par SeoParAI: 500 heures de developpement, serveur local securise, moteur AI operationnel.</p>
                 <ul>
-                    <li>Incorporer l'entreprise (NEQ Quebec)</li>
-                    <li>Envoyer la demande d'acces a la SAAQ</li>
-                    <li>Envoyer la demande d'adhesion IBC</li>
                     <li><strong>Developpement MVP (500h — SeoParAI):</strong> plateforme web, moteur AI, scanner VIN, infrastructure serveur local</li>
                     <li>Integrer les 10 sources de donnees gratuites</li>
                     <li>Deployer sur serveur local securise (hebergement + AI: $1,000/mois)</li>
                     <li>Lancer le marketing SEO + campagne web (SeoParAI)</li>
+                    <li>Tests, QA et optimisation performance</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item active">
+                <div class="timeline-phase">Phase 1B — Mois 2-4</div>
+                <h3>Fondation juridique & acces aux donnees</h3>
+                <p>Incorporer l'entreprise et lancer les demarches legales en parallele du developpement.</p>
+                <ul>
+                    <li>Incorporer l'entreprise (NEQ Quebec)</li>
+                    <li>Envoyer la demande d'acces a la SAAQ</li>
+                    <li>Envoyer la demande d'adhesion IBC</li>
+                    <li>Retenir un avocat (Loi 25, ententes SAAQ)</li>
                 </ul>
             </div>
 
