@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoVerif QC — Demo Rapport Vehiculaire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f2b46;
+            --primary-light: #1a3d5c;
+            --accent: #00b4d8;
+            --accent-dark: #0096b7;
+            --gold: #f4a61c;
+            --gold-dark: #d4910a;
+            --red: #e63946;
+            --green: #2a9d8f;
+            --bg: #f8f9fb;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(15, 43, 70, 0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 0 40px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px;
+        }
+        .nav-logo {
+            font-size: 1.6rem; font-weight: 900; color: white;
+            letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none;
+        }
+        .nav-logo .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: 900; color: var(--primary);
+        }
+        .nav-logo span { color: var(--accent); }
+        .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-link {
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            font-size: 0.85rem; font-weight: 500;
+        }
+        .nav-link:hover { color: white; }
+        .nav-badge {
+            background: var(--gold); color: var(--primary);
+            padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* SCANNER SECTION */
+        .scanner-section {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #0a1628 50%, var(--primary-light) 100%);
+            display: flex; align-items: center; justify-content: center;
+            padding: 100px 20px 60px;
+            position: relative; overflow: hidden;
+        }
+        .scanner-section::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(0,180,216,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 30%, rgba(244,166,28,0.06) 0%, transparent 50%);
+        }
+        .scanner-container {
+            position: relative;
+            max-width: 640px; width: 100%;
+        }
+        .scanner-header {
+            text-align: center; margin-bottom: 40px;
+        }
+        .scanner-header h1 {
+            font-size: 2.2rem; font-weight: 900; color: white;
+            margin-bottom: 12px; letter-spacing: -1px;
+        }
+        .scanner-header h1 .gradient {
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .scanner-header p {
+            color: rgba(255,255,255,0.6); font-size: 1rem;
+        }
+
+        /* INPUT BOX */
+        .input-box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-label {
+            display: block; color: rgba(255,255,255,0.7);
+            font-size: 0.8rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .vin-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.08);
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Inter', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .vin-input::placeholder {
+            color: rgba(255,255,255,0.25);
+            letter-spacing: 2px;
+            font-size: 1rem;
+        }
+        .vin-input:focus {
+            border-color: var(--accent);
+            background: rgba(0,180,216,0.08);
+            box-shadow: 0 0 30px rgba(0,180,216,0.15);
+        }
+
+        /* PHOTO UPLOAD */
+        .photo-upload {
+            border: 2px dashed rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 24px;
+        }
+        .photo-upload:hover {
+            border-color: var(--accent);
+            background: rgba(0,180,216,0.05);
+        }
+        .photo-upload .icon {
+            font-size: 2rem; margin-bottom: 8px;
+        }
+        .photo-upload p {
+            color: rgba(255,255,255,0.5); font-size: 0.85rem;
+        }
+        .photo-upload .or-text {
+            color: rgba(255,255,255,0.3); font-size: 0.75rem;
+            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* SCAN BUTTON */
+        .scan-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--accent), #0096b7);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,180,216,0.4);
+        }
+        .scan-btn:active { transform: translateY(0); }
+        .scan-btn.demo-btn {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--primary);
+            margin-top: 12px;
+            font-size: 0.95rem;
+        }
+
+        /* LOADING ANIMATION */
+        .loading-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(10,22,40,0.97);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .loading-overlay.active { display: flex; }
+
+        .loading-ring {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            border: 4px solid rgba(0,180,216,0.15);
+            border-top: 4px solid var(--accent);
+            border-right: 4px solid var(--gold);
+            animation: spin 1.2s linear infinite;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .loading-ring::after {
+            content: 'AV';
+            position: absolute; inset: 8px;
+            background: rgba(0,180,216,0.08);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; font-weight: 900; color: var(--accent);
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-title {
+            font-size: 1.5rem; font-weight: 800; color: white;
+            margin-bottom: 8px; text-align: center;
+        }
+        .loading-vin {
+            font-family: monospace; font-size: 1.1rem;
+            color: var(--accent); font-weight: 700;
+            letter-spacing: 3px; margin-bottom: 32px;
+        }
+
+        .loading-steps {
+            max-width: 500px; width: 100%;
+        }
+        .loading-step {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 0;
+            opacity: 0.3;
+            transition: all 0.5s;
+        }
+        .loading-step.active {
+            opacity: 1;
+        }
+        .loading-step.done {
+            opacity: 0.6;
+        }
+        .loading-step .step-icon {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; flex-shrink: 0;
+            transition: all 0.5s;
+        }
+        .loading-step.active .step-icon {
+            background: var(--accent);
+            animation: pulse-icon 1s infinite;
+        }
+        .loading-step.done .step-icon {
+            background: var(--green);
+        }
+        @keyframes pulse-icon {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0,180,216,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(0,180,216,0); }
+        }
+        .loading-step .step-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.88rem; font-weight: 500;
+        }
+        .loading-step.active .step-text { color: white; font-weight: 600; }
+
+        .loading-progress {
+            max-width: 500px; width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-top: 24px;
+            overflow: hidden;
+        }
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* REPORT SECTION */
+        .report-section {
+            display: none;
+            padding: 100px 20px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .report-section.active { display: block; }
+
+        .report-success {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .report-success .checkmark {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--green), #1a8a7e);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; color: white;
+            margin: 0 auto 20px;
+            animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes pop-in {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        .report-success h2 {
+            font-size: 1.8rem; font-weight: 800; margin-bottom: 8px;
+        }
+        .report-success p {
+            color: var(--text-light); font-size: 1rem;
+        }
+
+        /* REPORT CARD */
+        .report-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+        .report-card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 32px;
+            color: white;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 20px;
+        }
+        .report-vehicle-info h3 {
+            font-size: 1.5rem; font-weight: 800; margin-bottom: 4px;
+        }
+        .report-vehicle-info p {
+            color: rgba(255,255,255,0.6); font-size: 0.9rem;
+        }
+        .report-vehicle-info .vin-display {
+            font-family: monospace; font-size: 0.8rem;
+            color: var(--accent); letter-spacing: 2px;
+            margin-top: 4px; font-weight: 600;
+        }
+
+        /* SCORE */
+        .score-circle {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(var(--green) 0% 82%, rgba(255,255,255,0.15) 82% 100%);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .score-circle-inner {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        .score-number {
+            font-size: 1.8rem; font-weight: 900; color: var(--green);
+            line-height: 1;
+        }
+        .score-label {
+            font-size: 0.55rem; color: rgba(255,255,255,0.5);
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        /* REPORT BODY */
+        .report-body { padding: 32px; }
+
+        .report-verdict {
+            background: linear-gradient(135deg, rgba(42,157,143,0.08), rgba(42,157,143,0.02));
+            border: 1px solid rgba(42,157,143,0.2);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 28px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .verdict-icon {
+            width: 52px; height: 52px;
+            background: var(--green);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: white; flex-shrink: 0;
+        }
+        .verdict-text h4 {
+            font-size: 1.1rem; font-weight: 800; color: var(--green);
+            margin-bottom: 2px;
+        }
+        .verdict-text p {
+            font-size: 0.88rem; color: var(--text-light);
+        }
+
+        /* DATA GRID */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .data-item {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .data-item .data-label {
+            font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            color: var(--text-light); margin-bottom: 4px;
+        }
+        .data-item .data-value {
+            font-size: 1rem; font-weight: 700; color: var(--text);
+        }
+        .data-item .data-value.green { color: var(--green); }
+        .data-item .data-value.red { color: var(--red); }
+        .data-item .data-value.gold { color: var(--gold-dark); }
+
+        /* CHECK LIST */
+        .check-section {
+            margin-bottom: 28px;
+        }
+        .check-section h4 {
+            font-size: 0.95rem; font-weight: 700;
+            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .check-list { list-style: none; }
+        .check-list li {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        .check-list li:last-child { border-bottom: none; }
+        .check-icon {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; flex-shrink: 0; font-weight: 700;
+        }
+        .check-icon.pass { background: rgba(42,157,143,0.1); color: var(--green); }
+        .check-icon.warn { background: rgba(244,166,28,0.1); color: var(--gold-dark); }
+        .check-icon.fail { background: rgba(230,57,70,0.1); color: var(--red); }
+
+        /* ENTRETIEN */
+        .entretien-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .entretien-item {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .entretien-icon {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            background: rgba(0,180,216,0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; flex-shrink: 0;
+        }
+        .entretien-info .ent-label {
+            font-size: 0.78rem; font-weight: 700; color: var(--text);
+        }
+        .entretien-info .ent-detail {
+            font-size: 0.72rem; color: var(--text-light);
+        }
+
+        /* VALEUR */
+        .valeur-box {
+            background: linear-gradient(135deg, rgba(244,166,28,0.06), rgba(0,180,216,0.06));
+            border: 1px solid rgba(244,166,28,0.2);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .valeur-box h4 {
+            font-size: 0.85rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--text-light); margin-bottom: 8px;
+        }
+        .valeur-price {
+            font-size: 2.5rem; font-weight: 900;
+            color: var(--primary); line-height: 1;
+        }
+        .valeur-range {
+            font-size: 0.85rem; color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* DOWNLOAD */
+        .download-section {
+            text-align: center;
+            padding: 32px;
+            border-top: 1px solid var(--border);
+        }
+        .download-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border: none; border-radius: 14px;
+            color: white; font-size: 1.05rem; font-weight: 800;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,180,216,0.3);
+        }
+        .download-btn .dl-icon {
+            font-size: 1.2rem;
+        }
+        .download-sub {
+            margin-top: 12px;
+            font-size: 0.8rem; color: var(--text-light);
+        }
+
+        /* POWERED BY */
+        .powered-by {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        .powered-by a {
+            color: var(--accent); text-decoration: none; font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            nav { padding: 0 16px; }
+            .scanner-header h1 { font-size: 1.6rem; }
+            .input-box { padding: 24px; }
+            .vin-input { font-size: 1rem; letter-spacing: 2px; padding: 14px 16px; }
+            .report-card-header { padding: 24px; flex-direction: column; align-items: flex-start; }
+            .score-circle { width: 80px; height: 80px; }
+            .score-circle-inner { width: 64px; height: 64px; }
+            .score-number { font-size: 1.4rem; }
+            .report-body { padding: 20px; }
+            .data-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .entretien-grid { grid-template-columns: 1fr; }
+            .valeur-price { font-size: 2rem; }
+            .loading-title { font-size: 1.2rem; }
+        }
+        @media (max-width: 400px) {
+            .data-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="index.html" class="nav-logo"><span class="logo-icon">AV</span>Auto<span>Verif</span> QC</a>
+    <div class="nav-right">
+        <a href="index.html" class="nav-link">Plan d'affaires</a>
+        <a href="index.html#prix" class="nav-badge">Tarification</a>
+    </div>
+</nav>
+
+<!-- SCANNER -->
+<section class="scanner-section" id="scanner">
+    <div class="scanner-container">
+        <div class="scanner-header">
+            <h1>Verifiez votre vehicule <span class="gradient">en 30 secondes</span></h1>
+            <p>Entrez un numero VIN ou prenez une photo pour obtenir le rapport complet.</p>
+        </div>
+
+        <div class="input-box">
+            <div class="input-group">
+                <label class="input-label">Numero VIN (17 caracteres)</label>
+                <input type="text" class="vin-input" id="vinInput" maxlength="17"
+                       placeholder="Ex: 2HGFC2F59MH..."
+                       value="2HGFC2F59MH528491">
+            </div>
+
+            <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+                <div class="icon">&#128247;</div>
+                <p class="or-text">ou bien</p>
+                <p>Prenez une photo du VIN — notre AI le detecte automatiquement</p>
+                <input type="file" id="photoInput" accept="image/*" style="display: none;">
+            </div>
+
+            <button class="scan-btn" onclick="startScan()">
+                &#128270; &nbsp;Analyser ce vehicule — $19.99
+            </button>
+            <button class="scan-btn demo-btn" onclick="startScan()">
+                &#9889; &nbsp;Demo gratuite — Voir un exemple de rapport
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-ring"></div>
+    <div class="loading-title">Analyse en cours...</div>
+    <div class="loading-vin" id="loadingVin">2HGFC2F59MH528491</div>
+
+    <div class="loading-steps">
+        <div class="loading-step" id="step1">
+            <div class="step-icon">1</div>
+            <div class="step-text">Decodage VIN — identification du vehicule...</div>
+        </div>
+        <div class="loading-step" id="step2">
+            <div class="step-icon">2</div>
+            <div class="step-text">Verification vehicule vole (CPIC)...</div>
+        </div>
+        <div class="loading-step" id="step3">
+            <div class="step-icon">3</div>
+            <div class="step-text">Rappels de securite Canada + USA...</div>
+        </div>
+        <div class="loading-step" id="step4">
+            <div class="step-icon">4</div>
+            <div class="step-text">Branding SAAQ — salvage / reconstruit...</div>
+        </div>
+        <div class="loading-step" id="step5">
+            <div class="step-icon">5</div>
+            <div class="step-text">Historique odometre — detection fraude...</div>
+        </div>
+        <div class="loading-step" id="step6">
+            <div class="step-icon">6</div>
+            <div class="step-text">Encheres salvage — Copart / IAAI...</div>
+        </div>
+        <div class="loading-step" id="step7">
+            <div class="step-icon">7</div>
+            <div class="step-text">Liens financiers RDPRM...</div>
+        </div>
+        <div class="loading-step" id="step8">
+            <div class="step-icon">8</div>
+            <div class="step-text">Score de risque AI — analyse finale...</div>
+        </div>
+    </div>
+
+    <div class="loading-progress">
+        <div class="loading-progress-bar" id="progressBar"></div>
+    </div>
+</div>
+
+<!-- REPORT -->
+<section class="report-section" id="reportSection">
+    <div class="report-success">
+        <div class="checkmark">&#10003;</div>
+        <h2>Rapport genere avec succes</h2>
+        <p>Analyse completee en 28 secondes — 10 sources de donnees verifiees</p>
+    </div>
+
+    <div class="report-card">
+        <!-- HEADER -->
+        <div class="report-card-header">
+            <div class="report-vehicle-info">
+                <h3>Honda Civic EX 2021</h3>
+                <p>Berline 4 portes — 2.0L 4 cylindres — CVT — Traction avant</p>
+                <div class="vin-display">VIN: 2HGFC2F59MH528491</div>
+            </div>
+            <div class="score-circle">
+                <div class="score-circle-inner">
+                    <div class="score-number">82</div>
+                    <div class="score-label">Score AI</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-body">
+            <!-- VERDICT AI -->
+            <div class="report-verdict">
+                <div class="verdict-icon">&#9989;</div>
+                <div class="verdict-text">
+                    <h4>Recommandation: ACHETER avec confiance</h4>
+                    <p>Ce vehicule presente un profil de risque faible. Aucun drapeau rouge majeur detecte. Score de confiance: 82/100. Negociation possible sur le prix selon la valeur marchande.</p>
+                </div>
+            </div>
+
+            <!-- DATA GRID -->
+            <div class="data-grid">
+                <div class="data-item">
+                    <div class="data-label">Odometre</div>
+                    <div class="data-value">47,832 km</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Proprietaires</div>
+                    <div class="data-value">1</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Branding</div>
+                    <div class="data-value green">Aucun &#10003;</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Vol (CPIC)</div>
+                    <div class="data-value green">Non recherche &#10003;</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Liens RDPRM</div>
+                    <div class="data-value green">Aucun lien &#10003;</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Province</div>
+                    <div class="data-value">Quebec (QC)</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Couleur</div>
+                    <div class="data-value">Argent lunaire</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Carburant</div>
+                    <div class="data-value">Essence — 7.1L/100km</div>
+                </div>
+            </div>
+
+            <!-- VERIFICATIONS -->
+            <div class="check-section">
+                <h4>&#128737; Verifications de securite (8/8)</h4>
+                <ul class="check-list">
+                    <li>
+                        <span class="check-icon pass">&#10003;</span>
+                        <span><strong>Odometre valide</strong> — Aucune anomalie detectee. Progression coherente: 47,832 km en 4 ans.</span>
+                    </li>
+                    <li>
+                        <span class="check-icon pass">&#10003;</span>
+                        <span><strong>Pas de branding salvage/reconstruit</strong> — Le vehicule n'a jamais ete declare perte totale.</span>
+                    </li>
+                    <li>
+                        <span class="check-icon pass">&#10003;</span>
+                        <span><strong>Vehicule non vole</strong> — Verification CPIC negative. VIN non recherche.</span>
+                    </li>
+                    <li>
+                        <span class="check-icon pass">&#10003;</span>
+                        <span><strong>Aucun lien financier</strong> — Aucune dette ou privilege enregistre au RDPRM.</span>
+                    </li>
+                    <li>
+                        <span class="check-icon pass">&#10003;</span>
+                        <span><strong>Pas d'historique d'encheres salvage</strong> — Aucune trace sur Copart, IAAI ou Bidfax.</span>
+                    </li>
+                    <li>
+                        <span class="check-icon warn">&#9888;</span>
+                        <span><strong>1 rappel de securite</strong> — Rappel TC-2023-045: Probleme potentiel avec le systeme de freinage. <strong>A verifier avec le concessionnaire Honda.</strong></span>
+                    </li>
+                    <li>
+                        <span class="check-icon pass">&#10003;</span>
+                        <span><strong>Crash test: 5 etoiles NCAP</strong> — Excellent resultat en collision frontale et laterale.</span>
+                    </li>
+                    <li>
+                        <span class="check-icon pass">&#10003;</span>
+                        <span><strong>Plaintes consommateurs: faible</strong> — 12 plaintes pour ce modele/annee (moyenne nationale: 45).</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- VALEUR MARCHANDE -->
+            <div class="valeur-box">
+                <h4>Estimation valeur marchande AI</h4>
+                <div class="valeur-price">$24,500</div>
+                <div class="valeur-range">Fourchette estimee: $22,800 — $26,200 (selon etat et region QC)</div>
+            </div>
+
+            <!-- ENTRETIEN -->
+            <div class="check-section">
+                <h4>&#128295; Calendrier d'entretien recommande</h4>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 12px;">Base sur le modele Honda Civic 2021 a 47,832 km</p>
+                <div class="entretien-grid">
+                    <div class="entretien-item">
+                        <div class="entretien-icon">&#128167;</div>
+                        <div class="entretien-info">
+                            <div class="ent-label">Huile moteur</div>
+                            <div class="ent-detail">Prochain: 50,000 km (~$60-80)</div>
+                        </div>
+                    </div>
+                    <div class="entretien-item">
+                        <div class="entretien-icon">&#9881;</div>
+                        <div class="entretien-info">
+                            <div class="ent-label">Freins avant</div>
+                            <div class="ent-detail">Inspection: 50,000 km (~$250-400)</div>
+                        </div>
+                    </div>
+                    <div class="entretien-item">
+                        <div class="entretien-icon">&#127777;</div>
+                        <div class="entretien-info">
+                            <div class="ent-label">Liquide refroidissement</div>
+                            <div class="ent-detail">Remplacement: 60,000 km (~$100-150)</div>
+                        </div>
+                    </div>
+                    <div class="entretien-item">
+                        <div class="entretien-icon">&#128168;</div>
+                        <div class="entretien-info">
+                            <div class="ent-label">Filtre a air</div>
+                            <div class="ent-detail">Remplacement: 50,000 km (~$30-50)</div>
+                        </div>
+                    </div>
+                    <div class="entretien-item">
+                        <div class="entretien-icon">&#9889;</div>
+                        <div class="entretien-info">
+                            <div class="ent-label">Bougies d'allumage</div>
+                            <div class="ent-detail">Remplacement: 100,000 km (~$80-120)</div>
+                        </div>
+                    </div>
+                    <div class="entretien-item">
+                        <div class="entretien-icon">&#128258;</div>
+                        <div class="entretien-info">
+                            <div class="ent-label">Fluide transmission CVT</div>
+                            <div class="ent-detail">Remplacement: 60,000 km (~$150-250)</div>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-size: 0.78rem; color: var(--text-light); margin-top: 12px; font-style: italic;">
+                    Cout total entretien estime prochains 20,000 km: <strong>$670 — $1,050</strong>
+                </p>
+            </div>
+
+            <!-- DISCLAIMER -->
+            <div style="background: var(--bg); border-radius: 10px; padding: 16px; margin-top: 24px;">
+                <p style="font-size: 0.75rem; color: var(--text-light); line-height: 1.6;">
+                    <strong>Avertissement:</strong> Ce rapport est genere a des fins d'information seulement. AutoVerif QC recommande toujours une inspection mecanique professionnelle avant l'achat. Les donnees proviennent de sources gouvernementales et publiques. L'estimation de la valeur marchande est fournie a titre indicatif. AutoVerif QC n'est pas responsable des decisions d'achat basees sur ce rapport.
+                </p>
+            </div>
+        </div>
+
+        <!-- DOWNLOAD -->
+        <div class="download-section">
+            <a href="#" class="download-btn" onclick="animateDownload(event)">
+                <span class="dl-icon">&#128196;</span>
+                Telecharger le rapport PDF
+            </a>
+            <p class="download-sub">Rapport complet de 4 pages — genere le 14 fevrier 2026</p>
+            <p class="download-sub" style="margin-top: 16px;">
+                <a href="#" onclick="resetDemo(event)" style="color: var(--accent); text-decoration: none; font-weight: 600;">&#8592; Analyser un autre vehicule</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- POWERED BY -->
+    <div class="powered-by">
+        <p>Rapport genere par <strong>AutoVerif QC</strong> — Propulse par <a href="https://www.seoparai.com" target="_blank">SeoParAI</a></p>
+        <p style="margin-top: 4px;">10 sources de donnees | AI predictive | 100% quebecois</p>
+    </div>
+</section>
+
+<script>
+    function startScan() {
+        const vin = document.getElementById('vinInput').value || '2HGFC2F59MH528491';
+        document.getElementById('loadingVin').textContent = vin.toUpperCase();
+
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.classList.add('active');
+        document.querySelector('.scanner-section').style.display = 'none';
+
+        const steps = ['step1','step2','step3','step4','step5','step6','step7','step8'];
+        const progressBar = document.getElementById('progressBar');
+        let current = 0;
+
+        function nextStep() {
+            if (current > 0) {
+                document.getElementById(steps[current - 1]).classList.remove('active');
+                document.getElementById(steps[current - 1]).classList.add('done');
+                document.getElementById(steps[current - 1]).querySelector('.step-icon').textContent = '✓';
+            }
+
+            if (current < steps.length) {
+                document.getElementById(steps[current]).classList.add('active');
+                progressBar.style.width = ((current + 1) / steps.length * 100) + '%';
+                current++;
+                setTimeout(nextStep, 800 + Math.random() * 600);
+            } else {
+                progressBar.style.width = '100%';
+                setTimeout(showReport, 600);
+            }
+        }
+
+        setTimeout(nextStep, 500);
+    }
+
+    function showReport() {
+        document.getElementById('loadingOverlay').classList.remove('active');
+        document.getElementById('reportSection').classList.add('active');
+        document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
+
+        // Animate data items
+        document.querySelectorAll('.data-item, .check-list li, .entretien-item').forEach((el, i) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(10px)';
+            el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 100 + i * 60);
+        });
+    }
+
+    function animateDownload(e) {
+        e.preventDefault();
+        const btn = e.currentTarget;
+        btn.innerHTML = '<span class="dl-icon">&#9889;</span> Telechargement en cours...';
+        btn.style.opacity = '0.7';
+
+        setTimeout(() => {
+            btn.innerHTML = '<span class="dl-icon">&#10003;</span> Rapport telecharge!';
+            btn.style.background = 'linear-gradient(135deg, var(--green), #1a8a7e)';
+            btn.style.opacity = '1';
+        }, 1500);
+
+        setTimeout(() => {
+            btn.innerHTML = '<span class="dl-icon">&#128196;</span> Telecharger le rapport PDF';
+            btn.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
+        }, 4000);
+    }
+
+    function resetDemo(e) {
+        e.preventDefault();
+        document.getElementById('reportSection').classList.remove('active');
+        document.querySelector('.scanner-section').style.display = 'flex';
+
+        // Reset loading steps
+        for (let i = 1; i <= 8; i++) {
+            const step = document.getElementById('step' + i);
+            step.classList.remove('active', 'done');
+            step.querySelector('.step-icon').textContent = i;
+        }
+        document.getElementById('progressBar').style.width = '0%';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
