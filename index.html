@@ -28,6 +28,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { overflow-x: hidden; width: 100%; }
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -70,7 +71,7 @@
 
         /* ---- NAV ---- */
         nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            position: fixed; top: 30px; left: 0; right: 0; z-index: 1000;
             background: rgba(8, 13, 28, 0.85);
             backdrop-filter: blur(20px) saturate(1.8);
             -webkit-backdrop-filter: blur(20px) saturate(1.8);
@@ -188,10 +189,19 @@
             .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
             /* HERO mobile */
-            .hero { min-height: auto; padding: 80px 16px 40px; }
+            .hero { min-height: auto; padding: 100px 16px 40px; }
             .hero h1 { font-size: 1.5rem; letter-spacing: -0.5px; }
             .hero p { font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5; }
-            .hero-badge { font-size: 0.7rem; padding: 6px 14px; }
+            .hero-badge {
+                font-size: 0.78rem; padding: 10px 18px;
+                background: rgba(42,157,143,0.12); border: 1px solid rgba(42,157,143,0.35);
+                color: var(--green); font-weight: 700;
+                box-shadow: 0 0 20px rgba(42,157,143,0.15);
+            }
+            .hero-badge .dot {
+                width: 10px; height: 10px;
+                box-shadow: 0 0 12px rgba(42,157,143,0.8);
+            }
             .hero-stats { gap: 14px; flex-wrap: wrap; justify-content: center; }
             .hero-stat .number { font-size: 1.3rem; }
             .hero-stat .label { font-size: 0.6rem; max-width: 100px; }
@@ -267,7 +277,8 @@
             .arch-source .badge { font-size: 0.55rem !important; padding: 2px 6px !important; }
 
             /* MISC mobile */
-            .confidential { font-size: 0.55rem; letter-spacing: 0.5px; padding: 5px; }
+            .confidential { font-size: 0.55rem; letter-spacing: 0.5px; padding: 6px 8px; top: 0; }
+            nav { top: 26px !important; }
             footer { padding: 20px 14px; }
             footer p { font-size: 0.7rem; }
 
@@ -281,6 +292,7 @@
         @media (max-width: 480px) {
             /* Extra small screens */
             .hero h1 { font-size: 1.3rem; }
+            .hero-badge { font-size: 0.72rem; padding: 9px 14px; }
             .hero-stats { flex-direction: column; gap: 10px; }
             .hero-stat { display: flex; align-items: center; gap: 10px; }
             .hero-stat .number { font-size: 1.2rem; }
@@ -847,11 +859,13 @@
             background: linear-gradient(90deg, var(--red), #c1121f);
             color: white;
             text-align: center;
-            padding: 6px;
+            padding: 8px 12px;
             font-size: 0.7rem;
             font-weight: 600;
             letter-spacing: 3px;
             text-transform: uppercase;
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 1002;
         }
 
         /* ====== PREMIUM EFFECTS ====== */
@@ -3188,6 +3202,18 @@
     });
     // Extra safety: refresh again after 1.5s for slow connections
     setTimeout(() => ScrollTrigger.refresh(true), 1500);
+
+    // MOBILE FALLBACK: force all animated elements visible after 3s to prevent blank spaces
+    if (window.innerWidth <= 768) {
+        setTimeout(() => {
+            document.querySelectorAll('.card, .legal-block, .pricing-card, .timeline-item, .finance-card, .section-title, .section-label, .section-subtitle, .highlight-box, .table-wrapper, .accordion-item, .cta-section, .reveal').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+                el.style.visibility = 'visible';
+            });
+            ScrollTrigger.refresh(true);
+        }, 2500);
+    }
 
     // --- Hero stats counter animation (improved) ---
     function animateCounter(el, target, suffix) {
