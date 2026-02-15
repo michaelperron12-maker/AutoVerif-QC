@@ -9,19 +9,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
         :root {
-            --primary: #0f2b46;
-            --primary-light: #1a3d5c;
+            --primary: #080e1a;
+            --primary-light: #111b2e;
             --accent: #00b4d8;
             --accent-dark: #0096b7;
             --gold: #f4a61c;
             --gold-dark: #d4910a;
             --red: #e63946;
             --green: #2a9d8f;
-            --bg: #f8f9fb;
-            --card: #ffffff;
-            --text: #1a1a2e;
-            --text-light: #6b7280;
-            --border: #e5e7eb;
+            --bg: #0b1120;
+            --bg-light: #0f1729;
+            --card: rgba(255,255,255,0.04);
+            --text: #e8ecf2;
+            --text-light: #8892a4;
+            --border: rgba(255,255,255,0.08);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -44,11 +45,7 @@
             display: flex; align-items: center; gap: 10px; text-decoration: none;
         }
         .nav-logo .logo-icon {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--accent), var(--gold));
-            border-radius: 10px; display: flex; align-items: center;
-            justify-content: center; font-size: 1.1rem; font-weight: 900;
-            color: var(--primary);
+            width: 40px; height: 40px; flex-shrink: 0;
         }
         .nav-logo span { color: var(--accent); }
         .nav-right { display: flex; gap: 12px; }
@@ -306,14 +303,15 @@
             box-shadow: 0 8px 30px rgba(42,157,143,0.3);
         }
         .success-banner h2 {
-            font-size: 1.6rem; font-weight: 800; margin-bottom: 6px;
+            font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; color: white;
         }
         .success-banner p { color: var(--text-light); font-size: 0.92rem; }
 
         /* REPORT DOCUMENT */
         .report-doc {
-            background: white; border-radius: 24px; overflow: hidden;
-            box-shadow: 0 4px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+            background: rgba(255,255,255,0.03); border-radius: 24px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 4px 60px rgba(0,0,0,0.3);
         }
 
         /* DOC HEADER */
@@ -384,7 +382,7 @@
         }
         .verdict-content h4 {
             font-size: 1.05rem; font-weight: 800; color: var(--green);
-            margin-bottom: 2px;
+            margin-bottom: 2px; text-shadow: 0 0 20px rgba(42,157,143,0.2);
         }
         .verdict-content p { font-size: 0.85rem; color: var(--text-light); }
 
@@ -392,7 +390,7 @@
         .section-head {
             display: flex; align-items: center; gap: 10px;
             font-size: 0.95rem; font-weight: 800; margin-bottom: 16px;
-            margin-top: 32px;
+            margin-top: 32px; color: white;
         }
         .section-head .ico {
             width: 32px; height: 32px; border-radius: 8px;
@@ -411,19 +409,21 @@
             gap: 12px;
         }
         .d-card {
-            background: var(--bg); border-radius: 14px;
+            background: rgba(255,255,255,0.04); border-radius: 14px;
             padding: 16px; transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.06);
         }
         .d-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 20px rgba(0,180,216,0.08);
+            border-color: rgba(0,180,216,0.15);
         }
         .d-card .d-label {
             font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
             letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 4px;
         }
         .d-card .d-val {
-            font-size: 1.05rem; font-weight: 800; color: var(--text);
+            font-size: 1.05rem; font-weight: 800; color: white;
         }
         .d-val.ok { color: var(--green); }
         .d-val.warn { color: var(--gold-dark); }
@@ -433,11 +433,11 @@
         .check-list { list-style: none; margin-top: 8px; }
         .check-row {
             display: flex; align-items: flex-start; gap: 12px;
-            padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+            padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
             transition: all 0.3s;
         }
         .check-row:last-child { border-bottom: none; }
-        .check-row:hover { background: rgba(0,180,216,0.02); border-radius: 8px; padding-left: 8px; }
+        .check-row:hover { background: rgba(0,180,216,0.04); border-radius: 8px; padding-left: 8px; }
         .chk {
             width: 26px; height: 26px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -446,8 +446,8 @@
         .chk.pass { background: rgba(42,157,143,0.1); color: var(--green); }
         .chk.warn { background: rgba(244,166,28,0.1); color: var(--gold-dark); }
         .chk.fail { background: rgba(230,57,70,0.1); color: var(--red); }
-        .check-text { font-size: 0.88rem; }
-        .check-text strong { font-weight: 700; }
+        .check-text { font-size: 0.88rem; color: var(--text-light); }
+        .check-text strong { font-weight: 700; color: white; }
 
         /* VALEUR BOX */
         .valeur-card {
@@ -466,8 +466,9 @@
             letter-spacing: 1.5px; color: var(--text-light); margin-bottom: 8px;
         }
         .valeur-amount {
-            font-size: 3rem; font-weight: 900; color: var(--primary);
+            font-size: 3rem; font-weight: 900; color: var(--gold);
             line-height: 1; position: relative; z-index: 1;
+            text-shadow: 0 0 30px rgba(244,166,28,0.2);
         }
         .valeur-range {
             font-size: 0.85rem; color: var(--text-light); margin-top: 6px;
@@ -480,9 +481,9 @@
             gap: 10px; margin-top: 12px;
         }
         .ent-card {
-            background: var(--bg); border-radius: 12px;
+            background: rgba(255,255,255,0.04); border-radius: 12px;
             padding: 14px 16px; display: flex; align-items: center; gap: 12px;
-            transition: all 0.3s;
+            transition: all 0.3s; border: 1px solid rgba(255,255,255,0.06);
         }
         .ent-card:hover { transform: translateX(4px); }
         .ent-ico {
@@ -491,7 +492,7 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1.1rem; flex-shrink: 0;
         }
-        .ent-label { font-size: 0.82rem; font-weight: 700; }
+        .ent-label { font-size: 0.82rem; font-weight: 700; color: white; }
         .ent-detail { font-size: 0.72rem; color: var(--text-light); }
         .ent-total {
             text-align: center; margin-top: 16px;
@@ -500,15 +501,16 @@
 
         /* DISCLAIMER */
         .disclaimer {
-            background: var(--bg); border-radius: 12px;
+            background: rgba(255,255,255,0.03); border-radius: 12px;
             padding: 16px 20px; margin-top: 32px;
             font-size: 0.73rem; color: var(--text-light); line-height: 1.7;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         /* DOWNLOAD BAR */
         .download-bar {
             padding: 28px 40px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(255,255,255,0.06);
             display: flex; align-items: center;
             justify-content: center; gap: 20px;
             flex-wrap: wrap;
@@ -531,7 +533,7 @@
         }
         .dl-btn.outline {
             background: transparent;
-            border: 2px solid var(--border); color: var(--text);
+            border: 2px solid rgba(255,255,255,0.1); color: var(--text);
         }
         .dl-btn.outline:hover { border-color: var(--accent); color: var(--accent); }
         .dl-sub {
@@ -546,34 +548,122 @@
         }
         .report-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
 
+        /* SCROLL PROGRESS */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; z-index: 9999;
+            height: 3px; width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            box-shadow: 0 0 10px rgba(0,180,216,0.5);
+        }
+
+        /* REPORT PAGE BG */
+        .report-page { background: var(--bg); }
+
+        /* DOC BODY */
+        .doc-body { color: var(--text); }
+
+        /* ENT CARD HOVER GLOW */
+        .ent-card:hover {
+            transform: translateX(4px);
+            border-color: rgba(0,180,216,0.15);
+            box-shadow: 0 4px 16px rgba(0,180,216,0.06);
+        }
+
+        /* D-CARD LABEL */
+        .d-card .d-label { color: var(--text-light); }
+
+        /* VALEUR CARD DARK */
+        .valeur-card {
+            background: linear-gradient(135deg, rgba(244,166,28,0.06), rgba(0,180,216,0.04));
+            border: 1px solid rgba(244,166,28,0.12);
+        }
+        .valeur-range { color: var(--text-light); }
+
+        /* FOOTER DARK */
+        .report-footer { color: var(--text-light); }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            nav { padding: 0 16px; }
+            nav { padding: 0 12px; height: 56px; }
             .nav-right { display: none; }
-            .scanner-header h1 { font-size: 1.6rem; }
-            .glass-card { padding: 24px; }
-            .vin-input { font-size: 1rem; letter-spacing: 2px; }
-            .doc-header { padding: 24px; flex-direction: column; align-items: flex-start; }
-            .doc-body { padding: 24px; }
-            .data-cards { grid-template-columns: 1fr 1fr; }
-            .entretien-grid { grid-template-columns: 1fr; }
-            .download-bar { padding: 20px; flex-direction: column; }
-            .dl-btn { width: 100%; justify-content: center; }
-            .gauge-number { font-size: 2.2rem; }
-            .valeur-amount { font-size: 2.2rem; }
+            .nav-logo { font-size: 1.1rem; gap: 6px; }
+            .nav-logo .logo-icon { width: 28px !important; height: 28px !important; }
+            .scanner-hero { padding: 80px 14px 40px; }
+            .scanner-header h1 { font-size: 1.4rem; }
+            .scanner-header p { font-size: 0.82rem; }
+            .scanner-header .badge { font-size: 0.68rem; padding: 5px 12px; }
+            .glass-card { padding: 20px; border-radius: 18px; }
+            .vin-input { font-size: 0.95rem; letter-spacing: 2px; padding: 14px 16px; }
+            .btn-scan { padding: 14px; font-size: 0.95rem; }
+            .btn-scan.gold { font-size: 0.82rem; }
+            .photo-zone { padding: 14px; margin: 14px 0 20px; }
+            .photo-zone .cam { font-size: 1.4rem; }
+            .photo-zone p { font-size: 0.72rem; }
+            .doc-header { padding: 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+            .vehicle-info h3 { font-size: 1.2rem; }
+            .vehicle-info .sub { font-size: 0.78rem; }
+            .doc-body { padding: 20px; }
+            .data-cards { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .d-card { padding: 12px; }
+            .d-card .d-val { font-size: 0.9rem; }
+            .d-card .d-label { font-size: 0.6rem; }
+            .check-text { font-size: 0.8rem; }
+            .chk { width: 22px; height: 22px; font-size: 0.65rem; }
+            .entretien-grid { grid-template-columns: 1fr; gap: 8px; }
+            .ent-card { padding: 10px 12px; }
+            .ent-ico { width: 32px; height: 32px; font-size: 0.9rem; }
+            .download-bar { padding: 16px; flex-direction: column; gap: 10px; }
+            .dl-btn { width: 100%; justify-content: center; padding: 14px 24px; font-size: 0.9rem; }
+            .gauge-number { font-size: 2rem; }
+            .valeur-amount { font-size: 2rem; }
+            .valeur-card { padding: 20px; }
+            .success-banner h2 { font-size: 1.2rem; }
+            .success-check { width: 56px; height: 56px; font-size: 1.5rem; }
+            .verdict-bar { padding: 14px 16px; gap: 12px; }
+            .verdict-icon { width: 40px; height: 40px; font-size: 1.2rem; }
+            .verdict-content h4 { font-size: 0.9rem; }
+            .verdict-content p { font-size: 0.78rem; }
+            .section-head { font-size: 0.85rem; }
+            .section-head .ico { width: 28px; height: 28px; font-size: 0.8rem; }
+            .disclaimer { font-size: 0.68rem; padding: 12px 14px; }
+            .report-footer { font-size: 0.7rem; }
+            .loading-title { font-size: 1.1rem; }
+            .loading-vin { font-size: 0.85rem; letter-spacing: 2px; }
+            .scanner-anim { width: 120px; height: 120px; margin-bottom: 24px; }
+            .step-text { font-size: 0.75rem; }
+            .step-dot { width: 24px; height: 24px; font-size: 0.6rem; }
         }
-        @media (max-width: 400px) {
+        @media (max-width: 480px) {
             .data-cards { grid-template-columns: 1fr; }
+            .scanner-header h1 { font-size: 1.2rem; }
+            .glass-card { padding: 16px; }
+            .vin-input { font-size: 0.85rem; letter-spacing: 1px; }
         }
     </style>
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress"></div>
 <canvas id="particles"></canvas>
 
 <!-- NAV -->
 <nav>
-    <a href="index.html" class="nav-logo"><span class="logo-icon">AV</span>Auto<span>Verif</span> QC</a>
+    <a href="index.html" class="nav-logo">
+        <svg class="logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
+            <defs>
+                <linearGradient id="logoGrad" x1="0" y1="0" x2="44" y2="44">
+                    <stop offset="0%" stop-color="#00b4d8"/>
+                    <stop offset="50%" stop-color="#2a9d8f"/>
+                    <stop offset="100%" stop-color="#f4a61c"/>
+                </linearGradient>
+            </defs>
+            <rect width="44" height="44" rx="12" fill="url(#logoGrad)"/>
+            <path d="M13 30L22 10L31 30" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M16 24H28" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 17L31.5 20.5L36 14" stroke="#f4a61c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        Auto<span>Verif</span> QC
+    </a>
     <div class="nav-right">
         <a href="index.html" class="nav-link">Plan d'affaires</a>
         <a href="index.html#prix" class="nav-badge">Tarification</a>
@@ -747,6 +837,13 @@
 </section>
 
 <script>
+// ===== SCROLL PROGRESS =====
+window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
 // ===== PARTICLES =====
 (function(){
     const c = document.getElementById('particles');
@@ -754,7 +851,8 @@
     let w, h, dots = [];
     function resize(){ w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
     resize(); window.addEventListener('resize', resize);
-    for(let i = 0; i < 60; i++){
+    const pCount = window.innerWidth <= 768 ? 25 : 60;
+    for(let i = 0; i < pCount; i++){
         dots.push({
             x: Math.random()*w, y: Math.random()*h,
             r: Math.random()*1.5 + 0.3,
