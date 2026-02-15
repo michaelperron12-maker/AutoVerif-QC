@@ -591,9 +591,291 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
+
+        /* ====== PREMIUM EFFECTS ====== */
+
+        /* Animated gradient mesh background */
+        .hero-canvas {
+            position: absolute; inset: 0; z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Floating geometric shapes */
+        .floating-shapes {
+            position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none;
+        }
+        .floating-shapes .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.04;
+            animation: floatShape 20s ease-in-out infinite;
+        }
+        .floating-shapes .shape:nth-child(1) {
+            width: 400px; height: 400px; top: -100px; right: -100px;
+            background: radial-gradient(circle, var(--accent), transparent 70%);
+            animation-duration: 25s;
+        }
+        .floating-shapes .shape:nth-child(2) {
+            width: 300px; height: 300px; bottom: -50px; left: -80px;
+            background: radial-gradient(circle, var(--gold), transparent 70%);
+            animation-duration: 18s; animation-delay: -5s;
+        }
+        .floating-shapes .shape:nth-child(3) {
+            width: 200px; height: 200px; top: 40%; left: 60%;
+            background: radial-gradient(circle, var(--green), transparent 70%);
+            animation-duration: 22s; animation-delay: -10s;
+        }
+        @keyframes floatShape {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(15px, 35px) scale(1.05); }
+        }
+
+        /* Animated gradient border for cards on hover */
+        .card { position: relative; overflow: hidden; }
+        .card::before {
+            content: '';
+            position: absolute; inset: -2px;
+            background: linear-gradient(135deg, var(--accent), var(--gold), var(--green), var(--accent));
+            background-size: 300% 300%;
+            border-radius: 17px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+            animation: gradientBorder 4s ease infinite;
+        }
+        .card::after {
+            content: '';
+            position: absolute; inset: 1px;
+            background: var(--bg);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .card:hover::before, .card:hover::after { opacity: 1; }
+        @keyframes gradientBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glow effect on section labels */
+        .section-label {
+            position: relative;
+            animation: labelGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes labelGlow {
+            0% { box-shadow: 0 0 8px rgba(0,180,216,0.1); }
+            100% { box-shadow: 0 0 20px rgba(0,180,216,0.25); }
+        }
+
+        /* Better pricing card hover with glow */
+        .pricing-card:hover {
+            box-shadow: 0 0 60px rgba(0,180,216,0.15), 0 12px 40px rgba(0,0,0,0.3);
+        }
+        .pricing-card.featured {
+            box-shadow: 0 0 30px rgba(0,180,216,0.08);
+        }
+        .pricing-card.featured:hover {
+            box-shadow: 0 0 80px rgba(0,180,216,0.2), 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Animated hero gradient text */
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--accent), var(--gold), #2a9d8f, var(--accent));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shiftGradient 6s ease infinite;
+        }
+        @keyframes shiftGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Hero stat glow */
+        .hero-stat .number {
+            text-shadow: 0 0 30px rgba(0,180,216,0.3);
+        }
+        .hero-stat .number.gold {
+            text-shadow: 0 0 30px rgba(244,166,28,0.3);
+        }
+
+        /* Animated CTA buttons */
+        .cta-btn {
+            position: relative; overflow: hidden;
+        }
+        .cta-btn::before {
+            content: '';
+            position: absolute; top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        .cta-btn:hover::before {
+            width: 300px; height: 300px;
+        }
+
+        /* Section divider gradient line */
+        section::after {
+            content: '';
+            display: block;
+            width: 120px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--gold), transparent);
+            margin: 0 auto;
+            opacity: 0.3;
+            position: relative;
+            bottom: -40px;
+        }
+        .hero::after, footer::after, .confidential::after { display: none; }
+
+        /* Better legal block hover */
+        .legal-block {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .legal-block:hover {
+            border-color: rgba(0,180,216,0.2);
+            transform: translateX(4px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        /* Animated logo */
+        .logo-icon {
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Nav scroll effect */
+        nav.scrolled {
+            background: rgba(8, 14, 26, 0.98);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Mouse follower glow */
+        .cursor-glow {
+            position: fixed;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,180,216,0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            transition: left 0.3s ease-out, top 0.3s ease-out;
+        }
+
+        /* Timeline animated line */
+        .timeline::before {
+            background: linear-gradient(180deg, var(--accent), var(--gold), var(--green));
+            opacity: 0.4;
+            width: 3px;
+            box-shadow: 0 0 12px rgba(0,180,216,0.2);
+        }
+
+        /* Finance card number animation ready */
+        .finance-card .amount {
+            transition: transform 0.3s, text-shadow 0.3s;
+        }
+        .finance-card:hover .amount {
+            transform: scale(1.08);
+            text-shadow: 0 0 20px rgba(0,180,216,0.3);
+        }
+
+        /* Animated highlight box border */
+        .highlight-box {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+        .highlight-box:hover {
+            border-color: rgba(0,180,216,0.25);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Hero badge animated border */
+        .hero-badge {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-badge::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(90deg, rgba(0,180,216,0.3), rgba(244,166,28,0.3), rgba(0,180,216,0.3));
+            background-size: 200% 100%;
+            border-radius: 30px;
+            z-index: -1;
+            animation: badgeShimmer 3s linear infinite;
+        }
+        @keyframes badgeShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Table row hover glow */
+        tbody tr {
+            transition: all 0.2s;
+        }
+        tbody tr:hover {
+            background: rgba(0,180,216,0.06) !important;
+            box-shadow: inset 4px 0 0 var(--accent);
+        }
+
+        /* Accordion animated */
+        .accordion-item {
+            transition: all 0.3s;
+        }
+        .accordion-item:hover {
+            border-color: rgba(0,180,216,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .accordion-item.open {
+            border-color: rgba(0,180,216,0.3);
+            box-shadow: 0 8px 30px rgba(0,180,216,0.08);
+        }
+
+        /* Pricing btn shine animation */
+        .pricing-btn.primary {
+            position: relative; overflow: hidden;
+        }
+        .pricing-btn.primary::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -100%;
+            width: 80px; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-15deg);
+            animation: btnShine 4s ease-in-out infinite;
+        }
+        @keyframes btnShine {
+            0%, 100% { left: -100%; }
+            50% { left: 150%; }
+        }
+
+        /* Scroll progress indicator */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; z-index: 9999;
+            height: 3px; width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            transition: width 0.1s;
+            box-shadow: 0 0 10px rgba(0,180,216,0.5);
+        }
     </style>
 </head>
 <body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- CURSOR GLOW -->
+<div class="cursor-glow" id="cursorGlow"></div>
 
 <!-- CONFIDENTIAL BANNER -->
 <div class="confidential">DOCUMENT CONFIDENTIEL — PROPOSITION DE COENTREPRISE</div>
@@ -601,17 +883,23 @@
 <!-- NAV -->
 <nav class="no-print">
     <div class="nav-logo">
-        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
             <defs>
-                <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                <linearGradient id="logoGrad" x1="0" y1="0" x2="44" y2="44">
                     <stop offset="0%" stop-color="#00b4d8"/>
+                    <stop offset="50%" stop-color="#2a9d8f"/>
                     <stop offset="100%" stop-color="#f4a61c"/>
                 </linearGradient>
+                <filter id="logoGlow">
+                    <feGaussianBlur stdDeviation="2" result="blur"/>
+                    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
             </defs>
-            <rect width="40" height="40" rx="10" fill="url(#logoGrad)"/>
-            <path d="M12 28L20 10L28 28" stroke="#0f2b46" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M15 22H25" stroke="#0f2b46" stroke-width="3" stroke-linecap="round"/>
-            <path d="M26 18L29 21L33 15" stroke="#0f2b46" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <rect width="44" height="44" rx="12" fill="url(#logoGrad)" filter="url(#logoGlow)"/>
+            <path d="M13 30L22 10L31 30" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M16 24H28" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M28 17L31.5 20.5L36 14" stroke="#f4a61c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="32" cy="17" r="8" fill="none" stroke="rgba(244,166,28,0.3)" stroke-width="1"/>
         </svg>
         Auto<span>Verif</span> QC
     </div>
@@ -632,6 +920,12 @@
 
 <!-- HERO -->
 <section class="hero" id="top">
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
     <div class="hero-content">
         <div class="hero-badge">
             <span class="dot"></span>
@@ -2322,105 +2616,230 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
         });
     });
 
-    // GSAP Scroll Animations
+    // ====== PREMIUM ANIMATIONS ENGINE ======
     gsap.registerPlugin(ScrollTrigger);
 
-    // Fade up cards with stagger
-    gsap.utils.toArray('.card').forEach((card, i) => {
-        gsap.from(card, {
-            y: 40, opacity: 0, duration: 0.7,
+    // --- Scroll progress bar ---
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        document.getElementById('scrollProgress').style.width = pct + '%';
+    });
+
+    // --- Nav scroll effect ---
+    window.addEventListener('scroll', () => {
+        document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // --- Cursor glow follow ---
+    const glow = document.getElementById('cursorGlow');
+    if (window.innerWidth > 768) {
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+    } else {
+        glow.style.display = 'none';
+    }
+
+    // --- Hero particle canvas ---
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() {
+        const hero = document.querySelector('.hero');
+        canvas.width = hero.offsetWidth;
+        canvas.height = hero.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.4;
+            this.speedY = (Math.random() - 0.5) * 0.4;
+            this.opacity = Math.random() * 0.5 + 0.1;
+            this.color = Math.random() > 0.6 ? '244,166,28' : '0,180,216';
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+    function drawConnections() {
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 120) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(0,180,216, ${0.06 * (1 - dist / 120)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        drawConnections();
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // --- Hero entrance animation ---
+    const heroTL = gsap.timeline({ defaults: { ease: 'power3.out' }});
+    heroTL
+        .from('.hero-badge', { y: -20, opacity: 0, duration: 0.6 })
+        .from('.hero h1', { y: 30, opacity: 0, duration: 0.8, ease: 'power4.out' }, '-=0.3')
+        .from('.hero p', { y: 20, opacity: 0, duration: 0.6 }, '-=0.4')
+        .from('.hero-stat', { y: 30, opacity: 0, duration: 0.5, stagger: 0.15, ease: 'back.out(1.4)' }, '-=0.3');
+
+    // --- Cards: staggered 3D entrance ---
+    document.querySelectorAll('.card-grid').forEach(grid => {
+        const cards = grid.querySelectorAll('.card');
+        gsap.from(cards, {
+            y: 60, opacity: 0, rotateX: 8, duration: 0.8,
             ease: 'power3.out',
-            scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' },
-            delay: (i % 3) * 0.12
+            stagger: 0.12,
+            scrollTrigger: { trigger: grid, start: 'top 82%' }
         });
     });
 
-    // Legal blocks slide in
-    gsap.utils.toArray('.legal-block').forEach((block) => {
+    // --- Legal blocks: slide from left with glow ---
+    gsap.utils.toArray('.legal-block').forEach((block, i) => {
         gsap.from(block, {
-            x: -30, opacity: 0, duration: 0.6,
+            x: -50, opacity: 0, duration: 0.7,
             ease: 'power3.out',
-            scrollTrigger: { trigger: block, start: 'top 85%' }
+            scrollTrigger: { trigger: block, start: 'top 82%' },
+            delay: i * 0.05
         });
     });
 
-    // Pricing cards scale up
+    // --- Pricing cards: scale bounce ---
     gsap.utils.toArray('.pricing-card').forEach((card, i) => {
         gsap.from(card, {
-            scale: 0.9, opacity: 0, duration: 0.6,
-            ease: 'back.out(1.4)',
+            scale: 0.85, opacity: 0, y: 40, duration: 0.8,
+            ease: 'back.out(1.6)',
             scrollTrigger: { trigger: card, start: 'top 85%' },
-            delay: i * 0.15
+            delay: i * 0.18
         });
     });
 
-    // Timeline items
-    gsap.utils.toArray('.timeline-item').forEach((item) => {
+    // --- Timeline items: stagger slide ---
+    gsap.utils.toArray('.timeline-item').forEach((item, i) => {
         gsap.from(item, {
-            x: 40, opacity: 0, duration: 0.6,
+            x: 60, opacity: 0, duration: 0.7,
             ease: 'power3.out',
-            scrollTrigger: { trigger: item, start: 'top 85%' }
+            scrollTrigger: { trigger: item, start: 'top 82%' },
+            delay: i * 0.1
         });
     });
 
-    // Finance cards
+    // --- Finance cards: pop in ---
     gsap.utils.toArray('.finance-card').forEach((card, i) => {
         gsap.from(card, {
-            y: 30, opacity: 0, duration: 0.5,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: card, start: 'top 90%' },
+            scale: 0.8, y: 20, opacity: 0, duration: 0.5,
+            ease: 'back.out(1.4)',
+            scrollTrigger: { trigger: card, start: 'top 88%' },
             delay: i * 0.08
         });
     });
 
-    // Section titles
+    // --- Section titles: character reveal ---
     gsap.utils.toArray('.section-title').forEach((title) => {
         gsap.from(title, {
-            y: 20, opacity: 0, duration: 0.6,
-            ease: 'power3.out',
+            y: 30, opacity: 0, duration: 0.7,
+            ease: 'power4.out',
             scrollTrigger: { trigger: title, start: 'top 85%' }
         });
     });
 
-    // Section labels
+    // --- Section labels: pop in ---
     gsap.utils.toArray('.section-label').forEach((label) => {
         gsap.from(label, {
-            scale: 0.8, opacity: 0, duration: 0.4,
-            ease: 'back.out(1.4)',
+            scale: 0.6, opacity: 0, duration: 0.5,
+            ease: 'back.out(2)',
             scrollTrigger: { trigger: label, start: 'top 90%' }
         });
     });
 
-    // Highlight boxes
+    // --- Section subtitles ---
+    gsap.utils.toArray('.section-subtitle').forEach((sub) => {
+        gsap.from(sub, {
+            y: 20, opacity: 0, duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: sub, start: 'top 88%' }
+        });
+    });
+
+    // --- Highlight boxes: fade up with border glow ---
     gsap.utils.toArray('.highlight-box').forEach((box) => {
         gsap.from(box, {
-            y: 30, opacity: 0, duration: 0.7,
+            y: 40, opacity: 0, duration: 0.8,
             ease: 'power3.out',
-            scrollTrigger: { trigger: box, start: 'top 85%' }
+            scrollTrigger: { trigger: box, start: 'top 82%' }
         });
     });
 
-    // Accordion items
+    // --- Tables: slide up ---
+    gsap.utils.toArray('.table-wrapper').forEach((tw) => {
+        gsap.from(tw, {
+            y: 30, opacity: 0, duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: tw, start: 'top 88%' }
+        });
+    });
+
+    // --- Accordion: stagger ---
     gsap.utils.toArray('.accordion-item').forEach((item, i) => {
         gsap.from(item, {
-            y: 20, opacity: 0, duration: 0.4,
+            y: 25, opacity: 0, duration: 0.5,
             ease: 'power3.out',
             scrollTrigger: { trigger: item, start: 'top 90%' },
-            delay: i * 0.08
+            delay: i * 0.1
         });
     });
 
-    // Hero stats counter animation
-    function animateCounter(el, target) {
-        let current = 0;
-        const duration = 2000;
+    // --- CTA section: scale entrance ---
+    gsap.utils.toArray('.cta-section').forEach((cta) => {
+        gsap.from(cta, {
+            scale: 0.95, opacity: 0, duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: cta, start: 'top 85%' }
+        });
+    });
+
+    // --- Hero stats counter animation (improved) ---
+    function animateCounter(el, target, suffix) {
+        const duration = 2500;
         const start = performance.now();
         function update(now) {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            current = Math.round(target * eased);
-            el.textContent = current.toLocaleString();
+            // Exponential ease out
+            const eased = 1 - Math.pow(1 - progress, 4);
+            const current = Math.round(target * eased);
+            el.textContent = current.toLocaleString() + suffix;
             if (progress < 1) requestAnimationFrame(update);
         }
         requestAnimationFrame(update);
@@ -2432,15 +2851,39 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
         const text = n.textContent.replace(/[^0-9]/g, '');
         const num = parseInt(text);
         if (!isNaN(num) && num > 10) {
-            const suffix = n.textContent.replace(/[0-9,]/g, '');
-            const orig = num;
+            const suffix = n.textContent.replace(/[0-9,.]/g, '');
             n.textContent = '0' + suffix;
-            setTimeout(() => {
-                animateCounter(n, orig);
-                setTimeout(() => { n.textContent = orig.toLocaleString() + suffix; }, 2100);
-            }, 500);
+            setTimeout(() => animateCounter(n, num, suffix), 800);
         }
     });
+
+    // --- Parallax floating shapes ---
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        document.querySelectorAll('.floating-shapes .shape').forEach((shape, i) => {
+            const speed = [0.03, 0.05, 0.02][i] || 0.03;
+            shape.style.transform = `translateY(${scrollY * speed}px)`;
+        });
+    });
+
+    // --- 3D tilt on cards (desktop only) ---
+    if (window.innerWidth > 768) {
+        document.querySelectorAll('.card, .pricing-card, .finance-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / centerY * -3;
+                const rotateY = (x - centerX) / centerX * 3;
+                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+    }
 </script>
 
 </body>
