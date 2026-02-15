@@ -51,8 +51,17 @@
             height: 64px;
         }
         .nav-logo {
-            font-size: 1.4rem; font-weight: 800; color: white;
+            font-size: 1.6rem; font-weight: 900; color: white;
             letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .nav-logo .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: 900; color: var(--primary);
+            flex-shrink: 0;
         }
         .nav-logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 24px; list-style: none; }
@@ -549,7 +558,7 @@
 
 <!-- NAV -->
 <nav class="no-print">
-    <div class="nav-logo">Auto<span>Verif</span> QC</div>
+    <div class="nav-logo"><span class="logo-icon">AV</span>Auto<span>Verif</span> QC</div>
     <ul class="nav-links">
         <li><a href="#probleme">Probleme</a></li>
         <li><a href="#solution">Solution</a></li>
@@ -1678,7 +1687,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
     <div class="container">
         <p><strong>AutoVerif QC</strong> — Document confidentiel</p>
         <p style="margin-top: 8px;">Proposition de coentreprise — Fevrier 2026</p>
-        <p style="margin-top: 8px;">Partenaire technologique: <strong>SeoParAI</strong> — Web, Marketing, AI</p>
+        <p style="margin-top: 8px;">Partenaire technologique: <a href="https://www.seoparai.com" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-weight: 700;">SeoParAI</a> — Web, Marketing, AI</p>
         <p style="margin-top: 16px; font-size: 0.75rem;">Ce document contient des informations confidentielles et proprietaires. Il est destine uniquement aux parties nommees dans la proposition de coentreprise. Toute reproduction, distribution ou divulgation non autorisee est strictement interdite.</p>
     </div>
 </footer>
