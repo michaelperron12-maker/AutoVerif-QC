@@ -113,6 +113,53 @@
         }
         .nav-badge:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(244,166,28,0.3); }
 
+        /* HAMBURGER BUTTON — mobile only */
+        .hamburger { display: none; }
+
+        /* MOBILE MENU OVERLAY */
+        .mobile-menu {
+            display: none; position: fixed; inset: 0; z-index: 999;
+            background: rgba(6, 10, 20, 0.97);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            opacity: 0; transition: opacity 0.35s ease;
+            padding: 80px 20px 40px;
+            overflow-y: auto;
+        }
+        .mobile-menu.open { display: flex; opacity: 1; }
+        .mobile-menu a {
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem; font-weight: 600;
+            padding: 14px 28px; border-radius: 12px; width: 100%; max-width: 320px;
+            text-align: center; transition: all 0.25s;
+            border: 1px solid rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.02);
+        }
+        .mobile-menu a:hover, .mobile-menu a:active {
+            color: white; background: rgba(0,180,216,0.1);
+            border-color: rgba(0,180,216,0.2);
+        }
+        .mobile-menu .mobile-sep {
+            width: 60px; height: 1px; background: rgba(255,255,255,0.08);
+            margin: 8px 0;
+        }
+        .mobile-menu .mobile-badges {
+            display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; justify-content: center;
+        }
+        .mobile-menu .mobile-badges a {
+            width: auto; font-size: 0.85rem; padding: 12px 24px;
+            font-weight: 700; border-radius: 20px;
+        }
+        .mobile-menu .mobile-badges a.badge-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white; border: none;
+        }
+        .mobile-menu .mobile-badges a.badge-gold {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--primary); border: none;
+        }
+
         @media (max-width: 768px) {
             /* NAV mobile */
             nav { padding: 0 12px; gap: 6px; flex-wrap: nowrap; height: 56px; }
@@ -121,6 +168,24 @@
             .nav-logo .logo-icon { width: 28px !important; height: 28px !important; }
             .nav-badge { font-size: 0.65rem; padding: 5px 10px; white-space: nowrap; }
             .nav-badge:first-of-type { display: none; } /* Hide "Demo rapport" on mobile */
+
+            /* HAMBURGER visible on mobile */
+            .hamburger {
+                display: flex; flex-direction: column; justify-content: center; gap: 5px;
+                background: none; border: none; cursor: pointer;
+                width: 36px; height: 36px; padding: 6px;
+                border-radius: 8px; transition: background 0.2s;
+                flex-shrink: 0; z-index: 1001;
+            }
+            .hamburger:hover { background: rgba(255,255,255,0.06); }
+            .hamburger span {
+                display: block; width: 100%; height: 2px;
+                background: white; border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
             /* HERO mobile */
             .hero { min-height: auto; padding: 80px 16px 40px; }
@@ -992,7 +1057,28 @@
     </ul>
     <a href="rapport-demo.html" class="nav-badge no-print" style="margin-right: 8px; background: var(--accent); color: white;">Demo rapport</a>
     <a href="#proposition" class="nav-badge no-print">Proposition</a>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#probleme" onclick="closeMobileMenu()">Probleme</a>
+    <a href="#solution" onclick="closeMobileMenu()">Solution</a>
+    <a href="#citron" onclick="closeMobileMenu()">Protection</a>
+    <a href="#donnees" onclick="closeMobileMenu()">Donnees</a>
+    <a href="#legal" onclick="closeMobileMenu()">Legal</a>
+    <a href="#prix" onclick="closeMobileMenu()">Prix</a>
+    <a href="#finances" onclick="closeMobileMenu()">Finances</a>
+    <a href="#partenaire" onclick="closeMobileMenu()">Partenaire</a>
+    <a href="#roadmap" onclick="closeMobileMenu()">Roadmap</a>
+    <div class="mobile-sep"></div>
+    <div class="mobile-badges">
+        <a href="rapport-demo.html" class="badge-accent">Demo rapport</a>
+        <a href="#proposition" onclick="closeMobileMenu()" class="badge-gold">Proposition</a>
+    </div>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -3157,6 +3243,27 @@
                 card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
             });
         });
+    }
+
+    // ===== MOBILE MENU =====
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('hamburgerBtn');
+        const isOpen = menu.classList.contains('open');
+        if (isOpen) {
+            closeMobileMenu();
+        } else {
+            menu.classList.add('open');
+            btn.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('hamburgerBtn');
+        menu.classList.remove('open');
+        btn.classList.remove('active');
+        document.body.style.overflow = '';
     }
 </script>
 
