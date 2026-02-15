@@ -56,12 +56,7 @@
             display: flex; align-items: center; gap: 10px;
         }
         .nav-logo .logo-icon {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--accent), var(--gold));
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; font-weight: 900; color: var(--primary);
-            flex-shrink: 0;
+            width: 36px; height: 36px; flex-shrink: 0;
         }
         .nav-logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 24px; list-style: none; }
@@ -79,48 +74,68 @@
         }
 
         @media (max-width: 768px) {
-            nav { padding: 0 16px; }
+            nav { padding: 0 12px; gap: 8px; flex-wrap: nowrap; }
             .nav-links { display: none; }
-            .hero { min-height: auto; padding: 100px 16px 48px; }
-            .hero h1 { font-size: 1.8rem; letter-spacing: -0.5px; }
-            .hero p { font-size: 0.95rem; margin-bottom: 28px; }
-            .hero-stats { gap: 20px; }
-            .hero-stat .number { font-size: 1.6rem; }
-            .hero-stat .label { font-size: 0.7rem; }
-            section { padding: 48px 16px; }
-            .section-title { font-size: 1.5rem; }
-            .section-subtitle { font-size: 0.95rem; margin-bottom: 32px; }
-            .card-grid { grid-template-columns: 1fr; gap: 16px; }
-            .card { padding: 24px; }
-            .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
-            .pricing-card { padding: 28px 20px; }
-            .pricing-price { font-size: 2.2rem; }
-            .finance-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .finance-card { padding: 16px; }
-            .finance-card .amount { font-size: 1.4rem; }
-            .finance-card .desc { font-size: 0.72rem; }
-            .table-wrapper { margin: 16px -16px; border-radius: 0; border-left: none; border-right: none; }
-            table { font-size: 0.78rem; }
-            th, td { padding: 10px 12px; }
-            .timeline { padding-left: 28px; }
-            .timeline-item { padding: 20px; }
-            .timeline-item::before { left: -21px; width: 10px; height: 10px; }
-            .legal-block { padding: 20px; }
-            .legal-quote { padding: 10px 14px; font-size: 0.85rem; }
-            .highlight-box { padding: 20px; margin: 20px 0; }
-            .cta-section { padding: 40px 20px; border-radius: 16px; }
-            .cta-section h2 { font-size: 1.5rem; }
-            .cta-buttons { flex-direction: column; gap: 12px; }
-            .cta-btn { width: 100%; text-align: center; }
-            .accordion-header { padding: 16px; font-size: 0.88rem; }
-            .accordion-body-inner { padding: 0 16px 16px; }
+            .nav-logo { font-size: 1.2rem; gap: 6px; }
+            .nav-logo .logo-icon { width: 30px; height: 30px; font-size: 0.85rem; border-radius: 8px; }
+            .nav-badge { font-size: 0.7rem; padding: 5px 10px; white-space: nowrap; }
+            .hero { min-height: auto; padding: 90px 16px 48px; }
+            .hero h1 { font-size: 1.6rem; letter-spacing: -0.5px; }
+            .hero p { font-size: 0.9rem; margin-bottom: 24px; }
+            .hero-stats { gap: 16px; flex-wrap: wrap; justify-content: center; }
+            .hero-stat .number { font-size: 1.4rem; }
+            .hero-stat .label { font-size: 0.65rem; }
+            section { padding: 40px 16px; }
+            .section-label { font-size: 0.7rem; margin-bottom: 8px; }
+            .section-title { font-size: 1.3rem; margin-bottom: 8px; }
+            .section-subtitle { font-size: 0.88rem; margin-bottom: 28px; }
             .container { padding: 0; }
-            .confidential { font-size: 0.65rem; letter-spacing: 1px; padding: 6px; }
+            .card-grid { grid-template-columns: 1fr; gap: 14px; }
+            .card { padding: 20px; }
+            .card h3 { font-size: 1rem; }
+            .card p { font-size: 0.85rem; }
+            .card-icon { width: 44px; height: 44px; font-size: 1.3rem; margin-bottom: 12px; }
+            .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
+            .pricing-card { padding: 24px 18px; }
+            .pricing-price { font-size: 2rem; }
+            .pricing-features li { font-size: 0.82rem; padding: 6px 0; }
+            .pricing-btn { font-size: 0.82rem; padding: 10px 16px; }
+            .finance-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .finance-card { padding: 14px 10px; }
+            .finance-card .amount { font-size: 1.2rem; }
+            .finance-card .desc { font-size: 0.68rem; }
+            .table-wrapper { margin: 12px -16px; border-radius: 0; border-left: none; border-right: none; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            table { font-size: 0.72rem; min-width: 500px; }
+            th, td { padding: 8px 10px; }
+            .timeline { padding-left: 24px; }
+            .timeline-item { padding: 18px; }
+            .timeline-item::before { left: -19px; width: 10px; height: 10px; }
+            .timeline-item h3 { font-size: 1rem; }
+            .timeline-item li { font-size: 0.85rem; }
+            .legal-block { padding: 18px; margin-bottom: 16px; }
+            .legal-block h3 { font-size: 1rem; }
+            .legal-block p, .legal-block li { font-size: 0.85rem; }
+            .legal-quote { padding: 10px 14px; font-size: 0.82rem; }
+            .highlight-box { padding: 18px; margin: 16px 0; }
+            .highlight-box h3 { font-size: 1rem; }
+            .cta-section { padding: 36px 18px; border-radius: 16px; }
+            .cta-section h2 { font-size: 1.3rem; }
+            .cta-section p { font-size: 0.88rem; }
+            .cta-buttons { flex-direction: column; gap: 10px; }
+            .cta-btn { width: 100%; text-align: center; padding: 12px 20px; font-size: 0.9rem; }
+            .accordion-header { padding: 14px; font-size: 0.85rem; }
+            .accordion-body-inner { padding: 0 14px 14px; font-size: 0.85rem; }
+            .confidential { font-size: 0.6rem; letter-spacing: 1px; padding: 6px; }
+            footer { padding: 24px 16px; }
+            footer p { font-size: 0.72rem; }
         }
         @media (max-width: 400px) {
-            .hero-stats { flex-direction: column; gap: 16px; }
+            .hero-stats { flex-direction: column; gap: 12px; }
+            .hero h1 { font-size: 1.35rem; }
             .finance-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 1.5rem; }
+            .nav-logo { font-size: 1rem; }
+            .nav-badge { font-size: 0.65rem; padding: 4px 8px; }
+            .section-title { font-size: 1.15rem; }
         }
 
         /* ---- HERO ---- */
@@ -558,7 +573,21 @@
 
 <!-- NAV -->
 <nav class="no-print">
-    <div class="nav-logo"><span class="logo-icon">AV</span>Auto<span>Verif</span> QC</div>
+    <div class="nav-logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                    <stop offset="0%" stop-color="#00b4d8"/>
+                    <stop offset="100%" stop-color="#f4a61c"/>
+                </linearGradient>
+            </defs>
+            <rect width="40" height="40" rx="10" fill="url(#logoGrad)"/>
+            <path d="M12 28L20 10L28 28" stroke="#0f2b46" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M15 22H25" stroke="#0f2b46" stroke-width="3" stroke-linecap="round"/>
+            <path d="M26 18L29 21L33 15" stroke="#0f2b46" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        Auto<span>Verif</span> QC
+    </div>
     <ul class="nav-links">
         <li><a href="#probleme">Probleme</a></li>
         <li><a href="#solution">Solution</a></li>
