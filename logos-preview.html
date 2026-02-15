@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoVerif QC — 3 Logo Concepts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #060a14;
+            color: #e8ecf2;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            text-align: center;
+            padding: 60px 20px 20px;
+        }
+        .page-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00b4d8, #f4a61c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            color: #7a869c;
+            font-size: 1rem;
+        }
+
+        /* LOGO SECTIONS */
+        .logo-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        .logo-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #00b4d8;
+            margin-bottom: 12px;
+        }
+        .logo-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 6px;
+        }
+        .logo-desc {
+            font-size: 0.85rem;
+            color: #7a869c;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* LOGO CONTAINER */
+        .logo-stage {
+            background: radial-gradient(ellipse at center, rgba(0,180,216,0.04) 0%, transparent 70%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 60px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+            overflow: hidden;
+            min-height: 350px;
+        }
+        .logo-stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle 300px at 50% 50%, rgba(0,180,216,0.03), transparent);
+            pointer-events: none;
+        }
+
+        /* VARIANT ROWS */
+        .variants {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .variant-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+        }
+        .variant-box span {
+            display: block;
+            font-size: 0.7rem;
+            color: #7a869c;
+            margin-top: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* SEPARATOR */
+        .sep {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,180,216,0.3), transparent);
+            margin: 80px auto;
+        }
+
+        /* ====================== */
+        /*   LOGO 1 — SHIELD 3D  */
+        /* ====================== */
+        .logo1-wrap {
+            perspective: 800px;
+            display: inline-block;
+        }
+        .logo1 {
+            width: 160px; height: 180px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: logo1Float 6s ease-in-out infinite;
+        }
+        @keyframes logo1Float {
+            0%, 100% { transform: rotateY(-8deg) rotateX(5deg); }
+            50% { transform: rotateY(8deg) rotateX(-3deg); }
+        }
+        .logo1 .shield {
+            position: absolute; inset: 0;
+            transform-style: preserve-3d;
+        }
+        .logo1 .shield-face {
+            position: absolute; inset: 0;
+        }
+        .logo1 .shield-face svg { width: 100%; height: 100%; }
+
+        /* Shield depth layers */
+        .logo1 .shield-back {
+            transform: translateZ(-8px);
+            filter: brightness(0.4);
+        }
+        .logo1 .shield-mid {
+            transform: translateZ(-4px);
+            filter: brightness(0.7);
+        }
+        .logo1 .shield-front {
+            transform: translateZ(0px);
+        }
+        .logo1 .shield-glow {
+            transform: translateZ(4px);
+            filter: blur(8px);
+            opacity: 0.4;
+        }
+
+        /* Scan line */
+        .logo1 .scan-line {
+            position: absolute;
+            left: 15%; right: 15%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00b4d8, transparent);
+            box-shadow: 0 0 20px rgba(0,180,216,0.8), 0 0 40px rgba(0,180,216,0.4);
+            border-radius: 2px;
+            animation: scanDown 3s ease-in-out infinite;
+            transform: translateZ(8px);
+            z-index: 10;
+        }
+        @keyframes scanDown {
+            0%, 100% { top: 15%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            95% { top: 80%; opacity: 0; }
+        }
+
+        /* Floating particles around logo1 */
+        .logo1-particles {
+            position: absolute; inset: -40px;
+            pointer-events: none;
+            transform: translateZ(12px);
+        }
+        .logo1-particles .p {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: #00b4d8;
+            border-radius: 50%;
+            animation: particleDrift 4s ease-in-out infinite;
+        }
+        .logo1-particles .p:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .logo1-particles .p:nth-child(2) { right: 10%; top: 30%; animation-delay: 0.8s; }
+        .logo1-particles .p:nth-child(3) { left: 5%; bottom: 25%; animation-delay: 1.5s; }
+        .logo1-particles .p:nth-child(4) { right: 15%; bottom: 20%; animation-delay: 2.2s; }
+        .logo1-particles .p:nth-child(5) { left: 50%; top: 5%; animation-delay: 0.4s; }
+        .logo1-particles .p:nth-child(6) { right: 5%; top: 60%; animation-delay: 1.8s; animation-duration: 3.5s; }
+        @keyframes particleDrift {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-30px) scale(0.3); }
+        }
+
+        /* Logo1 wordmark */
+        .logo1-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: white;
+            position: relative;
+        }
+        .logo1-text .accent { color: #00b4d8; }
+        .logo1-text .qc {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f4a61c;
+            margin-left: 6px;
+            vertical-align: super;
+        }
+
+        /* ====================== */
+        /*  LOGO 2 — HEXAGON 3D  */
+        /* ====================== */
+        .logo2-wrap {
+            perspective: 1000px;
+            display: inline-block;
+        }
+        .logo2 {
+            width: 170px; height: 170px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: logo2Rotate 10s linear infinite;
+        }
+        @keyframes logo2Rotate {
+            0% { transform: rotateY(0deg) rotateX(5deg); }
+            100% { transform: rotateY(360deg) rotateX(5deg); }
+        }
+
+        .logo2 .hex-layer {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo2 .hex-layer svg { width: 100%; height: 100%; }
+        .logo2 .hex-back { transform: translateZ(-12px); opacity: 0.3; }
+        .logo2 .hex-mid { transform: translateZ(-6px); opacity: 0.6; }
+        .logo2 .hex-front { transform: translateZ(0); }
+        .logo2 .hex-glow {
+            transform: translateZ(6px);
+            filter: blur(12px);
+            opacity: 0.3;
+        }
+
+        /* Center AV text */
+        .logo2 .center-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(14px);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -2px;
+            text-shadow: 0 0 30px rgba(0,180,216,0.5);
+        }
+
+        /* Orbiting rings */
+        .logo2 .orbit {
+            position: absolute; inset: -20px;
+            border: 1px solid rgba(0,180,216,0.15);
+            border-radius: 50%;
+            transform: translateZ(2px) rotateX(70deg);
+            animation: orbitSpin 8s linear infinite;
+        }
+        .logo2 .orbit:nth-child(2) {
+            inset: -35px;
+            border-color: rgba(244,166,28,0.1);
+            animation-duration: 12s;
+            animation-direction: reverse;
+            transform: translateZ(2px) rotateX(70deg) rotateZ(30deg);
+        }
+        .logo2 .orbit-dot {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: #00b4d8;
+            border-radius: 50%;
+            top: -3px; left: 50%;
+            box-shadow: 0 0 10px #00b4d8;
+        }
+        .logo2 .orbit:nth-child(2) .orbit-dot { background: #f4a61c; box-shadow: 0 0 10px #f4a61c; }
+        @keyframes orbitSpin {
+            from { transform: translateZ(2px) rotateX(70deg) rotateZ(0deg); }
+            to { transform: translateZ(2px) rotateX(70deg) rotateZ(360deg); }
+        }
+
+        .logo2-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: white;
+        }
+        .logo2-text .accent { color: #00b4d8; }
+        .logo2-text .qc {
+            font-size: 0.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f4a61c, #e63946);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: 4px;
+        }
+
+        /* ====================== */
+        /*  LOGO 3 — EMBLEM 3D   */
+        /* ====================== */
+        .logo3-wrap {
+            perspective: 900px;
+            display: inline-block;
+        }
+        .logo3 {
+            width: 170px; height: 170px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: logo3Tilt 8s ease-in-out infinite;
+        }
+        @keyframes logo3Tilt {
+            0%, 100% { transform: rotateX(8deg) rotateY(-12deg) rotateZ(0deg); }
+            25% { transform: rotateX(-4deg) rotateY(5deg) rotateZ(2deg); }
+            50% { transform: rotateX(5deg) rotateY(12deg) rotateZ(-1deg); }
+            75% { transform: rotateX(-6deg) rotateY(-8deg) rotateZ(1deg); }
+        }
+
+        .logo3 .ring-outer {
+            position: absolute; inset: 0;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            background: linear-gradient(#060a14, #060a14) padding-box,
+                        linear-gradient(135deg, #00b4d8, #2a9d8f, #f4a61c) border-box;
+            transform: translateZ(0);
+            animation: ringPulse 4s ease-in-out infinite;
+        }
+        @keyframes ringPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0,180,216,0.15); }
+            50% { box-shadow: 0 0 40px rgba(0,180,216,0.3), 0 0 60px rgba(244,166,28,0.1); }
+        }
+
+        .logo3 .ring-inner {
+            position: absolute; inset: 12px;
+            border: 2px solid rgba(0,180,216,0.2);
+            border-radius: 50%;
+            transform: translateZ(4px);
+        }
+
+        .logo3 .ring-accent {
+            position: absolute; inset: 6px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            background: linear-gradient(#060a14, #060a14) padding-box,
+                        conic-gradient(from 0deg, #00b4d8, #2a9d8f, #f4a61c, #e63946, #00b4d8) border-box;
+            transform: translateZ(2px);
+            animation: ringRotate 12s linear infinite;
+        }
+        @keyframes ringRotate {
+            from { rotate: 0deg; }
+            to { rotate: 360deg; }
+        }
+
+        /* Inner content */
+        .logo3 .emblem-center {
+            position: absolute; inset: 24px;
+            background: radial-gradient(circle at 35% 35%, #0f1a2e, #060a14);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            transform: translateZ(8px);
+            overflow: hidden;
+        }
+
+        /* Checkmark animation */
+        .logo3 .check-container {
+            position: relative;
+            width: 50px; height: 50px;
+        }
+        .logo3 .check-circle {
+            position: absolute; inset: 0;
+            border: 2px solid #2a9d8f;
+            border-radius: 50%;
+            animation: checkPulse 3s ease-in-out infinite;
+        }
+        @keyframes checkPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 20px rgba(42,157,143,0.4); }
+        }
+        .logo3 .check-svg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px; height: 28px;
+        }
+        .logo3 .check-path {
+            stroke: #2a9d8f;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            stroke-dasharray: 40;
+            stroke-dashoffset: 40;
+            animation: checkDraw 2s ease-in-out infinite;
+        }
+        @keyframes checkDraw {
+            0%, 40% { stroke-dashoffset: 40; }
+            60%, 100% { stroke-dashoffset: 0; }
+        }
+
+        /* Car silhouette */
+        .logo3 .car-silhouette {
+            position: absolute;
+            bottom: 22px;
+            opacity: 0.15;
+            transform: translateZ(10px);
+        }
+
+        /* Holographic shine */
+        .logo3 .holo-shine {
+            position: absolute; inset: 24px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                transparent 30%,
+                rgba(0,180,216,0.08) 45%,
+                rgba(244,166,28,0.06) 50%,
+                transparent 65%
+            );
+            transform: translateZ(12px);
+            animation: holoMove 5s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes holoMove {
+            0%, 100% { background-position: -200% -200%; }
+            50% { background-position: 200% 200%; }
+        }
+
+        /* Tick marks around ring */
+        .logo3 .tick-marks {
+            position: absolute; inset: -2px;
+            transform: translateZ(3px);
+        }
+
+        .logo3-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        .logo3-text .auto {
+            color: white;
+        }
+        .logo3-text .verif {
+            background: linear-gradient(135deg, #00b4d8, #2a9d8f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo3-text .qc-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f4a61c, #e63946);
+            color: white;
+            -webkit-text-fill-color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+            vertical-align: middle;
+            letter-spacing: 1px;
+        }
+
+        /* FOOTER */
+        .page-footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7a869c;
+            font-size: 0.75rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 1.6rem; }
+            .logo-stage { padding: 40px 20px; min-height: 280px; }
+            .logo1-text, .logo2-text, .logo3-text { font-size: 1.8rem; }
+            .variants { gap: 20px; }
+            .variant-box { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <h1>AutoVerif QC — Logo Concepts</h1>
+    <p>3 propositions de logo anime 3D — Choisis ton prefere</p>
+</div>
+
+<!-- ==================== LOGO 1 ==================== -->
+<div class="logo-section">
+    <div class="logo-label">Concept 01</div>
+    <div class="logo-title">Shield Scanner</div>
+    <div class="logo-desc">Bouclier 3D avec ligne de scan — Represente la protection et la verification vehiculaire. Effet de profondeur multi-couches avec particules flottantes.</div>
+
+    <div class="logo-stage">
+        <div class="logo1-wrap">
+            <div class="logo1">
+                <div class="shield shield-back shield-face">
+                    <svg viewBox="0 0 160 180" fill="none">
+                        <path d="M80 8L148 40V95C148 130 120 160 80 176C40 160 12 130 12 95V40L80 8Z" fill="#00b4d8"/>
+                    </svg>
+                </div>
+                <div class="shield shield-mid shield-face">
+                    <svg viewBox="0 0 160 180" fill="none">
+                        <path d="M80 8L148 40V95C148 130 120 160 80 176C40 160 12 130 12 95V40L80 8Z" fill="url(#grad1mid)"/>
+                        <defs>
+                            <linearGradient id="grad1mid" x1="12" y1="8" x2="148" y2="176">
+                                <stop offset="0%" stop-color="#0a1628"/>
+                                <stop offset="100%" stop-color="#0d1f3c"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="shield shield-front shield-face">
+                    <svg viewBox="0 0 160 180" fill="none">
+                        <defs>
+                            <linearGradient id="shieldGrad" x1="12" y1="8" x2="148" y2="176">
+                                <stop offset="0%" stop-color="#0c1a30"/>
+                                <stop offset="50%" stop-color="#0a1424"/>
+                                <stop offset="100%" stop-color="#081020"/>
+                            </linearGradient>
+                            <linearGradient id="strokeGrad" x1="12" y1="8" x2="148" y2="176">
+                                <stop offset="0%" stop-color="#00b4d8"/>
+                                <stop offset="50%" stop-color="#2a9d8f"/>
+                                <stop offset="100%" stop-color="#f4a61c"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M80 8L148 40V95C148 130 120 160 80 176C40 160 12 130 12 95V40L80 8Z" fill="url(#shieldGrad)" stroke="url(#strokeGrad)" stroke-width="2"/>
+                        <!-- Car icon -->
+                        <g transform="translate(44, 58)" opacity="0.12">
+                            <path d="M8 28h56v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-8zM14 16l6-12h32l6 12" stroke="white" stroke-width="2" fill="none"/>
+                            <rect x="8" y="16" width="56" height="14" rx="4" stroke="white" stroke-width="2" fill="none"/>
+                            <circle cx="20" cy="38" r="4" fill="white"/>
+                            <circle cx="52" cy="38" r="4" fill="white"/>
+                        </g>
+                        <!-- Checkmark -->
+                        <g transform="translate(52, 70)">
+                            <path d="M10 28L24 42L48 12" stroke="#2a9d8f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                                <animate attributeName="stroke-dasharray" values="0 80;80 0" dur="2s" repeatCount="indefinite"/>
+                            </path>
+                        </g>
+                        <!-- AV letters top -->
+                        <text x="80" y="55" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">AV</text>
+                    </svg>
+                </div>
+                <div class="shield shield-glow shield-face">
+                    <svg viewBox="0 0 160 180" fill="none">
+                        <path d="M80 8L148 40V95C148 130 120 160 80 176C40 160 12 130 12 95V40L80 8Z" fill="#00b4d8"/>
+                    </svg>
+                </div>
+                <div class="scan-line"></div>
+                <div class="logo1-particles">
+                    <div class="p"></div><div class="p"></div><div class="p"></div>
+                    <div class="p"></div><div class="p"></div><div class="p"></div>
+                </div>
+            </div>
+        </div>
+        <div class="logo1-text">Auto<span class="accent">Verif</span><span class="qc">QC</span></div>
+    </div>
+
+    <!-- Variants -->
+    <div class="variants">
+        <div class="variant-box">
+            <svg width="60" height="68" viewBox="0 0 160 180" fill="none">
+                <path d="M80 8L148 40V95C148 130 120 160 80 176C40 160 12 130 12 95V40L80 8Z" fill="#0c1a30" stroke="url(#sg1)" stroke-width="2.5"/>
+                <text x="80" y="90" text-anchor="middle" font-family="Space Grotesk" font-size="36" font-weight="800" fill="white">AV</text>
+                <path d="M55 110L70 125L108 82" stroke="#2a9d8f" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <defs><linearGradient id="sg1" x1="0" y1="0" x2="160" y2="180"><stop stop-color="#00b4d8"/><stop offset="1" stop-color="#f4a61c"/></linearGradient></defs>
+            </svg>
+            <span>Icon seul</span>
+        </div>
+        <div class="variant-box">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <svg width="36" height="40" viewBox="0 0 160 180" fill="none">
+                    <path d="M80 8L148 40V95C148 130 120 160 80 176C40 160 12 130 12 95V40L80 8Z" fill="#0c1a30" stroke="#00b4d8" stroke-width="3"/>
+                    <text x="80" y="90" text-anchor="middle" font-family="Space Grotesk" font-size="36" font-weight="800" fill="white">AV</text>
+                    <path d="M55 110L70 125L108 82" stroke="#2a9d8f" stroke-width="4" stroke-linecap="round" fill="none"/>
+                </svg>
+                <span style="font-family:Space Grotesk;font-weight:800;font-size:1.3rem;color:white;letter-spacing:-1px;">Auto<span style="color:#00b4d8">Verif</span> <span style="color:#f4a61c;font-size:0.7rem;vertical-align:super;">QC</span></span>
+            </div>
+            <span>Horizontal</span>
+        </div>
+        <div class="variant-box" style="background:white;border-color:rgba(0,0,0,0.1);">
+            <svg width="60" height="68" viewBox="0 0 160 180" fill="none">
+                <path d="M80 8L148 40V95C148 130 120 160 80 176C40 160 12 130 12 95V40L80 8Z" fill="#0a1424" stroke="#00b4d8" stroke-width="2.5"/>
+                <text x="80" y="90" text-anchor="middle" font-family="Space Grotesk" font-size="36" font-weight="800" fill="white">AV</text>
+                <path d="M55 110L70 125L108 82" stroke="#2a9d8f" stroke-width="4" stroke-linecap="round" fill="none"/>
+            </svg>
+            <span style="color:#333;">Fond clair</span>
+        </div>
+    </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ==================== LOGO 2 ==================== -->
+<div class="logo-section">
+    <div class="logo-label">Concept 02</div>
+    <div class="logo-title">Quantum Hex</div>
+    <div class="logo-desc">Hexagone 3D en rotation avec orbites — Represente la technologie AI, la precision et les donnees multi-sources. Style futuriste crypto/tech avec monogramme AV central.</div>
+
+    <div class="logo-stage">
+        <div class="logo2-wrap">
+            <div class="logo2">
+                <div class="hex-layer hex-back">
+                    <svg viewBox="0 0 170 170" fill="none">
+                        <polygon points="85,5 160,45 160,125 85,165 10,125 10,45" fill="#00b4d8"/>
+                    </svg>
+                </div>
+                <div class="hex-layer hex-mid">
+                    <svg viewBox="0 0 170 170" fill="none">
+                        <polygon points="85,5 160,45 160,125 85,165 10,125 10,45" fill="#0a1628" stroke="rgba(0,180,216,0.3)" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="hex-layer hex-front">
+                    <svg viewBox="0 0 170 170" fill="none">
+                        <defs>
+                            <linearGradient id="hexGrad" x1="10" y1="5" x2="160" y2="165">
+                                <stop offset="0%" stop-color="#0c1a30"/>
+                                <stop offset="50%" stop-color="#0a1424"/>
+                                <stop offset="100%" stop-color="#081020"/>
+                            </linearGradient>
+                            <linearGradient id="hexStroke" x1="10" y1="5" x2="160" y2="165">
+                                <stop offset="0%" stop-color="#00b4d8"/>
+                                <stop offset="50%" stop-color="#2a9d8f"/>
+                                <stop offset="100%" stop-color="#f4a61c"/>
+                            </linearGradient>
+                        </defs>
+                        <polygon points="85,5 160,45 160,125 85,165 10,125 10,45" fill="url(#hexGrad)" stroke="url(#hexStroke)" stroke-width="2"/>
+                        <!-- Inner hexagon -->
+                        <polygon points="85,30 135,55 135,115 85,140 35,115 35,55" fill="none" stroke="rgba(0,180,216,0.15)" stroke-width="1"/>
+                        <!-- Data lines -->
+                        <line x1="85" y1="30" x2="85" y2="5" stroke="rgba(0,180,216,0.2)" stroke-width="1"/>
+                        <line x1="135" y1="55" x2="160" y2="45" stroke="rgba(0,180,216,0.2)" stroke-width="1"/>
+                        <line x1="35" y1="55" x2="10" y2="45" stroke="rgba(0,180,216,0.2)" stroke-width="1"/>
+                        <line x1="135" y1="115" x2="160" y2="125" stroke="rgba(244,166,28,0.2)" stroke-width="1"/>
+                        <line x1="35" y1="115" x2="10" y2="125" stroke="rgba(244,166,28,0.2)" stroke-width="1"/>
+                        <line x1="85" y1="140" x2="85" y2="165" stroke="rgba(244,166,28,0.2)" stroke-width="1"/>
+                        <!-- Corner dots -->
+                        <circle cx="85" cy="5" r="3" fill="#00b4d8"/>
+                        <circle cx="160" cy="45" r="3" fill="#00b4d8"/>
+                        <circle cx="10" cy="45" r="3" fill="#00b4d8"/>
+                        <circle cx="160" cy="125" r="3" fill="#f4a61c"/>
+                        <circle cx="10" cy="125" r="3" fill="#f4a61c"/>
+                        <circle cx="85" cy="165" r="3" fill="#f4a61c"/>
+                    </svg>
+                </div>
+                <div class="hex-layer hex-glow">
+                    <svg viewBox="0 0 170 170" fill="none">
+                        <polygon points="85,5 160,45 160,125 85,165 10,125 10,45" fill="#00b4d8"/>
+                    </svg>
+                </div>
+                <div class="center-text">AV</div>
+                <div class="orbit"><div class="orbit-dot"></div></div>
+                <div class="orbit"><div class="orbit-dot"></div></div>
+            </div>
+        </div>
+        <div class="logo2-text">Auto<span class="accent">Verif</span><span class="qc">QC</span></div>
+    </div>
+
+    <!-- Variants -->
+    <div class="variants">
+        <div class="variant-box">
+            <svg width="60" height="60" viewBox="0 0 170 170" fill="none">
+                <polygon points="85,5 160,45 160,125 85,165 10,125 10,45" fill="#0a1424" stroke="url(#hs2)" stroke-width="2.5"/>
+                <text x="85" y="95" text-anchor="middle" font-family="Space Grotesk" font-size="42" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+                <defs><linearGradient id="hs2" x1="0" y1="0" x2="170" y2="170"><stop stop-color="#00b4d8"/><stop offset="1" stop-color="#f4a61c"/></linearGradient></defs>
+            </svg>
+            <span>Icon seul</span>
+        </div>
+        <div class="variant-box">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <svg width="34" height="34" viewBox="0 0 170 170" fill="none">
+                    <polygon points="85,5 160,45 160,125 85,165 10,125 10,45" fill="#0a1424" stroke="#00b4d8" stroke-width="3"/>
+                    <text x="85" y="95" text-anchor="middle" font-family="Space Grotesk" font-size="42" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+                </svg>
+                <span style="font-family:Space Grotesk;font-weight:800;font-size:1.3rem;color:white;letter-spacing:-1px;">Auto<span style="color:#00b4d8">Verif</span> <span style="background:linear-gradient(135deg,#f4a61c,#e63946);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:0.7rem;">QC</span></span>
+            </div>
+            <span>Horizontal</span>
+        </div>
+        <div class="variant-box" style="background:white;border-color:rgba(0,0,0,0.1);">
+            <svg width="60" height="60" viewBox="0 0 170 170" fill="none">
+                <polygon points="85,5 160,45 160,125 85,165 10,125 10,45" fill="#0a1424" stroke="#00b4d8" stroke-width="2.5"/>
+                <text x="85" y="95" text-anchor="middle" font-family="Space Grotesk" font-size="42" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+            </svg>
+            <span style="color:#333;">Fond clair</span>
+        </div>
+    </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ==================== LOGO 3 ==================== -->
+<div class="logo-section">
+    <div class="logo-label">Concept 03</div>
+    <div class="logo-title">Certified Emblem</div>
+    <div class="logo-desc">Embleme circulaire 3D avec anneau holographique — Represente la certification, la confiance et l'authenticite. Animation de checkmark + reflet holographique premium. Style international haut de gamme.</div>
+
+    <div class="logo-stage">
+        <div class="logo3-wrap">
+            <div class="logo3">
+                <div class="ring-accent"></div>
+                <div class="ring-outer"></div>
+                <div class="ring-inner"></div>
+                <!-- Tick marks -->
+                <svg class="tick-marks" viewBox="0 0 170 170" fill="none" style="position:absolute;inset:-2px;transform:translateZ(3px);">
+                    <g transform="translate(85,85)">
+                        <!-- 12 tick marks -->
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(30)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.3)" stroke-width="1.5" stroke-linecap="round" transform="rotate(60)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(244,166,28,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(90)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.3)" stroke-width="1.5" stroke-linecap="round" transform="rotate(120)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(150)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(244,166,28,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(180)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.3)" stroke-width="1.5" stroke-linecap="round" transform="rotate(210)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(240)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(244,166,28,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(270)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.3)" stroke-width="1.5" stroke-linecap="round" transform="rotate(300)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-72" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(330)"/>
+                    </g>
+                </svg>
+                <div class="emblem-center">
+                    <!-- AV text -->
+                    <svg width="80" height="40" viewBox="0 0 80 40" style="margin-bottom:2px;transform:translateZ(12px);">
+                        <text x="40" y="32" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="34" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+                    </svg>
+                    <!-- Checkmark -->
+                    <div class="check-container" style="transform:translateZ(14px);width:36px;height:36px;">
+                        <div class="check-circle"></div>
+                        <svg class="check-svg" viewBox="0 0 28 28" style="width:20px;height:20px;">
+                            <path class="check-path" d="M6 14L12 20L22 8"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="holo-shine"></div>
+            </div>
+        </div>
+        <div class="logo3-text"><span class="auto">Auto</span><span class="verif">Verif</span><span class="qc-badge">QC</span></div>
+    </div>
+
+    <!-- Variants -->
+    <div class="variants">
+        <div class="variant-box">
+            <svg width="65" height="65" viewBox="0 0 170 170" fill="none">
+                <circle cx="85" cy="85" r="78" fill="#0a1424" stroke="url(#eg1)" stroke-width="3"/>
+                <circle cx="85" cy="85" r="66" fill="none" stroke="rgba(0,180,216,0.2)" stroke-width="1"/>
+                <text x="85" y="82" text-anchor="middle" font-family="Space Grotesk" font-size="38" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+                <path d="M68 100L78 110L102 82" stroke="#2a9d8f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <defs><linearGradient id="eg1" x1="0" y1="0" x2="170" y2="170"><stop stop-color="#00b4d8"/><stop offset=".5" stop-color="#2a9d8f"/><stop offset="1" stop-color="#f4a61c"/></linearGradient></defs>
+            </svg>
+            <span>Icon seul</span>
+        </div>
+        <div class="variant-box">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <svg width="36" height="36" viewBox="0 0 170 170" fill="none">
+                    <circle cx="85" cy="85" r="78" fill="#0a1424" stroke="#00b4d8" stroke-width="3"/>
+                    <text x="85" y="82" text-anchor="middle" font-family="Space Grotesk" font-size="38" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+                    <path d="M68 100L78 110L102 82" stroke="#2a9d8f" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                </svg>
+                <span style="font-family:Space Grotesk;font-weight:800;font-size:1.3rem;letter-spacing:-1px;"><span style="color:white">Auto</span><span style="background:linear-gradient(135deg,#00b4d8,#2a9d8f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Verif</span> <span style="font-size:0.6rem;font-weight:800;background:#f4a61c;color:#060a14;padding:2px 6px;border-radius:4px;vertical-align:middle;-webkit-text-fill-color:#060a14;">QC</span></span>
+            </div>
+            <span>Horizontal</span>
+        </div>
+        <div class="variant-box" style="background:white;border-color:rgba(0,0,0,0.1);">
+            <svg width="65" height="65" viewBox="0 0 170 170" fill="none">
+                <circle cx="85" cy="85" r="78" fill="#0a1424" stroke="#00b4d8" stroke-width="3"/>
+                <circle cx="85" cy="85" r="66" fill="none" stroke="rgba(0,180,216,0.15)" stroke-width="1"/>
+                <text x="85" y="82" text-anchor="middle" font-family="Space Grotesk" font-size="38" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+                <path d="M68 100L78 110L102 82" stroke="#2a9d8f" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            </svg>
+            <span style="color:#333;">Fond clair</span>
+        </div>
+    </div>
+</div>
+
+<div class="page-footer">
+    <p>AutoVerif QC — Logo Concepts — SeoParAI 2026</p>
+    <p style="margin-top:6px;">Tous les logos sont en SVG vectoriel, animables, et scalables a toute taille.</p>
+</div>
+
+</body>
+</html>
