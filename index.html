@@ -2955,6 +2955,9 @@
         .from('.hero p', { y: 20, opacity: 0, duration: 0.6 }, '-=0.4')
         .from('.hero-stat', { y: 30, opacity: 0, duration: 0.5, stagger: 0.15, ease: 'back.out(1.4)' }, '-=0.3');
 
+    // --- Shared ScrollTrigger defaults (ensures elements already in view animate immediately) ---
+    const stDefaults = { toggleActions: 'play none none none', once: true };
+
     // --- Cards: staggered 3D entrance ---
     document.querySelectorAll('.card-grid').forEach(grid => {
         const cards = grid.querySelectorAll('.card');
@@ -2962,7 +2965,7 @@
             y: 60, opacity: 0, rotateX: 8, duration: 0.8,
             ease: 'power3.out',
             stagger: 0.12,
-            scrollTrigger: { trigger: grid, start: 'top 82%' }
+            scrollTrigger: { trigger: grid, start: 'top 92%', ...stDefaults }
         });
     });
 
@@ -2971,7 +2974,7 @@
         gsap.from(block, {
             x: -50, opacity: 0, duration: 0.7,
             ease: 'power3.out',
-            scrollTrigger: { trigger: block, start: 'top 82%' },
+            scrollTrigger: { trigger: block, start: 'top 92%', ...stDefaults },
             delay: i * 0.05
         });
     });
@@ -2981,7 +2984,7 @@
         gsap.from(card, {
             scale: 0.85, opacity: 0, y: 40, duration: 0.8,
             ease: 'back.out(1.6)',
-            scrollTrigger: { trigger: card, start: 'top 85%' },
+            scrollTrigger: { trigger: card, start: 'top 92%', ...stDefaults },
             delay: i * 0.18
         });
     });
@@ -2991,7 +2994,7 @@
         gsap.from(item, {
             x: 60, opacity: 0, duration: 0.7,
             ease: 'power3.out',
-            scrollTrigger: { trigger: item, start: 'top 82%' },
+            scrollTrigger: { trigger: item, start: 'top 92%', ...stDefaults },
             delay: i * 0.1
         });
     });
@@ -3001,7 +3004,7 @@
         gsap.from(card, {
             scale: 0.8, y: 20, opacity: 0, duration: 0.5,
             ease: 'back.out(1.4)',
-            scrollTrigger: { trigger: card, start: 'top 88%' },
+            scrollTrigger: { trigger: card, start: 'top 95%', ...stDefaults },
             delay: i * 0.08
         });
     });
@@ -3011,7 +3014,7 @@
         gsap.from(title, {
             y: 30, opacity: 0, duration: 0.7,
             ease: 'power4.out',
-            scrollTrigger: { trigger: title, start: 'top 85%' }
+            scrollTrigger: { trigger: title, start: 'top 92%', ...stDefaults }
         });
     });
 
@@ -3020,7 +3023,7 @@
         gsap.from(label, {
             scale: 0.6, opacity: 0, duration: 0.5,
             ease: 'back.out(2)',
-            scrollTrigger: { trigger: label, start: 'top 90%' }
+            scrollTrigger: { trigger: label, start: 'top 95%', ...stDefaults }
         });
     });
 
@@ -3029,7 +3032,7 @@
         gsap.from(sub, {
             y: 20, opacity: 0, duration: 0.6,
             ease: 'power3.out',
-            scrollTrigger: { trigger: sub, start: 'top 88%' }
+            scrollTrigger: { trigger: sub, start: 'top 95%', ...stDefaults }
         });
     });
 
@@ -3038,7 +3041,7 @@
         gsap.from(box, {
             y: 40, opacity: 0, duration: 0.8,
             ease: 'power3.out',
-            scrollTrigger: { trigger: box, start: 'top 82%' }
+            scrollTrigger: { trigger: box, start: 'top 92%', ...stDefaults }
         });
     });
 
@@ -3047,7 +3050,7 @@
         gsap.from(tw, {
             y: 30, opacity: 0, duration: 0.6,
             ease: 'power3.out',
-            scrollTrigger: { trigger: tw, start: 'top 88%' }
+            scrollTrigger: { trigger: tw, start: 'top 95%', ...stDefaults }
         });
     });
 
@@ -3056,7 +3059,7 @@
         gsap.from(item, {
             y: 25, opacity: 0, duration: 0.5,
             ease: 'power3.out',
-            scrollTrigger: { trigger: item, start: 'top 90%' },
+            scrollTrigger: { trigger: item, start: 'top 95%', ...stDefaults },
             delay: i * 0.1
         });
     });
@@ -3066,9 +3069,16 @@
         gsap.from(cta, {
             scale: 0.95, opacity: 0, duration: 0.8,
             ease: 'power3.out',
-            scrollTrigger: { trigger: cta, start: 'top 85%' }
+            scrollTrigger: { trigger: cta, start: 'top 92%', ...stDefaults }
         });
     });
+
+    // --- Refresh ScrollTrigger after full page load (fixes anchor navigation & slow load) ---
+    window.addEventListener('load', () => {
+        ScrollTrigger.refresh(true);
+    });
+    // Extra safety: refresh again after 1.5s for slow connections
+    setTimeout(() => ScrollTrigger.refresh(true), 1500);
 
     // --- Hero stats counter animation (improved) ---
     function animateCounter(el, target, suffix) {
