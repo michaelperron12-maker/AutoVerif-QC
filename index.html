@@ -6,21 +6,25 @@
     <title>AutoVerif QC — Plan d'affaires & Proposition de coentreprise</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
         :root {
-            --primary: #0f2b46;
-            --primary-light: #1a3d5c;
+            --primary: #080e1a;
+            --primary-light: #111b2e;
             --accent: #00b4d8;
             --accent-dark: #0096b7;
             --gold: #f4a61c;
             --gold-dark: #d4910a;
             --red: #e63946;
             --green: #2a9d8f;
-            --bg: #f8f9fb;
-            --card: #ffffff;
-            --text: #1a1a2e;
-            --text-light: #6b7280;
-            --border: #e5e7eb;
+            --bg: #0b1120;
+            --bg-light: #0f1729;
+            --card: rgba(255,255,255,0.04);
+            --card-border: rgba(255,255,255,0.08);
+            --text: #e8ecf2;
+            --text-light: #8892a4;
+            --border: rgba(255,255,255,0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,6 +35,10 @@
             color: var(--text);
             line-height: 1.6;
         }
+
+        /* REVEAL ANIMATION */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
         /* ---- PRINT STYLES ---- */
         @media print {
@@ -204,7 +212,7 @@
         }
 
         /* ---- SECTIONS ---- */
-        section { padding: 80px 20px; }
+        section { padding: 80px 20px; position: relative; }
         .container { max-width: 1100px; margin: 0 auto; }
 
         .section-label {
@@ -214,11 +222,13 @@
             font-size: 0.8rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 1px;
             margin-bottom: 16px;
+            border: 1px solid rgba(0,180,216,0.15);
         }
         .section-title {
             font-size: clamp(1.8rem, 3vw, 2.4rem);
             font-weight: 800; letter-spacing: -1px;
             margin-bottom: 16px; line-height: 1.15;
+            color: white;
         }
         .section-subtitle {
             font-size: 1.05rem; color: var(--text-light);
@@ -234,14 +244,17 @@
         }
         .card {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 32px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(8px);
         }
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,180,216,0.08);
+            border-color: rgba(0,180,216,0.2);
+            background: rgba(255,255,255,0.06);
         }
         .card-icon {
             width: 48px; height: 48px;
@@ -255,7 +268,7 @@
         .card-icon.red { background: rgba(230,57,70,0.1); }
         .card h3 {
             font-size: 1.1rem; font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 8px; color: white;
         }
         .card p {
             font-size: 0.9rem; color: var(--text-light);
@@ -273,7 +286,7 @@
             width: 100%; border-collapse: collapse;
             font-size: 0.9rem;
         }
-        thead { background: var(--primary); color: white; }
+        thead { background: rgba(0,180,216,0.1); color: var(--accent); }
         th {
             padding: 14px 20px; text-align: left;
             font-weight: 600; font-size: 0.8rem;
@@ -301,20 +314,22 @@
         }
         .pricing-card {
             background: var(--card);
-            border: 2px solid var(--border);
+            border: 1px solid var(--card-border);
             border-radius: 20px;
             padding: 40px 32px;
             text-align: center;
             position: relative;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(8px);
         }
         .pricing-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,180,216,0.1);
+            border-color: rgba(0,180,216,0.2);
         }
         .pricing-card.featured {
             border-color: var(--accent);
-            background: linear-gradient(180deg, rgba(0,180,216,0.03) 0%, white 40%);
+            background: linear-gradient(180deg, rgba(0,180,216,0.08) 0%, rgba(0,180,216,0.02) 100%);
         }
         .pricing-card.featured::before {
             content: 'POPULAIRE';
@@ -330,7 +345,7 @@
         }
         .pricing-price {
             font-size: 3rem; font-weight: 900;
-            color: var(--text); line-height: 1;
+            color: white; line-height: 1;
             margin-bottom: 4px;
         }
         .pricing-price sup { font-size: 1.2rem; top: -1.2em; }
@@ -365,7 +380,7 @@
         .pricing-btn.primary:hover { background: var(--accent-dark); }
         .pricing-btn.outline {
             background: transparent;
-            border: 2px solid var(--border);
+            border: 2px solid var(--card-border);
             color: var(--text);
         }
         .pricing-btn.outline:hover { border-color: var(--accent); color: var(--accent); }
@@ -375,14 +390,16 @@
         .timeline::before {
             content: '';
             position: absolute; left: 15px; top: 0; bottom: 0;
-            width: 2px; background: var(--border);
+            width: 2px; background: linear-gradient(180deg, var(--accent), var(--gold), var(--green));
+            opacity: 0.3;
         }
         .timeline-item {
             position: relative; margin-bottom: 40px;
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 28px 32px;
+            backdrop-filter: blur(8px);
         }
         .timeline-item::before {
             content: '';
@@ -390,6 +407,7 @@
             width: 12px; height: 12px; border-radius: 50%;
             background: var(--accent);
             border: 3px solid var(--bg);
+            box-shadow: 0 0 12px rgba(0,180,216,0.4);
         }
         .timeline-item.active::before { background: var(--green); }
         .timeline-item.pending::before { background: var(--gold); }
@@ -399,7 +417,7 @@
             color: var(--accent); margin-bottom: 6px;
         }
         .timeline-item h3 {
-            font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;
+            font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; color: white;
         }
         .timeline-item p {
             font-size: 0.9rem; color: var(--text-light); line-height: 1.6;
@@ -415,14 +433,15 @@
         /* ---- LEGAL SECTION ---- */
         .legal-block {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 32px;
             margin-bottom: 24px;
+            backdrop-filter: blur(8px);
         }
         .legal-block h3 {
             font-size: 1.1rem; font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 12px; color: white;
             display: flex; align-items: center; gap: 10px;
         }
         .legal-block p, .legal-block li {
@@ -450,14 +469,20 @@
         }
         .finance-card {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 24px;
             text-align: center;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s;
+        }
+        .finance-card:hover {
+            border-color: rgba(0,180,216,0.2);
+            transform: translateY(-2px);
         }
         .finance-card .amount {
             font-size: 2rem; font-weight: 800;
-            color: var(--primary); line-height: 1;
+            color: white; line-height: 1;
         }
         .finance-card .amount.green { color: var(--green); }
         .finance-card .desc {
@@ -513,18 +538,19 @@
         /* ---- ACCORDION ---- */
         .accordion-item {
             background: var(--card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             margin-bottom: 12px;
             overflow: hidden;
+            backdrop-filter: blur(8px);
         }
         .accordion-header {
             padding: 20px 24px;
             font-weight: 600; font-size: 0.95rem;
-            cursor: pointer;
+            cursor: pointer; color: white;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .accordion-header:hover { background: rgba(0,180,216,0.02); }
+        .accordion-header:hover { background: rgba(0,180,216,0.04); }
         .accordion-header .arrow {
             transition: transform 0.3s;
             font-size: 0.8rem; color: var(--text-light);
@@ -542,15 +568,16 @@
 
         /* ---- HIGHLIGHT BOX ---- */
         .highlight-box {
-            background: linear-gradient(135deg, rgba(0,180,216,0.06), rgba(244,166,28,0.06));
-            border: 1px solid rgba(0,180,216,0.2);
+            background: linear-gradient(135deg, rgba(0,180,216,0.04), rgba(244,166,28,0.03));
+            border: 1px solid rgba(0,180,216,0.12);
             border-radius: 16px;
             padding: 32px;
             margin: 32px 0;
+            backdrop-filter: blur(8px);
         }
         .highlight-box h3 {
             font-size: 1.2rem; font-weight: 800;
-            margin-bottom: 12px;
+            margin-bottom: 12px; color: white;
         }
 
         /* ---- CONFIDENTIAL BANNER ---- */
@@ -688,7 +715,7 @@
 </section>
 
 <!-- SOLUTION -->
-<section id="solution" style="background: white;">
+<section id="solution" style="background: var(--bg-light);">
     <div class="container">
         <span class="section-label">La solution</span>
         <h2 class="section-title">AutoVerif QC: la premiere alternative quebecoise</h2>
@@ -730,7 +757,7 @@
 </section>
 
 <!-- PROTECTION CITRON -->
-<section id="citron" style="background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 50%, #fce4ec 100%);">
+<section id="citron" style="background: linear-gradient(135deg, rgba(244,166,28,0.04) 0%, rgba(230,57,70,0.04) 100%);">
     <div class="container">
         <span class="section-label" style="background: rgba(230,57,70,0.1); color: var(--red);">Protection consommateur</span>
         <h2 class="section-title">Fini les autos citron. Comprenez les risques par vous-meme.</h2>
@@ -759,7 +786,7 @@
             </div>
         </div>
 
-        <div class="highlight-box" style="margin-top: 40px; background: white; border-color: rgba(230,57,70,0.3);">
+        <div class="highlight-box" style="margin-top: 40px; border-color: rgba(230,57,70,0.2);">
             <h3>Les 8 drapeaux rouges que notre AI detecte automatiquement</h3>
             <div class="table-wrapper" style="margin-top: 16px;">
                 <table>
@@ -823,7 +850,7 @@
             <h2>Ne soyez plus jamais victime d'un auto citron</h2>
             <p>850,000 vehicules d'occasion sont vendus chaque annee au Quebec. Des milliers d'acheteurs se font avoir. AutoVerif QC est votre protection — accessible, abordable, et compris par tous.</p>
             <div class="cta-buttons">
-                <a href="#prix" class="cta-btn" style="background: white; color: var(--red);">Verifier un vehicule — $19.99</a>
+                <a href="#prix" class="cta-btn" style="background: rgba(255,255,255,0.95); color: var(--red);">Verifier un vehicule — $19.99</a>
                 <a href="#prix" class="cta-btn" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.5);">Essayer gratuitement</a>
             </div>
         </div>
@@ -976,7 +1003,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
 </section>
 
 <!-- PLAN LEGAL COMPLET -->
-<section id="legal" style="background: white;">
+<section id="legal" style="background: var(--bg-light);">
     <div class="container">
         <span class="section-label">Cadre juridique</span>
         <h2 class="section-title">Strategie juridique blindee: 12 arguments legaux pour l'acces aux donnees SAAQ</h2>
@@ -1500,7 +1527,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
 </section>
 
 <!-- PRICING -->
-<section id="prix" style="background: linear-gradient(180deg, var(--bg) 0%, #eef6fc 100%);">
+<section id="prix" style="background: linear-gradient(180deg, var(--bg) 0%, var(--bg-light) 100%);">
     <div class="container">
         <span class="section-label">Tarification</span>
         <h2 class="section-title">3 offres, 1 mission: proteger les Quebecois</h2>
@@ -1745,7 +1772,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
 </section>
 
 <!-- PROJECTIONS FINANCIERES -->
-<section id="finances" style="background: white;">
+<section id="finances" style="background: var(--bg-light);">
     <div class="container">
         <span class="section-label">Projections financieres</span>
         <h2 class="section-title">Modele de revenus sur 24 mois</h2>
@@ -1944,7 +1971,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
 </section>
 
 <!-- ROADMAP -->
-<section id="roadmap" style="background: white;">
+<section id="roadmap" style="background: var(--bg-light);">
     <div class="container">
         <span class="section-label">Feuille de route</span>
         <h2 class="section-title">Plan d'execution sur 18 mois</h2>
@@ -2022,7 +2049,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
 </section>
 
 <!-- PARTENAIRE TECHNOLOGIQUE -->
-<section id="partenaire" style="background: linear-gradient(180deg, #f0f9ff 0%, var(--bg) 100%);">
+<section id="partenaire" style="background: linear-gradient(180deg, rgba(0,180,216,0.04) 0%, var(--bg) 100%);">
     <div class="container">
         <span class="section-label">Partenaire technologique</span>
         <h2 class="section-title">SeoParAI — Le moteur derriere AutoVerif QC</h2>
@@ -2175,7 +2202,7 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
 </section>
 
 <!-- FAQ -->
-<section id="faq" style="background: white;">
+<section id="faq" style="background: var(--bg-light);">
     <div class="container">
         <span class="section-label">FAQ</span>
         <h2 class="section-title">Questions frequentes</h2>
@@ -2295,21 +2322,124 @@ Client (web/mobile)  →  API AutoVerif (serveur QC)
         });
     });
 
-    // Scroll reveal
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { threshold: 0.1 });
+    // GSAP Scroll Animations
+    gsap.registerPlugin(ScrollTrigger);
 
-    document.querySelectorAll('.card, .legal-block, .pricing-card, .timeline-item, .accordion-item, .finance-card').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
+    // Fade up cards with stagger
+    gsap.utils.toArray('.card').forEach((card, i) => {
+        gsap.from(card, {
+            y: 40, opacity: 0, duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' },
+            delay: (i % 3) * 0.12
+        });
+    });
+
+    // Legal blocks slide in
+    gsap.utils.toArray('.legal-block').forEach((block) => {
+        gsap.from(block, {
+            x: -30, opacity: 0, duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: block, start: 'top 85%' }
+        });
+    });
+
+    // Pricing cards scale up
+    gsap.utils.toArray('.pricing-card').forEach((card, i) => {
+        gsap.from(card, {
+            scale: 0.9, opacity: 0, duration: 0.6,
+            ease: 'back.out(1.4)',
+            scrollTrigger: { trigger: card, start: 'top 85%' },
+            delay: i * 0.15
+        });
+    });
+
+    // Timeline items
+    gsap.utils.toArray('.timeline-item').forEach((item) => {
+        gsap.from(item, {
+            x: 40, opacity: 0, duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: item, start: 'top 85%' }
+        });
+    });
+
+    // Finance cards
+    gsap.utils.toArray('.finance-card').forEach((card, i) => {
+        gsap.from(card, {
+            y: 30, opacity: 0, duration: 0.5,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 90%' },
+            delay: i * 0.08
+        });
+    });
+
+    // Section titles
+    gsap.utils.toArray('.section-title').forEach((title) => {
+        gsap.from(title, {
+            y: 20, opacity: 0, duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: title, start: 'top 85%' }
+        });
+    });
+
+    // Section labels
+    gsap.utils.toArray('.section-label').forEach((label) => {
+        gsap.from(label, {
+            scale: 0.8, opacity: 0, duration: 0.4,
+            ease: 'back.out(1.4)',
+            scrollTrigger: { trigger: label, start: 'top 90%' }
+        });
+    });
+
+    // Highlight boxes
+    gsap.utils.toArray('.highlight-box').forEach((box) => {
+        gsap.from(box, {
+            y: 30, opacity: 0, duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: box, start: 'top 85%' }
+        });
+    });
+
+    // Accordion items
+    gsap.utils.toArray('.accordion-item').forEach((item, i) => {
+        gsap.from(item, {
+            y: 20, opacity: 0, duration: 0.4,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: item, start: 'top 90%' },
+            delay: i * 0.08
+        });
+    });
+
+    // Hero stats counter animation
+    function animateCounter(el, target) {
+        let current = 0;
+        const duration = 2000;
+        const start = performance.now();
+        function update(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            current = Math.round(target * eased);
+            el.textContent = current.toLocaleString();
+            if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+    }
+
+    // Animate hero stats on load
+    const heroNums = document.querySelectorAll('.hero-stat .number');
+    heroNums.forEach(n => {
+        const text = n.textContent.replace(/[^0-9]/g, '');
+        const num = parseInt(text);
+        if (!isNaN(num) && num > 10) {
+            const suffix = n.textContent.replace(/[0-9,]/g, '');
+            const orig = num;
+            n.textContent = '0' + suffix;
+            setTimeout(() => {
+                animateCounter(n, orig);
+                setTimeout(() => { n.textContent = orig.toLocaleString() + suffix; }, 2100);
+            }, 500);
+        }
     });
 </script>
 
