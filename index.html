@@ -82,68 +82,121 @@
         }
 
         @media (max-width: 768px) {
-            nav { padding: 0 12px; gap: 8px; flex-wrap: nowrap; }
+            /* NAV mobile */
+            nav { padding: 0 12px; gap: 6px; flex-wrap: nowrap; height: 56px; }
             .nav-links { display: none; }
-            .nav-logo { font-size: 1.2rem; gap: 6px; }
-            .nav-logo .logo-icon { width: 30px; height: 30px; font-size: 0.85rem; border-radius: 8px; }
-            .nav-badge { font-size: 0.7rem; padding: 5px 10px; white-space: nowrap; }
-            .hero { min-height: auto; padding: 90px 16px 48px; }
-            .hero h1 { font-size: 1.6rem; letter-spacing: -0.5px; }
-            .hero p { font-size: 0.9rem; margin-bottom: 24px; }
-            .hero-stats { gap: 16px; flex-wrap: wrap; justify-content: center; }
-            .hero-stat .number { font-size: 1.4rem; }
-            .hero-stat .label { font-size: 0.65rem; }
-            section { padding: 40px 16px; }
-            .section-label { font-size: 0.7rem; margin-bottom: 8px; }
-            .section-title { font-size: 1.3rem; margin-bottom: 8px; }
-            .section-subtitle { font-size: 0.88rem; margin-bottom: 28px; }
+            .nav-logo { font-size: 1.1rem; gap: 6px; }
+            .nav-logo .logo-icon { width: 28px !important; height: 28px !important; }
+            .nav-badge { font-size: 0.65rem; padding: 5px 10px; white-space: nowrap; }
+            .nav-badge:first-of-type { display: none; } /* Hide "Demo rapport" on mobile */
+
+            /* HERO mobile */
+            .hero { min-height: auto; padding: 80px 16px 40px; }
+            .hero h1 { font-size: 1.5rem; letter-spacing: -0.5px; }
+            .hero p { font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5; }
+            .hero-badge { font-size: 0.7rem; padding: 6px 14px; }
+            .hero-stats { gap: 14px; flex-wrap: wrap; justify-content: center; }
+            .hero-stat .number { font-size: 1.3rem; }
+            .hero-stat .label { font-size: 0.6rem; max-width: 100px; }
+
+            /* SECTIONS mobile */
+            section { padding: 40px 14px; }
+            section::after { bottom: -20px; width: 80px; }
+            .section-label { font-size: 0.68rem; margin-bottom: 8px; padding: 5px 12px; }
+            .section-title { font-size: 1.25rem; margin-bottom: 8px; }
+            .section-subtitle { font-size: 0.85rem; margin-bottom: 24px; line-height: 1.5; }
             .container { padding: 0; }
-            .card-grid { grid-template-columns: 1fr; gap: 14px; }
-            .card { padding: 20px; }
-            .card h3 { font-size: 1rem; }
-            .card p { font-size: 0.85rem; }
-            .card-icon { width: 44px; height: 44px; font-size: 1.3rem; margin-bottom: 12px; }
-            .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
-            .pricing-card { padding: 24px 18px; }
+
+            /* CARDS mobile */
+            .card-grid { grid-template-columns: 1fr; gap: 12px; }
+            .card { padding: 18px; }
+            .card::before, .card::after { display: none; } /* Disable gradient border on mobile */
+            .card h3 { font-size: 0.95rem; }
+            .card p { font-size: 0.82rem; line-height: 1.5; }
+            .card-icon { width: 40px; height: 40px; font-size: 1.2rem; margin-bottom: 10px; }
+
+            /* PRICING mobile */
+            .pricing-grid { grid-template-columns: 1fr; gap: 14px; }
+            .pricing-card { padding: 22px 16px; }
             .pricing-price { font-size: 2rem; }
-            .pricing-features li { font-size: 0.82rem; padding: 6px 0; }
+            .pricing-features li { font-size: 0.8rem; padding: 5px 0; }
             .pricing-btn { font-size: 0.82rem; padding: 10px 16px; }
-            .finance-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .finance-card { padding: 14px 10px; }
-            .finance-card .amount { font-size: 1.2rem; }
-            .finance-card .desc { font-size: 0.68rem; }
-            .table-wrapper { margin: 12px -16px; border-radius: 0; border-left: none; border-right: none; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            table { font-size: 0.72rem; min-width: 500px; }
-            th, td { padding: 8px 10px; }
-            .timeline { padding-left: 24px; }
-            .timeline-item { padding: 18px; }
-            .timeline-item::before { left: -19px; width: 10px; height: 10px; }
-            .timeline-item h3 { font-size: 1rem; }
-            .timeline-item li { font-size: 0.85rem; }
-            .legal-block { padding: 18px; margin-bottom: 16px; }
-            .legal-block h3 { font-size: 1rem; }
-            .legal-block p, .legal-block li { font-size: 0.85rem; }
-            .legal-quote { padding: 10px 14px; font-size: 0.82rem; }
-            .highlight-box { padding: 18px; margin: 16px 0; }
-            .highlight-box h3 { font-size: 1rem; }
-            .cta-section { padding: 36px 18px; border-radius: 16px; }
-            .cta-section h2 { font-size: 1.3rem; }
-            .cta-section p { font-size: 0.88rem; }
-            .cta-buttons { flex-direction: column; gap: 10px; }
-            .cta-btn { width: 100%; text-align: center; padding: 12px 20px; font-size: 0.9rem; }
-            .accordion-header { padding: 14px; font-size: 0.85rem; }
-            .accordion-body-inner { padding: 0 14px 14px; font-size: 0.85rem; }
-            .confidential { font-size: 0.6rem; letter-spacing: 1px; padding: 6px; }
-            footer { padding: 24px 16px; }
-            footer p { font-size: 0.72rem; }
+
+            /* FINANCE mobile */
+            .finance-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .finance-card { padding: 12px 8px; }
+            .finance-card .amount { font-size: 1.1rem; }
+            .finance-card .desc { font-size: 0.65rem; }
+
+            /* TABLES mobile */
+            .table-wrapper { margin: 10px -14px; border-radius: 0; border-left: none; border-right: none; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            table { font-size: 0.7rem; min-width: 480px; }
+            th, td { padding: 7px 8px; }
+
+            /* TIMELINE mobile */
+            .timeline { padding-left: 22px; }
+            .timeline-item { padding: 16px; }
+            .timeline-item::before { left: -18px; width: 10px; height: 10px; }
+            .timeline-item h3 { font-size: 0.95rem; }
+            .timeline-item p { font-size: 0.82rem; }
+            .timeline-item li { font-size: 0.82rem; }
+
+            /* LEGAL mobile */
+            .legal-block { padding: 16px; margin-bottom: 12px; }
+            .legal-block h3 { font-size: 0.95rem; flex-wrap: wrap; }
+            .legal-block p, .legal-block li { font-size: 0.82rem; line-height: 1.5; }
+            .legal-quote { padding: 10px 12px; font-size: 0.78rem; }
+            .legal-block:hover { transform: none; } /* Disable hover slide on touch */
+
+            /* HIGHLIGHT mobile */
+            .highlight-box { padding: 16px; margin: 14px 0; }
+            .highlight-box h3 { font-size: 0.95rem; }
+
+            /* CTA mobile */
+            .cta-section { padding: 30px 16px; border-radius: 14px; }
+            .cta-section h2 { font-size: 1.2rem; }
+            .cta-section p { font-size: 0.82rem; }
+            .cta-buttons { flex-direction: column; gap: 8px; }
+            .cta-btn { width: 100%; text-align: center; padding: 12px 18px; font-size: 0.85rem; }
+
+            /* ACCORDION mobile */
+            .accordion-header { padding: 12px; font-size: 0.82rem; }
+            .accordion-body-inner { padding: 0 12px 12px; font-size: 0.82rem; }
+
+            /* ARCHITECTURE DIAGRAM mobile */
+            .arch-diagram { padding: 0 4px; }
+            .arch-sources { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
+            .arch-source { padding: 10px 4px !important; }
+            .arch-source .badge { font-size: 0.55rem !important; padding: 2px 6px !important; }
+
+            /* MISC mobile */
+            .confidential { font-size: 0.55rem; letter-spacing: 0.5px; padding: 5px; }
+            footer { padding: 20px 14px; }
+            footer p { font-size: 0.7rem; }
+
+            /* PREMIUM EFFECTS mobile - reduce for performance */
+            .floating-shapes .shape:nth-child(1) { width: 200px; height: 200px; }
+            .floating-shapes .shape:nth-child(2) { width: 150px; height: 150px; }
+            .floating-shapes .shape:nth-child(3) { width: 100px; height: 100px; }
+            .cursor-glow { display: none !important; }
         }
-        @media (max-width: 400px) {
-            .hero-stats { flex-direction: column; gap: 12px; }
-            .hero h1 { font-size: 1.35rem; }
+
+        @media (max-width: 480px) {
+            /* Extra small screens */
+            .hero h1 { font-size: 1.3rem; }
+            .hero-stats { flex-direction: column; gap: 10px; }
+            .hero-stat { display: flex; align-items: center; gap: 10px; }
+            .hero-stat .number { font-size: 1.2rem; }
+            .hero-stat .label { font-size: 0.65rem; max-width: none; text-align: left; margin-top: 0; }
             .finance-grid { grid-template-columns: 1fr; }
-            .nav-logo { font-size: 1rem; }
-            .nav-badge { font-size: 0.65rem; padding: 4px 8px; }
-            .section-title { font-size: 1.15rem; }
+            .nav-logo { font-size: 0.95rem; }
+            .nav-badge { font-size: 0.6rem; padding: 4px 8px; }
+            .section-title { font-size: 1.1rem; }
+            .section-subtitle { font-size: 0.8rem; }
+
+            /* Architecture on very small */
+            .arch-sources { grid-template-columns: repeat(2, 1fr) !important; }
+            .arch-diagram > div:nth-child(4) { display: none; } /* Hide complex arrow connectors */
         }
 
         /* ---- HERO ---- */
@@ -1448,13 +1501,28 @@
                     box-shadow: 0 8px 24px rgba(0,180,216,0.12);
                 }
                 @media (max-width: 768px) {
-                    .arch-sources {
-                        grid-template-columns: repeat(3, 1fr) !important;
+                    .arch-diagram { padding: 0 !important; }
+                    .arch-diagram > div > div[style*="padding: 20px 40px"] {
+                        padding: 14px 20px !important;
+                    }
+                    .arch-diagram > div > div[style*="padding: 16px 28px"] {
+                        padding: 12px 16px !important;
+                    }
+                    .arch-node div[style*="font-size: 1.15rem"] {
+                        font-size: 0.95rem !important;
+                    }
+                    .arch-node div[style*="font-size: 1.8rem"] {
+                        font-size: 1.3rem !important;
                     }
                 }
                 @media (max-width: 480px) {
-                    .arch-sources {
-                        grid-template-columns: repeat(2, 1fr) !important;
+                    .arch-node div[style*="font-size: 0.95rem"],
+                    .arch-node div[style*="font-size: 1rem"] {
+                        font-size: 0.8rem !important;
+                    }
+                    .arch-node div[style*="max-width: 180px"] {
+                        max-width: 100% !important;
+                        min-width: 0 !important;
                     }
                 }
             </style>
@@ -2844,7 +2912,8 @@
         }
     }
 
-    for (let i = 0; i < 80; i++) particles.push(new Particle());
+    const particleCount = window.innerWidth <= 768 ? 30 : 80;
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
     function drawConnections() {
         for (let i = 0; i < particles.length; i++) {
@@ -2852,7 +2921,8 @@
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 120) {
+                const maxDist = window.innerWidth <= 768 ? 80 : 120;
+                if (dist < maxDist) {
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
