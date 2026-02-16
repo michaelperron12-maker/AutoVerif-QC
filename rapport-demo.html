@@ -934,7 +934,8 @@
         <div class="step-row" data-step="5"><div class="step-dot">5</div><div class="step-text">Verification vol — CPIC / CIPC + NICB VINCheck (REF)</div></div>
         <div class="step-row" data-step="6"><div class="step-dot">6</div><div class="step-text">SAAQ + RDPRM Quebec — titre, branding, hypotheques, PPSA</div></div>
         <div class="step-row" data-step="7"><div class="step-dot">7</div><div class="step-text">Accidents & encheres — FCSA, Copart, IAAI, NMVTIS, VinAudit</div></div>
-        <div class="step-row" data-step="8"><div class="step-dot">8</div><div class="step-text">Odometre + valeur marchande + Loi Citron + Score AI final</div></div>
+        <div class="step-row" data-step="8"><div class="step-dot">8</div><div class="step-text">Consommation & emissions — EPA fueleconomy.gov (LIVE)</div></div>
+        <div class="step-row" data-step="9"><div class="step-dot">9</div><div class="step-text">Odometre + valeur marchande + Loi Citron + Score AI final</div></div>
     </div>
 
     <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
@@ -1327,8 +1328,26 @@
             </div>
             <p class="ent-total">Cout entretien estime prochains 20,000 km: <strong>$670 — $1,050</strong></p>
 
+            <!-- ===== 16. CONSOMMATION & EMISSIONS ===== -->
+            <div class="section-head"><div class="ico green">&#9981;</div> 16. Consommation & emissions — EPA</div>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot live"></span>EPA fueleconomy.gov — LIVE</span></p>
+            <div id="epaSection">
+                <div class="data-cards" id="epaCards">
+                    <div class="d-card"><div class="d-label">Ville</div><div class="d-val" id="epaCityMpg">—</div></div>
+                    <div class="d-card"><div class="d-label">Route</div><div class="d-val" id="epaHwyMpg">—</div></div>
+                    <div class="d-card"><div class="d-label">Combine</div><div class="d-val" id="epaCombMpg">—</div></div>
+                    <div class="d-card"><div class="d-label">Cout carburant/an</div><div class="d-val" id="epaFuelCost">—</div></div>
+                    <div class="d-card"><div class="d-label">CO2 emissions</div><div class="d-val" id="epaCo2">—</div></div>
+                    <div class="d-card"><div class="d-label">Type essence</div><div class="d-val" id="epaFuelType">—</div></div>
+                    <div class="d-card"><div class="d-label">Score economie</div><div class="d-val" id="epaFeScore">—</div></div>
+                    <div class="d-card"><div class="d-label">Score GHG</div><div class="d-val" id="epaGhgScore">—</div></div>
+                </div>
+                <div id="epaSavings" style="display:none;background:rgba(42,157,143,0.04);border:1px solid rgba(42,157,143,0.1);border-radius:12px;padding:14px 18px;margin-top:12px;text-align:center;">
+                </div>
+            </div>
+
             <!-- ===== SOMMAIRE CHECKS ===== -->
-            <div class="section-head"><div class="ico green">&#128737;</div> Sommaire des verifications (22 sources — 7 LIVE)</div>
+            <div class="section-head"><div class="ico green">&#128737;</div> Sommaire des verifications (23 sources — 8 LIVE)</div>
             <ul class="check-list">
                 <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Decodage VIN</strong> — VIN valide, specs confirmees (NHTSA vPIC)</span></li>
                 <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Immatriculation SAAQ</strong> — Active, aucun branding, jamais hors QC</span></li>
@@ -1356,6 +1375,7 @@
                 <span class="source-badge"><span class="sb-dot live"></span>NHTSA Investigations — LIVE</span>
                 <span class="source-badge"><span class="sb-dot live"></span>Transport Canada VRDB — LIVE</span>
                 <span class="source-badge"><span class="sb-dot live"></span>NICB VINCheck — REF</span>
+                <span class="source-badge"><span class="sb-dot live"></span>EPA Fuel Economy — LIVE</span>
                 <span class="source-badge"><span class="sb-dot gov"></span>SAAQ SAAQclic</span>
                 <span class="source-badge"><span class="sb-dot gov"></span>RDPRM Quebec</span>
                 <span class="source-badge"><span class="sb-dot gov"></span>CPIC / CIPC (GRC)</span>
@@ -1386,13 +1406,13 @@
             <button class="dl-btn outline" onclick="resetAll()">
                 &#8592; &nbsp;Analyser un autre vehicule
             </button>
-            <p class="dl-sub">Rapport complet 9 pages — 22 sources (7 LIVE) — genere le 15 fevrier 2026 — AutoVerif QC + SeoParAI</p>
+            <p class="dl-sub">Rapport complet 9 pages — 23 sources (8 LIVE) — genere le 15 fevrier 2026 — AutoVerif QC + SeoParAI</p>
         </div>
     </div>
 
     <div class="report-footer">
         <p>Rapport genere par <strong>AutoVerif QC</strong> — Propulse par <a href="https://www.seoparai.com" target="_blank">SeoParAI</a></p>
-        <p style="margin-top:4px;">22 sources (7 LIVE) | 15 verifications | AI predictive | 100% quebecois</p>
+        <p style="margin-top:4px;">23 sources (8 LIVE) | 15 verifications | AI predictive | 100% quebecois</p>
     </div>
 </div>
 </section>
@@ -1458,9 +1478,11 @@ const API = {
     ratings: 'https://api.nhtsa.gov/SafetyRatings',
     investigations: 'https://api.nhtsa.gov/recalls/recallsByVehicle', // shares endpoint pattern
     tcRecalls: 'https://data.tc.gc.ca/v1.3/api/eng/vehicle-recall-database/recall-summary/make/',
-    nicb: 'https://www.nicb.org/vincheck' // reference only — no CORS, shown as checked
+    nicb: 'https://www.nicb.org/vincheck', // reference only — no CORS, shown as checked
+    epaOptions: 'https://www.fueleconomy.gov/ws/rest/vehicle/menu/options',
+    epaVehicle: 'https://www.fueleconomy.gov/ws/rest/vehicle/'
 };
-let liveData = { decode: null, recalls: null, complaints: null, ratings: null, tcRecalls: null, investigations: null };
+let liveData = { decode: null, recalls: null, complaints: null, ratings: null, tcRecalls: null, investigations: null, epa: null };
 let apisDone = false;
 let currentVin = '';
 
@@ -1471,7 +1493,7 @@ function getVar(results, name) {
 }
 
 async function fetchAllAPIs(vin) {
-    liveData = { decode: null, recalls: null, complaints: null, ratings: null, tcRecalls: null, investigations: null, tcChecked: false, nicbChecked: false };
+    liveData = { decode: null, recalls: null, complaints: null, ratings: null, tcRecalls: null, investigations: null, epa: null, tcChecked: false, nicbChecked: false };
     let make = '', model = '', year = '';
 
     // 1. Decode VIN
@@ -1577,6 +1599,45 @@ async function fetchAllAPIs(vin) {
 
     // NICB VINCheck — no CORS API available, mark as checked reference
     liveData.nicbChecked = true;
+
+    // EPA Fuel Economy — FREE, CORS *, XML format
+    // Need to find model variant then fetch full data
+    try {
+        // EPA uses specific model names like "Civic 4Dr" — try common patterns
+        const epaModel = model.replace(/[-_]/g, ' ');
+        const epaPatterns = [epaModel + ' 4Dr', epaModel, epaModel + ' AWD', epaModel + ' FWD', epaModel + ' 2WD', epaModel + ' 4WD'];
+        let epaVehicleId = null;
+
+        for (const pattern of epaPatterns) {
+            if (epaVehicleId) break;
+            try {
+                const optRes = await fetch(API.epaOptions + '?year=' + year + '&make=' + encodeURIComponent(make) + '&model=' + encodeURIComponent(pattern));
+                const optXml = await optRes.text();
+                const match = optXml.match(/<value>(\d+)<\/value>/);
+                if (match) epaVehicleId = match[1];
+            } catch(e) {}
+        }
+
+        if (epaVehicleId) {
+            const epaRes = await fetch(API.epaVehicle + epaVehicleId);
+            const epaXml = await epaRes.text();
+            const getXml = (tag) => { const m = epaXml.match(new RegExp('<' + tag + '>([^<]*)</' + tag + '>')); return m ? m[1] : null; };
+            liveData.epa = {
+                city08: getXml('city08'),        // MPG ville
+                highway08: getXml('highway08'),  // MPG route
+                comb08: getXml('comb08'),         // MPG combiné
+                fuelCost08: getXml('fuelCost08'), // Coût carburant annuel $
+                co2: getXml('co2TailpipeGpm'),    // g CO2/mile
+                fuelType: getXml('fuelType1'),    // Type essence
+                feScore: getXml('feScore'),       // Score économie /10
+                ghgScore: getXml('ghgScore'),     // Score GHG /10
+                vClass: getXml('VClass'),         // Classe véhicule
+                turbo: getXml('tCharger') === 'T',
+                youSaveSpend: getXml('youSaveSpend'), // $ save vs average
+                barrels: getXml('barrels08')      // Barils pétrole/an
+            };
+        }
+    } catch(e) { console.warn('EPA failed:', e); }
 
     apisDone = true;
 }
@@ -1730,6 +1791,56 @@ function populateLiveData() {
             breakdown.innerHTML = '<p style="font-size:0.82rem;color:var(--green);text-align:center;padding:10px 0;">&#10003; Aucune plainte enregistree</p>';
         }
     }
+
+    // EPA Fuel Economy data
+    if (liveData.epa) {
+        const e = liveData.epa;
+        const mpgToLper100 = (mpg) => mpg ? (235.215 / parseFloat(mpg)).toFixed(1) : null;
+        const set = (id, val) => { const el = document.getElementById(id); if(el && val) el.textContent = val; };
+
+        // Convert MPG to L/100km for Canadian users
+        const cityL = mpgToLper100(e.city08);
+        const hwyL = mpgToLper100(e.highway08);
+        const combL = mpgToLper100(e.comb08);
+
+        set('epaCityMpg', cityL ? cityL + ' L/100km' : e.city08 + ' MPG');
+        set('epaHwyMpg', hwyL ? hwyL + ' L/100km' : e.highway08 + ' MPG');
+        set('epaCombMpg', combL ? combL + ' L/100km' : e.comb08 + ' MPG');
+        set('epaFuelCost', e.fuelCost08 ? '$' + parseInt(e.fuelCost08).toLocaleString() + ' USD/an' : null);
+        set('epaCo2', e.co2 ? parseFloat(e.co2).toFixed(0) + ' g/km' : null);
+        set('epaFuelType', e.fuelType);
+        set('epaFeScore', e.feScore ? e.feScore + '/10' : null);
+        set('epaGhgScore', e.ghgScore ? e.ghgScore + '/10' : null);
+
+        // Color code scores
+        const colorScore = (id, score) => {
+            const el = document.getElementById(id);
+            if (el && score) {
+                const s = parseInt(score);
+                el.style.color = s >= 7 ? 'var(--green)' : s >= 4 ? 'var(--gold)' : 'var(--red)';
+            }
+        };
+        colorScore('epaFeScore', e.feScore);
+        colorScore('epaGhgScore', e.ghgScore);
+
+        // Savings message
+        if (e.youSaveSpend) {
+            const savings = parseInt(e.youSaveSpend);
+            const savDiv = document.getElementById('epaSavings');
+            savDiv.style.display = 'block';
+            if (savings > 0) {
+                savDiv.innerHTML = '<p style="font-size:0.85rem;color:var(--green);font-weight:700;">&#10003; Vous economisez $' + savings.toLocaleString() + ' en carburant vs la moyenne sur 5 ans</p>';
+            } else if (savings < 0) {
+                savDiv.innerHTML = '<p style="font-size:0.85rem;color:var(--gold);font-weight:700;">&#9888; Vous depensez $' + Math.abs(savings).toLocaleString() + ' de plus en carburant vs la moyenne sur 5 ans</p>';
+            }
+        }
+
+        // Turbo badge
+        if (e.turbo) {
+            const cityCard = document.getElementById('epaCityMpg');
+            if (cityCard) cityCard.closest('.d-card').querySelector('.d-label').textContent = 'Ville (Turbo)';
+        }
+    }
 }
 
 // ===== SCAN =====
@@ -1810,6 +1921,7 @@ function showReport(){
     if (liveData.tcRecalls !== null || liveData.tcChecked) liveCount++;
     if (liveData.investigations !== null) liveCount++;
     if (liveData.nicbChecked) liveCount++;
+    if (liveData.epa) liveCount++;
 
     // Update success banner
     document.querySelector('.success-banner p').innerHTML =
