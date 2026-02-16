@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoVerif QC — Plan d'affaires & Proposition de coentreprise</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
@@ -857,164 +857,146 @@
         .confidential { display: none; }
 
         /* ============================================ */
-        /*  HERO 3D LOGO — Prestige Double Ring V2     */
+        /*  HERO 3D LOGO — V3-A Center Score            */
         /* ============================================ */
         .hero-logo-showcase {
             margin: 30px auto 36px;
             display: flex; flex-direction: column; align-items: center; gap: 16px;
         }
-        .hero-logo-wrap {
-            perspective: 900px;
-            display: inline-block;
-        }
+        .hero-logo-wrap { perspective: 900px; display: inline-block; }
         .hero-logo {
-            width: 220px; height: 220px;
+            width: 240px; height: 240px;
             position: relative;
             transform-style: preserve-3d;
-            animation: heroLogoTilt 10s ease-in-out infinite;
+            animation: hlTilt 10s ease-in-out infinite;
         }
-        @keyframes heroLogoTilt {
+        @keyframes hlTilt {
             0%, 100% { transform: rotateX(6deg) rotateY(-8deg); }
             33% { transform: rotateX(-3deg) rotateY(10deg); }
             66% { transform: rotateX(5deg) rotateY(-5deg); }
         }
-
-        /* Glow rings */
         .hero-logo .hl-glow-1 {
-            position: absolute; inset: -10px; border-radius: 50%;
+            position: absolute; inset: -8px; border-radius: 50%;
             border: 1px solid rgba(0,180,216,0.06);
             transform: translateZ(-2px);
-            animation: hlGlowPulse 5s ease-in-out infinite;
+            animation: hlGlowP 5s ease-in-out infinite;
         }
         .hero-logo .hl-glow-2 {
-            position: absolute; inset: -20px; border-radius: 50%;
+            position: absolute; inset: -18px; border-radius: 50%;
             border: 1px solid rgba(244,166,28,0.04);
             transform: translateZ(-4px);
-            animation: hlGlowPulse 5s ease-in-out infinite 2s;
+            animation: hlGlowP 5s ease-in-out infinite 2s;
         }
-        @keyframes hlGlowPulse {
+        @keyframes hlGlowP {
             0%, 100% { opacity: 0.3; box-shadow: none; }
             50% { opacity: 1; box-shadow: 0 0 30px rgba(0,180,216,0.06); }
         }
-
-        /* Double accent ring (counter-rotate) */
-        .hero-logo .hl-ring-accent2 {
-            position: absolute; inset: 3px; border-radius: 50%;
-            border: 1px solid transparent;
+        .hero-logo .hl-conic {
+            position: absolute; inset: 2px; border-radius: 50%;
+            border: 1.5px solid transparent;
             background: linear-gradient(#060a14, #060a14) padding-box,
-                        conic-gradient(from 180deg, rgba(0,180,216,0.3), rgba(42,157,143,0.2), rgba(244,166,28,0.3), rgba(230,57,70,0.2), rgba(0,180,216,0.3)) border-box;
+                        conic-gradient(from 180deg, rgba(0,180,216,0.35), rgba(42,157,143,0.2), rgba(244,166,28,0.35), rgba(230,57,70,0.2), rgba(0,180,216,0.35)) border-box;
             transform: translateZ(1px);
-            animation: hlRingRotate2 18s linear infinite;
+            animation: hlConicSpin 18s linear infinite;
         }
-        @keyframes hlRingRotate2 { from { rotate: 0deg; } to { rotate: -360deg; } }
-
-        /* Outer ring: gradient border with pulse glow */
-        .hero-logo .hl-ring-outer {
-            position: absolute; inset: 0; border: 3px solid transparent; border-radius: 50%;
+        @keyframes hlConicSpin { to { rotate: -360deg; } }
+        .hero-logo .hl-outer {
+            position: absolute; inset: 8px; border-radius: 50%;
+            border: 3px solid transparent;
             background: linear-gradient(#060a14, #060a14) padding-box,
                         linear-gradient(135deg, #00b4d8, #2a9d8f, #f4a61c) border-box;
             transform: translateZ(0);
-            animation: hlRingPulse 4s ease-in-out infinite;
+            animation: hlRingGlow 4s ease-in-out infinite;
         }
-        @keyframes hlRingPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(0,180,216,0.15); }
-            50% { box-shadow: 0 0 40px rgba(0,180,216,0.3), 0 0 60px rgba(244,166,28,0.1); }
+        @keyframes hlRingGlow {
+            0%, 100% { box-shadow: 0 0 18px rgba(0,180,216,0.12); }
+            50% { box-shadow: 0 0 36px rgba(0,180,216,0.25), 0 0 50px rgba(244,166,28,0.08); }
         }
-
-        /* Accent ring: conic gradient rotating */
-        .hero-logo .hl-ring-accent {
-            position: absolute; inset: 6px; border-radius: 50%;
+        .hero-logo .hl-accent {
+            position: absolute; inset: 16px; border-radius: 50%;
             border: 1.5px solid transparent;
             background: linear-gradient(#060a14, #060a14) padding-box,
                         conic-gradient(from 0deg, #00b4d8, #2a9d8f, #f4a61c, #e63946, #00b4d8) border-box;
             transform: translateZ(2px);
-            animation: hlRingRotate 12s linear infinite;
+            animation: hlAccentSpin 12s linear infinite;
         }
-        @keyframes hlRingRotate { from { rotate: 0deg; } to { rotate: 360deg; } }
-
-        /* Inner ring */
-        .hero-logo .hl-ring-inner {
-            position: absolute; inset: 14px;
-            border: 1.5px solid rgba(0,180,216,0.18);
-            border-radius: 50%; transform: translateZ(4px);
+        @keyframes hlAccentSpin { to { rotate: 360deg; } }
+        .hero-logo .hl-inner {
+            position: absolute; inset: 24px; border-radius: 50%;
+            border: 1px solid rgba(0,180,216,0.15);
+            transform: translateZ(3px);
         }
-
-        /* External tick marks */
-        .hero-logo .hl-ext-ticks {
-            position: absolute; inset: -2px;
-            transform: translateZ(3px); pointer-events: none;
-        }
-
-        /* Dial face */
         .hero-logo .hl-dial {
-            position: absolute; inset: 22px;
+            position: absolute; inset: 30px; border-radius: 50%;
             background: radial-gradient(circle at 42% 38%, #0e1a2e, #060a14 70%);
-            border-radius: 50%; transform: translateZ(6px);
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
-            overflow: hidden;
+            transform: translateZ(5px);
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.5);
         }
-
-        /* Center glow */
+        .hero-logo .hl-geo {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            transform: translateZ(6px); pointer-events: none;
+        }
         .hero-logo .hl-center-glow {
             position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) translateZ(5px);
+            transform: translate(-50%, -50%) translateZ(7px);
             width: 60px; height: 60px;
             background: radial-gradient(circle, rgba(0,180,216,0.06), transparent 70%);
             border-radius: 50%;
-            animation: hlCenterPulse 4s ease-in-out infinite;
+            animation: hlCGlow 4s ease-in-out infinite;
         }
-        @keyframes hlCenterPulse {
-            0%, 100% { transform: translate(-50%, -50%) translateZ(5px) scale(1); opacity: 0.3; }
-            50% { transform: translate(-50%, -50%) translateZ(5px) scale(1.3); opacity: 0.7; }
+        @keyframes hlCGlow {
+            0%, 100% { transform: translate(-50%, -50%) translateZ(7px) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) translateZ(7px) scale(1.3); opacity: 0.7; }
         }
-
-        /* Monogram */
-        .hero-logo .hl-monogram {
-            position: absolute; top: 22%; left: 50%;
-            transform: translateX(-50%) translateZ(10px);
+        /* Score ring */
+        .hero-logo .hl-score-ring {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(11px);
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 1px solid rgba(0,180,216,0.08);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .hero-logo .hl-score-ring.glow {
+            border-color: rgba(0,229,255,0.15);
+            box-shadow: 0 0 20px rgba(0,229,255,0.06), inset 0 0 15px rgba(0,229,255,0.03);
+        }
+        /* Center digital score */
+        .hero-logo .hl-digital {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(13px);
+            text-align: center; z-index: 15;
+        }
+        .hero-logo .hl-score-big {
+            font-family: 'Orbitron', 'Space Grotesk', monospace;
+            font-size: 2.2rem; font-weight: 900;
+            letter-spacing: 2px; line-height: 1;
+            min-width: 70px; display: inline-block;
+            color: #00e5ff;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .hero-logo .hl-score-big.low { color: #e63946; text-shadow: 0 0 15px rgba(230,57,70,0.5); }
+        .hero-logo .hl-score-big.mid { color: #f4a61c; text-shadow: 0 0 15px rgba(244,166,28,0.5); }
+        .hero-logo .hl-score-big.good { color: #2a9d8f; text-shadow: 0 0 15px rgba(42,157,143,0.5); }
+        .hero-logo .hl-score-big.excellent { color: #00e5ff; text-shadow: 0 0 15px rgba(0,229,255,0.5); }
+        .hero-logo .hl-score-sub {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.1rem; font-weight: 800;
-            color: white; letter-spacing: -2px;
-            text-shadow: 0 0 20px rgba(0,180,216,0.3);
-        }
-        .hero-logo .hl-monogram::after {
-            content: ''; display: block;
-            width: 32px; height: 1px;
-            background: linear-gradient(90deg, transparent, #00b4d8, transparent);
-            margin: 4px auto 0;
-        }
-
-        /* Sub text */
-        .hero-logo .hl-sub {
-            position: absolute; top: 48%; left: 50%;
-            transform: translateX(-50%) translateZ(10px);
-            font-size: 0.35rem; font-weight: 600;
+            font-size: 0.42rem; font-weight: 700;
             color: rgba(0,180,216,0.5);
             letter-spacing: 3px; text-transform: uppercase;
-            white-space: nowrap;
+            display: block; margin-top: 4px;
         }
-
         /* Needle */
         .hero-logo .hl-needle {
-            position: absolute; bottom: 40%; left: 50%;
+            position: absolute; bottom: 42%; left: 50%;
             transform-origin: bottom center;
-            transform: translateX(-50%) translateZ(14px) rotate(-55deg);
-            animation: hlNeedleSweep 8s ease-in-out infinite;
-        }
-        @keyframes hlNeedleSweep {
-            0%, 5% { transform: translateX(-50%) translateZ(14px) rotate(-55deg); }
-            20% { transform: translateX(-50%) translateZ(14px) rotate(30deg); }
-            35% { transform: translateX(-50%) translateZ(14px) rotate(10deg); }
-            50% { transform: translateX(-50%) translateZ(14px) rotate(48deg); }
-            65% { transform: translateX(-50%) translateZ(14px) rotate(42deg); }
-            75%, 92% { transform: translateX(-50%) translateZ(14px) rotate(50deg); }
-            100% { transform: translateX(-50%) translateZ(14px) rotate(-55deg); }
+            transform: translateX(-50%) translateZ(12px) rotate(-55deg);
+            z-index: 10;
         }
         .hero-logo .hl-needle-line {
-            width: 1.5px; height: 55px;
-            background: linear-gradient(to top, rgba(244,166,28,0.9), #f4a61c, rgba(244,166,28,0.3));
+            width: 1.8px; height: 58px;
+            background: linear-gradient(to top, rgba(244,166,28,0.9), #f4a61c, rgba(244,166,28,0.2));
             margin: 0 auto; border-radius: 1px;
-            box-shadow: 0 0 8px rgba(244,166,28,0.4);
+            box-shadow: 0 0 8px rgba(244,166,28,0.35);
         }
         .hero-logo .hl-cap {
             width: 14px; height: 14px; border-radius: 50%;
@@ -1024,57 +1006,27 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.4);
         }
         .hero-logo .hl-cap-dot {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 4px; height: 4px;
-            background: #f4a61c; border-radius: 50%;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 4px; height: 4px; background: #f4a61c; border-radius: 50%;
             box-shadow: 0 0 6px rgba(244,166,28,0.6);
         }
-
-        /* Score box */
-        .hero-logo .hl-score {
-            position: absolute; bottom: 16%; left: 50%;
-            transform: translateX(-50%) translateZ(10px);
-            text-align: center;
-            background: rgba(0,180,216,0.05);
-            border: 1px solid rgba(0,180,216,0.1);
-            border-radius: 8px; padding: 3px 12px;
-        }
-        .hero-logo .hl-score-val {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.95rem; font-weight: 800;
-            background: linear-gradient(135deg, #00b4d8, #2a9d8f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-logo .hl-score-unit {
-            font-size: 0.3rem; color: #7a869c;
-            letter-spacing: 1px; text-transform: uppercase;
-        }
-
-        /* Holographic shine */
         .hero-logo .hl-holo {
-            position: absolute; inset: 22px; border-radius: 50%;
+            position: absolute; inset: 30px; border-radius: 50%;
             background: linear-gradient(135deg, transparent 30%, rgba(0,180,216,0.06) 45%, rgba(244,166,28,0.04) 50%, transparent 65%);
-            transform: translateZ(16px); pointer-events: none;
+            transform: translateZ(14px); pointer-events: none;
             animation: hlHoloShift 6s ease-in-out infinite;
         }
-        @keyframes hlHoloShift {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
+        @keyframes hlHoloShift { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* Wordmark under logo */
+        /* Wordmark */
         .hero-logo-wordmark {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem; font-weight: 800; letter-spacing: -1px;
-            text-align: center;
+            font-size: 2rem; font-weight: 800; letter-spacing: -1px; text-align: center;
         }
         .hero-logo-wordmark .auto { color: white; }
         .hero-logo-wordmark .verif {
             background: linear-gradient(135deg, #00b4d8, #2a9d8f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .hero-logo-wordmark .qc-tag {
             display: inline-block; font-size: 0.65rem; font-weight: 800;
@@ -1083,31 +1035,41 @@
             padding: 3px 8px; border-radius: 6px;
             margin-left: 8px; vertical-align: middle; letter-spacing: 1px;
         }
-
-        /* SeoParAI branding under logo */
         .hero-powered {
-            font-size: 0.72rem; color: rgba(255,255,255,0.3);
-            letter-spacing: 1px; margin-top: 4px;
+            font-size: 0.72rem; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-top: 4px;
         }
-        .hero-powered a {
-            color: var(--accent); text-decoration: none; font-weight: 700;
-            transition: color 0.3s;
-        }
+        .hero-powered a { color: var(--accent); text-decoration: none; font-weight: 700; transition: color 0.3s; }
         .hero-powered a:hover { color: var(--gold); }
 
-        /* Mobile adjustments for hero logo */
+        /* Nav logo typography */
+        .nav-logo .nav-auto {
+            color: white; font-weight: 800; letter-spacing: -0.5px;
+        }
+        .nav-logo .nav-verif {
+            background: linear-gradient(135deg, #00b4d8, #2a9d8f);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        .nav-logo .nav-qc {
+            font-size: 0.5rem; font-weight: 800;
+            background: linear-gradient(135deg, #f4a61c, #e63946);
+            color: white; -webkit-text-fill-color: white;
+            padding: 2px 6px; border-radius: 4px;
+            margin-left: 5px; vertical-align: middle; letter-spacing: 1px;
+        }
+
         @media (max-width: 768px) {
             .hero-logo-showcase { margin: 20px auto 24px; }
-            .hero-logo { width: 170px; height: 170px; }
-            .hero-logo .hl-monogram { font-size: 1.6rem; }
-            .hero-logo .hl-needle-line { height: 42px; }
+            .hero-logo { width: 200px; height: 200px; }
+            .hero-logo .hl-score-big { font-size: 1.8rem; }
+            .hero-logo .hl-needle-line { height: 48px; }
             .hero-logo-wordmark { font-size: 1.5rem; }
             .hero-powered { font-size: 0.65rem; }
         }
         @media (max-width: 480px) {
-            .hero-logo { width: 150px; height: 150px; }
-            .hero-logo .hl-monogram { font-size: 1.4rem; }
-            .hero-logo .hl-needle-line { height: 36px; }
+            .hero-logo { width: 170px; height: 170px; }
+            .hero-logo .hl-score-big { font-size: 1.5rem; }
+            .hero-logo .hl-needle-line { height: 40px; }
             .hero-logo-wordmark { font-size: 1.3rem; }
         }
 
@@ -1281,31 +1243,41 @@
 <!-- NAV -->
 <nav class="no-print">
     <div class="nav-logo">
-        <svg class="logo-icon" viewBox="0 0 230 230" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;">
+        <svg class="logo-icon" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 38px; height: 38px;">
             <defs>
-                <linearGradient id="navLO" x1="0" y1="0" x2="230" y2="230"><stop stop-color="#00b4d8"/><stop offset=".5" stop-color="#2a9d8f"/><stop offset="1" stop-color="#f4a61c"/></linearGradient>
-                <linearGradient id="navLC" x1="0" y1="0" x2="230" y2="230"><stop stop-color="#00b4d8"/><stop offset=".25" stop-color="#2a9d8f"/><stop offset=".5" stop-color="#f4a61c"/><stop offset=".75" stop-color="#e63946"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
-                <linearGradient id="navLA" x1="38" y1="167" x2="192" y2="28"><stop stop-color="#e63946"/><stop offset=".3" stop-color="#f4a61c"/><stop offset=".6" stop-color="#2a9d8f"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
+                <linearGradient id="nO" x1="0" y1="0" x2="240" y2="240"><stop stop-color="#00b4d8"/><stop offset=".5" stop-color="#2a9d8f"/><stop offset="1" stop-color="#f4a61c"/></linearGradient>
+                <linearGradient id="nC" x1="0" y1="0" x2="240" y2="240"><stop stop-color="#00b4d8"/><stop offset=".25" stop-color="#2a9d8f"/><stop offset=".5" stop-color="#f4a61c"/><stop offset=".75" stop-color="#e63946"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
+                <linearGradient id="nA" x1="54" y1="158" x2="186" y2="42"><stop stop-color="#e63946"/><stop offset=".3" stop-color="#f4a61c"/><stop offset=".6" stop-color="#2a9d8f"/><stop offset="1" stop-color="#00b4d8"/></linearGradient>
             </defs>
-            <circle cx="115" cy="115" r="108" fill="none" stroke="rgba(0,180,216,0.08)" stroke-width="1"/>
-            <circle cx="115" cy="115" r="104" fill="#060a14" stroke="url(#navLC)" stroke-width="1.5"/>
-            <circle cx="115" cy="115" r="100" fill="#060a14" stroke="url(#navLO)" stroke-width="3.5"/>
-            <circle cx="115" cy="115" r="94" fill="none" stroke="url(#navLC)" stroke-width="1.5" opacity=".6"/>
-            <circle cx="115" cy="115" r="88" fill="none" stroke="rgba(0,180,216,0.18)" stroke-width="1.5"/>
-            <circle cx="115" cy="115" r="82" fill="#0a1222"/>
-            <path d="M38 167 A88 88 0 1 1 192 167" fill="none" stroke="url(#navLA)" stroke-width="2.5" stroke-linecap="round" opacity=".45"/>
-            <text x="115" y="105" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="38" font-weight="800" fill="white" letter-spacing="-2">AV</text>
-            <line x1="115" y1="125" x2="115" y2="48" stroke="#f4a61c" stroke-width="2" stroke-linecap="round" transform="rotate(50, 115, 125)"/>
-            <circle cx="115" cy="125" r="6" fill="#1a2640" stroke="rgba(244,166,28,0.3)" stroke-width="1.5"/>
-            <circle cx="115" cy="125" r="2.5" fill="#f4a61c"/>
-            <g transform="translate(115,115)" opacity=".35">
-                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(90)"/>
-                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(180)"/>
-                <line x1="0" y1="-101" x2="0" y2="-96" stroke="#f4a61c" stroke-width="1.5" stroke-linecap="round" transform="rotate(270)"/>
+            <circle cx="120" cy="120" r="118" fill="none" stroke="url(#nC)" stroke-width="1.5" opacity=".3"/>
+            <circle cx="120" cy="120" r="112" fill="#060a14" stroke="url(#nO)" stroke-width="3"/>
+            <circle cx="120" cy="120" r="104" fill="none" stroke="url(#nC)" stroke-width="1.5" opacity=".5"/>
+            <circle cx="120" cy="120" r="96" fill="none" stroke="rgba(0,180,216,0.15)" stroke-width="1"/>
+            <circle cx="120" cy="120" r="90" fill="#0a1222"/>
+            <path d="M 54.2 158 A 76 76 0 1 1 185.8 158" fill="none" stroke="url(#nA)" stroke-width="2.5" stroke-linecap="round" opacity=".4"/>
+            <!-- Ext ticks -->
+            <g transform="translate(120,120)" opacity=".35">
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="2" stroke-linecap="round"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(30)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(60)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#f4a61c" stroke-width="2" stroke-linecap="round" transform="rotate(90)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(120)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(150)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#f4a61c" stroke-width="2" stroke-linecap="round" transform="rotate(180)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(210)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(240)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#f4a61c" stroke-width="2" stroke-linecap="round" transform="rotate(270)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(300)"/>
+                <line x1="0" y1="-110" x2="0" y2="-100" stroke="#00b4d8" stroke-width="1.5" stroke-linecap="round" transform="rotate(330)"/>
             </g>
+            <!-- Score center -->
+            <text x="120" y="128" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="40" font-weight="900" fill="#00e5ff" letter-spacing="1">95</text>
+            <!-- Needle -->
+            <line x1="120" y1="130" x2="120" y2="52" stroke="#f4a61c" stroke-width="2" stroke-linecap="round" transform="rotate(50, 120, 130)"/>
+            <circle cx="120" cy="130" r="7" fill="#1a2640" stroke="rgba(244,166,28,0.3)" stroke-width="1.5"/>
+            <circle cx="120" cy="130" r="2.5" fill="#f4a61c"/>
         </svg>
-        Auto<span>Verif</span> QC
+        <span class="nav-auto">Auto</span><span class="nav-verif">Verif</span><span class="nav-qc">QC</span>
     </div>
     <ul class="nav-links">
         <li><a href="#probleme">Probleme</a></li>
@@ -1357,111 +1329,89 @@
             Proposition de coentreprise — Fevrier 2026
         </div>
 
-        <!-- ===== LOGO 3D PRESTIGE DOUBLE RING ===== -->
+        <!-- ===== LOGO 3D V3-A CENTER SCORE ===== -->
         <div class="hero-logo-showcase">
             <div class="hero-logo-wrap">
                 <div class="hero-logo">
-                    <!-- Glow rings -->
                     <div class="hl-glow-1"></div>
                     <div class="hl-glow-2"></div>
+                    <div class="hl-conic"></div>
+                    <div class="hl-outer"></div>
+                    <div class="hl-accent"></div>
+                    <div class="hl-inner"></div>
+                    <div class="hl-dial"></div>
 
-                    <!-- Rings -->
-                    <div class="hl-ring-accent2"></div>
-                    <div class="hl-ring-outer"></div>
-                    <div class="hl-ring-accent"></div>
-                    <div class="hl-ring-inner"></div>
-
-                    <!-- External tick marks -->
-                    <svg class="hl-ext-ticks" viewBox="0 0 214 214" fill="none">
-                        <g transform="translate(107,107)">
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(0,180,216,0.5)" stroke-width="2" stroke-linecap="round"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(15)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(0,180,216,0.35)" stroke-width="1.5" stroke-linecap="round" transform="rotate(30)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(45)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-94" stroke="rgba(0,180,216,0.2)" stroke-width="1" stroke-linecap="round" transform="rotate(60)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(75)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(90)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(105)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-94" stroke="rgba(0,180,216,0.2)" stroke-width="1" stroke-linecap="round" transform="rotate(120)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(135)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(0,180,216,0.35)" stroke-width="1.5" stroke-linecap="round" transform="rotate(150)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(165)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(180)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(195)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(0,180,216,0.35)" stroke-width="1.5" stroke-linecap="round" transform="rotate(210)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(225)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(0,180,216,0.35)" stroke-width="1.5" stroke-linecap="round" transform="rotate(240)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(255)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(270)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(285)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-94" stroke="rgba(0,180,216,0.2)" stroke-width="1" stroke-linecap="round" transform="rotate(300)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(315)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-93" stroke="rgba(0,180,216,0.35)" stroke-width="1.5" stroke-linecap="round" transform="rotate(330)"/>
-                            <line x1="0" y1="-100" x2="0" y2="-95" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(345)"/>
+                    <!-- Unified SVG 240x240 -->
+                    <svg class="hl-geo" viewBox="0 0 240 240" fill="none">
+                        <g transform="translate(120,120)">
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.5)" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(30)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(60)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(90)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(120)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(150)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(180)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(210)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(240)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(270)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(300)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(330)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(15)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(45)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(75)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(105)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(135)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(165)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(195)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(225)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(255)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(285)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(315)"/>
+                            <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(345)"/>
                         </g>
+                        <defs><linearGradient id="hlArc" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e63946" stop-opacity="0.45"/><stop offset="30%" stop-color="#f4a61c" stop-opacity="0.5"/><stop offset="65%" stop-color="#2a9d8f" stop-opacity="0.5"/><stop offset="100%" stop-color="#00b4d8" stop-opacity="0.45"/></linearGradient></defs>
+                        <path d="M 54.2 158 A 76 76 0 1 1 185.8 158" fill="none" stroke="url(#hlArc)" stroke-width="2.5" stroke-linecap="round"/>
+                        <g transform="translate(120,120)">
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(230,57,70,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-120)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(230,57,70,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-96)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-72)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-48)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-24)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(42,157,143,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(0)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(42,157,143,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(24)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(48)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(72)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(96)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.65)" stroke-width="1.5" stroke-linecap="round" transform="rotate(120)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-108)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-84)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-60)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-36)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-12)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(12)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(36)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(60)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(84)"/>
+                            <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(108)"/>
+                        </g>
+                        <text x="55" y="150" font-family="Space Grotesk" font-size="8" fill="rgba(230,57,70,0.5)" font-weight="700" text-anchor="middle">0</text>
+                        <text x="44" y="90" font-family="Space Grotesk" font-size="7" fill="rgba(255,255,255,0.25)" font-weight="600" text-anchor="middle">25</text>
+                        <text x="120" y="52" font-family="Space Grotesk" font-size="8" fill="rgba(244,166,28,0.5)" font-weight="700" text-anchor="middle">50</text>
+                        <text x="196" y="90" font-family="Space Grotesk" font-size="7" fill="rgba(255,255,255,0.25)" font-weight="600" text-anchor="middle">75</text>
+                        <text x="185" y="150" font-family="Space Grotesk" font-size="8" fill="rgba(0,180,216,0.5)" font-weight="700" text-anchor="middle">100</text>
+                        <text x="120" y="170" text-anchor="middle" font-family="Space Grotesk" font-size="4" fill="rgba(0,180,216,0.3)" font-weight="700" letter-spacing="2">AUTOVERIF QUEBEC</text>
                     </svg>
 
-                    <!-- Dial face -->
-                    <div class="hl-dial">
-                        <svg viewBox="0 0 168 168" style="position:absolute;inset:0;width:100%;height:100%;">
-                            <defs>
-                                <linearGradient id="hlDialArc" x1="0%" y1="100%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="#e63946" stop-opacity="0.35"/>
-                                    <stop offset="30%" stop-color="#f4a61c" stop-opacity="0.45"/>
-                                    <stop offset="60%" stop-color="#2a9d8f" stop-opacity="0.45"/>
-                                    <stop offset="100%" stop-color="#00b4d8" stop-opacity="0.35"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M22 132 A68 68 0 1 1 146 132" fill="none" stroke="url(#hlDialArc)" stroke-width="2.5" stroke-linecap="round"/>
-                            <g transform="translate(84,84)">
-                                <line x1="0" y1="-66" x2="0" y2="-58" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-120)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-110)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-61" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" transform="rotate(-100)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-90)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-58" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-80)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-70)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-61" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" transform="rotate(-60)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-50)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-58" stroke="rgba(244,166,28,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-40)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-30)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-61" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" transform="rotate(-20)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-10)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-58" stroke="rgba(244,166,28,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(0)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(10)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-61" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" transform="rotate(20)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(30)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-58" stroke="rgba(42,157,143,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(40)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(50)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-61" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" transform="rotate(60)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(70)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-58" stroke="rgba(0,180,216,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(80)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(90)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-61" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" transform="rotate(100)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-62" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(110)"/>
-                                <line x1="0" y1="-66" x2="0" y2="-58" stroke="rgba(0,180,216,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(120)"/>
-                            </g>
-                            <text x="18" y="120" font-family="Space Grotesk" font-size="6.5" fill="rgba(230,57,70,0.4)" font-weight="600">0</text>
-                            <text x="30" y="56" font-family="Space Grotesk" font-size="6" fill="rgba(255,255,255,0.2)" font-weight="600">25</text>
-                            <text x="78" y="18" font-family="Space Grotesk" font-size="6.5" fill="rgba(244,166,28,0.4)" font-weight="600">50</text>
-                            <text x="134" y="56" font-family="Space Grotesk" font-size="6" fill="rgba(255,255,255,0.2)" font-weight="600">75</text>
-                            <text x="142" y="120" font-family="Space Grotesk" font-size="6.5" fill="rgba(0,180,216,0.4)" font-weight="600">100</text>
-                        </svg>
+                    <div class="hl-center-glow"></div>
+                    <div class="hl-score-ring" id="heroScoreRing"></div>
+                    <div class="hl-digital">
+                        <span class="hl-score-big" id="heroScoreNum">0</span>
+                        <span class="hl-score-sub">SCORE CONFIANCE</span>
                     </div>
 
-                    <div class="hl-center-glow"></div>
-                    <div class="hl-monogram">AV</div>
-                    <div class="hl-sub">AUTOVERIF QUEBEC</div>
-
-                    <!-- Needle -->
-                    <div class="hl-needle">
+                    <div class="hl-needle" id="heroNeedle">
                         <div class="hl-needle-line"></div>
                         <div class="hl-cap"><div class="hl-cap-dot"></div></div>
-                    </div>
-
-                    <!-- Score -->
-                    <div class="hl-score">
-                        <div class="hl-score-val">95</div>
-                        <div class="hl-score-unit">SCORE</div>
                     </div>
 
                     <div class="hl-holo"></div>
@@ -3660,6 +3610,39 @@
         btn.classList.remove('active');
         document.body.style.overflow = '';
     }
+
+    // ===== HERO LOGO: Score digital synchro aiguille =====
+    (function() {
+        const kf = [
+            { t: 0.00, a: -55 }, { t: 0.05, a: -55 },
+            { t: 0.20, a: 30 },  { t: 0.35, a: 10 },
+            { t: 0.50, a: 48 },  { t: 0.65, a: 42 },
+            { t: 0.75, a: 50 },  { t: 0.92, a: 50 },
+            { t: 1.00, a: -55 },
+        ];
+        const DUR = 8000;
+        const needle = document.getElementById('heroNeedle');
+        const scoreEl = document.getElementById('heroScoreNum');
+        const ring = document.getElementById('heroScoreRing');
+        if (!needle || !scoreEl) return;
+        let t0 = null;
+        function tick(ts) {
+            if (!t0) t0 = ts;
+            const t = ((ts - t0) % DUR) / DUR;
+            let i = 0;
+            for (; i < kf.length - 1; i++) if (t >= kf[i].t && t <= kf[i+1].t) break;
+            const seg = kf[i+1].t === kf[i].t ? 0 : (t - kf[i].t) / (kf[i+1].t - kf[i].t);
+            const e = seg < 0.5 ? 2*seg*seg : 1-Math.pow(-2*seg+2,2)/2;
+            const angle = kf[i].a + (kf[i+1].a - kf[i].a) * e;
+            const score = Math.round(Math.max(0, Math.min(100, ((angle+55)/105)*100)));
+            needle.style.transform = 'translateX(-50%) translateZ(12px) rotate('+angle+'deg)';
+            scoreEl.textContent = score;
+            scoreEl.className = 'hl-score-big ' + (score<25?'low':score<50?'mid':score<75?'good':'excellent');
+            if (ring) ring.classList.toggle('glow', score > 70);
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+    })();
 </script>
 
 </body>
