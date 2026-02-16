@@ -652,9 +652,10 @@
             margin: 2px;
         }
         .source-badge .sb-dot { width: 5px; height: 5px; border-radius: 50%; }
-        .source-badge .sb-dot.live { background: var(--green); }
+        .source-badge .sb-dot.live { background: var(--green); box-shadow: 0 0 6px rgba(42,157,143,0.6); animation: blink 2s infinite; }
         .source-badge .sb-dot.api { background: var(--accent); }
         .source-badge .sb-dot.gov { background: var(--gold); }
+        @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
 
         /* ENTRETIEN */
         .entretien-grid {
@@ -953,9 +954,9 @@
         <!-- HEADER -->
         <div class="doc-header">
             <div class="vehicle-info">
-                <h3>Honda Civic EX 2021</h3>
-                <p class="sub">Berline 4 portes — 2.0L 4 cyl. i-VTEC — CVT — Traction</p>
-                <span class="vin-tag">2HGFC2F59MH528491</span>
+                <h3 id="headerTitle">Honda Civic EX 2021</h3>
+                <p class="sub" id="headerSub">Berline 4 portes — 2.0L 4 cyl. i-VTEC — CVT — Traction</p>
+                <span class="vin-tag" id="headerVin">2HGFC2F59MH528491</span>
             </div>
             <div class="score-gauge">
                 <div class="sg-conic"></div>
@@ -1070,19 +1071,19 @@
             <!-- ===== 1. DECODAGE VIN ===== -->
             <div class="section-head"><div class="ico blue">&#128202;</div> 1. Decodage VIN — Specifications completes</div>
             <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot api"></span>NHTSA vPIC</span> <span class="source-badge"><span class="sb-dot gov"></span>Transport Canada</span></p>
-            <div class="data-cards">
-                <div class="d-card"><div class="d-label">Marque</div><div class="d-val">Honda</div></div>
-                <div class="d-card"><div class="d-label">Modele</div><div class="d-val">Civic EX</div></div>
-                <div class="d-card"><div class="d-label">Annee</div><div class="d-val">2021</div></div>
-                <div class="d-card"><div class="d-label">Carrosserie</div><div class="d-val">Berline 4 portes</div></div>
-                <div class="d-card"><div class="d-label">Moteur</div><div class="d-val">2.0L 4 cyl. i-VTEC</div></div>
-                <div class="d-card"><div class="d-label">Transmission</div><div class="d-val">CVT automatique</div></div>
-                <div class="d-card"><div class="d-label">Traction</div><div class="d-val">Avant (FWD)</div></div>
-                <div class="d-card"><div class="d-label">Carburant</div><div class="d-val">Essence 7.1 L/100km</div></div>
-                <div class="d-card"><div class="d-label">Couleur exterieure</div><div class="d-val">Argent lunaire</div></div>
-                <div class="d-card"><div class="d-label">Pays assemblage</div><div class="d-val">Canada (Alliston, ON)</div></div>
-                <div class="d-card"><div class="d-label">Poids</div><div class="d-val">1,339 kg</div></div>
-                <div class="d-card"><div class="d-label">Puissance</div><div class="d-val">158 ch / 138 lb-pi</div></div>
+            <div class="data-cards" id="vinSpecsGrid">
+                <div class="d-card"><div class="d-label">Marque</div><div class="d-val" id="specMake">—</div></div>
+                <div class="d-card"><div class="d-label">Modele</div><div class="d-val" id="specModel">—</div></div>
+                <div class="d-card"><div class="d-label">Annee</div><div class="d-val" id="specYear">—</div></div>
+                <div class="d-card"><div class="d-label">Carrosserie</div><div class="d-val" id="specBody">—</div></div>
+                <div class="d-card"><div class="d-label">Moteur</div><div class="d-val" id="specEngine">—</div></div>
+                <div class="d-card"><div class="d-label">Transmission</div><div class="d-val" id="specTrans">—</div></div>
+                <div class="d-card"><div class="d-label">Traction</div><div class="d-val" id="specDrive">—</div></div>
+                <div class="d-card"><div class="d-label">Carburant</div><div class="d-val" id="specFuel">—</div></div>
+                <div class="d-card"><div class="d-label">Trim</div><div class="d-val" id="specTrim">—</div></div>
+                <div class="d-card"><div class="d-label">Pays assemblage</div><div class="d-val" id="specPlant">—</div></div>
+                <div class="d-card"><div class="d-label">Poids</div><div class="d-val" id="specWeight">—</div></div>
+                <div class="d-card"><div class="d-label">Cylindres</div><div class="d-val" id="specCyl">—</div></div>
             </div>
 
             <!-- ===== 2. IMMATRICULATION SAAQ ===== -->
@@ -1245,88 +1246,33 @@
             <!-- ===== 10. RAPPELS SECURITE ===== -->
             <div class="section-head"><div class="ico gold">&#9888;</div> 10. Rappels de securite — Transport Canada</div>
             <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>Transport Canada</span> <span class="source-badge"><span class="sb-dot api"></span>NHTSA (USA)</span></p>
-            <div class="data-cards" style="margin-bottom:12px;">
-                <div class="d-card"><div class="d-label">Rappels totaux</div><div class="d-val warn">2</div></div>
-                <div class="d-card"><div class="d-label">Rappels corriges</div><div class="d-val ok">1 &#10003;</div></div>
-                <div class="d-card"><div class="d-label">Rappels en attente</div><div class="d-val warn">1 &#9888;</div></div>
+            <div class="data-cards" style="margin-bottom:12px;" id="recallStats">
+                <div class="d-card"><div class="d-label">Rappels totaux</div><div class="d-val" id="recallTotal">—</div></div>
+                <div class="d-card"><div class="d-label">Source</div><div class="d-val" style="font-size:0.8rem;" id="recallSource">NHTSA Live</div></div>
             </div>
-            <div class="recall-card">
-                <div class="rc-head">
-                    <span class="rc-badge open">EN ATTENTE</span>
-                    <span class="rc-title">TC-2023-045 — Systeme de freinage</span>
-                </div>
-                <div class="rc-detail">Un probleme avec le module de commande de frein pourrait entrainer une activation involontaire du frein de stationnement electronique pendant la conduite. Le concessionnaire Honda remplacera le module gratuitement.</div>
-                <div class="rc-meta">
-                    <span>&#128197; Date: 2023-06-14</span>
-                    <span>&#9888; Risque: Moyen</span>
-                    <span>&#128736; Correctif: Remplacement module ABS</span>
-                    <span>&#128176; Cout: Gratuit (garantie Honda)</span>
-                </div>
-            </div>
-            <div class="recall-card" style="border-color: rgba(42,157,143,0.12); background: rgba(42,157,143,0.03);">
-                <div class="rc-head">
-                    <span class="rc-badge fixed">CORRIGE</span>
-                    <span class="rc-title">TC-2021-182 — Ceinture de securite arriere</span>
-                </div>
-                <div class="rc-detail">Le mecanisme de retraction de la ceinture arriere centrale pourrait ne pas fonctionner correctement. Correctif applique par le concessionnaire le 2021-09-22.</div>
-                <div class="rc-meta">
-                    <span>&#128197; Date: 2021-05-10</span>
-                    <span>&#10003; Corrige: 2021-09-22</span>
-                    <span>&#128736; Correctif: Remplacement retracteur</span>
-                </div>
+            <div id="recallsList">
+                <p style="font-size:0.82rem;color:var(--text-light);text-align:center;padding:20px 0;">Chargement des rappels...</p>
             </div>
 
             <!-- ===== 11. CRASH TESTS ===== -->
             <div class="section-head"><div class="ico green">&#128663;</div> 11. Tests de collision — NHTSA & IIHS</div>
             <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot api"></span>NHTSA</span> <span class="source-badge"><span class="sb-dot api"></span>IIHS</span></p>
-            <div class="crash-grid">
-                <div class="crash-card">
-                    <div class="cc-stars">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
-                    <div class="cc-label">Global NHTSA</div>
-                    <div class="cc-score">5/5</div>
-                </div>
-                <div class="crash-card">
-                    <div class="cc-stars">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
-                    <div class="cc-label">Frontale</div>
-                    <div class="cc-score">5/5</div>
-                </div>
-                <div class="crash-card">
-                    <div class="cc-stars">&#11088;&#11088;&#11088;&#11088;&#11088;</div>
-                    <div class="cc-label">Laterale</div>
-                    <div class="cc-score">5/5</div>
-                </div>
-                <div class="crash-card">
-                    <div class="cc-stars">&#11088;&#11088;&#11088;&#11088;</div>
-                    <div class="cc-label">Tonneau</div>
-                    <div class="cc-score">4/5</div>
-                </div>
-                <div class="crash-card">
-                    <div class="cc-stars" style="color:var(--green);">G</div>
-                    <div class="cc-label">IIHS Overlap</div>
-                    <div class="cc-score">Good</div>
-                </div>
-                <div class="crash-card">
-                    <div class="cc-stars" style="color:var(--green);">G+</div>
-                    <div class="cc-label">IIHS Headlights</div>
-                    <div class="cc-score">Superior</div>
-                </div>
+            <div class="crash-grid" id="crashGrid">
+                <p style="font-size:0.82rem;color:var(--text-light);text-align:center;padding:20px 0;grid-column:1/-1;">Chargement des resultats NHTSA...</p>
             </div>
 
             <!-- ===== 12. PLAINTES CONSOMMATEURS ===== -->
             <div class="section-head"><div class="ico blue">&#128172;</div> 12. Plaintes consommateurs — NHTSA</div>
             <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot api"></span>NHTSA Complaints</span> <span class="source-badge"><span class="sb-dot api"></span>OPC Quebec</span></p>
             <div class="data-cards" style="margin-bottom:12px;">
-                <div class="d-card"><div class="d-label">Plaintes NHTSA</div><div class="d-val ok">12</div></div>
-                <div class="d-card"><div class="d-label">Moyenne modele</div><div class="d-val" style="color:var(--text-light)">45</div></div>
-                <div class="d-card"><div class="d-label">Enquete NHTSA</div><div class="d-val ok">Aucune ouverte &#10003;</div></div>
-                <div class="d-card"><div class="d-label">Plaintes OPC QC</div><div class="d-val ok">0 &#10003;</div></div>
+                <div class="d-card"><div class="d-label">Plaintes NHTSA</div><div class="d-val" id="complaintCount">—</div></div>
+                <div class="d-card"><div class="d-label">Avec blessures</div><div class="d-val" id="complaintInjuries">—</div></div>
+                <div class="d-card"><div class="d-label">Avec collision</div><div class="d-val" id="complaintCrash">—</div></div>
+                <div class="d-card"><div class="d-label">Avec incendie</div><div class="d-val" id="complaintFire">—</div></div>
             </div>
-            <ul class="check-list">
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Transmission CVT</strong> — 4 plaintes (hesitation). Normal pour ce type.</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Systeme audio</strong> — 3 plaintes (deconnexion Bluetooth). Correctif logiciel disponible.</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Freins</strong> — 3 plaintes (bruit). Normal pour plaquettes ceramiques.</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Autres</strong> — 2 plaintes mineures. Aucun patron systematique.</span></li>
-            </ul>
+            <div id="complaintBreakdown">
+                <p style="font-size:0.82rem;color:var(--text-light);text-align:center;padding:10px 0;">Chargement des plaintes...</p>
+            </div>
 
             <!-- ===== 13. LOI CITRON QC ===== -->
             <div class="section-head"><div class="ico gold">&#128275;</div> 13. Protection Loi Citron — Quebec</div>
@@ -1500,12 +1446,195 @@ window.addEventListener('scroll', () => {
     draw();
 })();
 
+// ===== LIVE API CONFIG =====
+const API = {
+    decode: 'https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/',
+    recalls: 'https://api.nhtsa.gov/recalls/recallsByVehicle',
+    complaints: 'https://api.nhtsa.gov/complaints/complaintsByVehicle',
+    ratings: 'https://api.nhtsa.gov/SafetyRatings'
+};
+let liveData = { decode: null, recalls: null, complaints: null, ratings: null };
+let apisDone = false;
+let currentVin = '';
+
+// ===== NHTSA vPIC DECODE =====
+function getVar(results, name) {
+    const r = results.find(v => v.Variable === name);
+    return r && r.Value ? r.Value : null;
+}
+
+async function fetchAllAPIs(vin) {
+    liveData = { decode: null, recalls: null, complaints: null, ratings: null };
+    let make = '', model = '', year = '';
+
+    // 1. Decode VIN
+    try {
+        const res = await fetch(API.decode + vin + '?format=json');
+        const data = await res.json();
+        const r = data.Results;
+        make = getVar(r, 'Make') || '';
+        model = getVar(r, 'Model') || '';
+        year = getVar(r, 'Model Year') || '';
+        liveData.decode = {
+            make, model, year,
+            body: getVar(r, 'Body Class'),
+            doors: getVar(r, 'Doors'),
+            engine: getVar(r, 'Displacement (L)'),
+            cylinders: getVar(r, 'Engine Number of Cylinders'),
+            fuel: getVar(r, 'Fuel Type - Primary'),
+            drive: getVar(r, 'Drive Type'),
+            trans: getVar(r, 'Transmission Style'),
+            trim: getVar(r, 'Trim') || getVar(r, 'Series'),
+            plantCountry: getVar(r, 'Plant Country'),
+            plantCity: getVar(r, 'Plant City'),
+            weight: getVar(r, 'Curb Weight (pounds)'),
+            seats: getVar(r, 'Number of Seats'),
+            abs: getVar(r, 'Anti-lock Braking System (ABS)'),
+            esc: getVar(r, 'Electronic Stability Control (ESC)'),
+            fcw: getVar(r, 'Forward Collision Warning (FCW)')
+        };
+    } catch(e) { console.warn('Decode failed:', e); }
+
+    if (!make || !model || !year) { apisDone = true; return; }
+
+    // 2-4. Parallel: recalls, complaints, safety ratings
+    const [recallRes, complaintRes, ratingRes] = await Promise.allSettled([
+        fetch(API.recalls + '?make=' + encodeURIComponent(make) + '&model=' + encodeURIComponent(model) + '&modelYear=' + year).then(r => r.json()),
+        fetch(API.complaints + '?make=' + encodeURIComponent(make) + '&model=' + encodeURIComponent(model) + '&modelYear=' + year).then(r => r.json()),
+        fetch(API.ratings + '/modelyear/' + year + '/make/' + encodeURIComponent(make) + '/model/' + encodeURIComponent(model) + '?format=json').then(r => r.json())
+    ]);
+
+    if (recallRes.status === 'fulfilled' && recallRes.value.results) {
+        liveData.recalls = recallRes.value.results;
+    }
+    if (complaintRes.status === 'fulfilled' && complaintRes.value.results) {
+        liveData.complaints = complaintRes.value.results;
+    }
+
+    // Safety ratings: need 2nd call for actual ratings
+    if (ratingRes.status === 'fulfilled' && ratingRes.value.Results && ratingRes.value.Results.length > 0) {
+        try {
+            const vid = ratingRes.value.Results[0].VehicleId;
+            const r2 = await fetch(API.ratings + '/VehicleId/' + vid + '?format=json');
+            const d2 = await r2.json();
+            if (d2.Results && d2.Results.length > 0) liveData.ratings = d2.Results[0];
+        } catch(e) { console.warn('Ratings detail failed:', e); }
+    }
+
+    apisDone = true;
+}
+
+// ===== POPULATE REPORT WITH LIVE DATA =====
+function populateLiveData() {
+    const d = liveData.decode;
+    if (!d) return;
+
+    // Header
+    const title = (d.make||'') + ' ' + (d.model||'') + ' ' + (d.trim||'') + ' ' + (d.year||'');
+    document.getElementById('headerTitle').textContent = title.replace(/\s+/g,' ').trim();
+    const sub = [d.body, d.engine ? d.engine+'L '+d.cylinders+' cyl.' : '', d.trans, d.drive].filter(Boolean).join(' — ');
+    document.getElementById('headerSub').textContent = sub;
+    document.getElementById('headerVin').textContent = currentVin.toUpperCase();
+
+    // Specs
+    const set = (id, val) => { const el = document.getElementById(id); if(el && val) el.textContent = val; };
+    set('specMake', d.make);
+    set('specModel', d.model + (d.trim ? ' ' + d.trim : ''));
+    set('specYear', d.year);
+    set('specBody', d.body ? d.body + (d.doors ? ' ' + d.doors + ' portes' : '') : null);
+    set('specEngine', d.engine ? d.engine + 'L ' + d.cylinders + ' cyl.' : null);
+    set('specTrans', d.trans);
+    set('specDrive', d.drive);
+    set('specFuel', d.fuel);
+    set('specTrim', d.trim);
+    set('specPlant', d.plantCountry ? d.plantCountry + (d.plantCity ? ' (' + d.plantCity + ')' : '') : null);
+    set('specWeight', d.weight ? Math.round(d.weight * 0.4536).toLocaleString() + ' kg' : null);
+    set('specCyl', d.cylinders);
+
+    // Mark VIN decode source as LIVE
+    const src1 = document.querySelector('#vinSpecsGrid')?.previousElementSibling;
+    if (src1) src1.innerHTML = '<span class="source-badge" style="border-color:rgba(42,157,143,0.3);"><span class="sb-dot live"></span>NHTSA vPIC — LIVE</span>';
+
+    // Recalls
+    if (liveData.recalls !== null) {
+        const recalls = liveData.recalls;
+        document.getElementById('recallTotal').innerHTML = recalls.length > 0 ? '<span style="color:var(--gold)">' + recalls.length + '</span>' : '<span style="color:var(--green)">0 &#10003;</span>';
+        document.getElementById('recallSource').innerHTML = '<span style="color:var(--green)">NHTSA LIVE &#10003;</span>';
+        const container = document.getElementById('recallsList');
+        if (recalls.length === 0) {
+            container.innerHTML = '<div style="background:rgba(42,157,143,0.04);border:1px solid rgba(42,157,143,0.1);border-radius:12px;padding:14px 18px;text-align:center;"><p style="font-size:0.85rem;color:var(--green);font-weight:700;">&#10003; Aucun rappel de securite pour ce vehicule</p></div>';
+        } else {
+            container.innerHTML = recalls.map(rc => `
+                <div class="recall-card" style="margin-bottom:10px;">
+                    <div class="rc-head"><span class="rc-badge open">RAPPEL</span><span class="rc-title">${rc.NHTSACampaignNumber} — ${rc.Component}</span></div>
+                    <div class="rc-detail">${rc.Summary ? rc.Summary.substring(0, 300) + (rc.Summary.length > 300 ? '...' : '') : 'N/A'}</div>
+                    <div class="rc-meta">
+                        <span>&#128197; ${rc.ReportReceivedDate || 'N/A'}</span>
+                        <span>&#128736; ${rc.Remedy ? rc.Remedy.substring(0, 100) + '...' : 'Contacter le concessionnaire'}</span>
+                        ${rc.parkIt ? '<span style="color:var(--red);font-weight:800;">&#9888; NE PAS CONDUIRE</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    // Crash tests
+    if (liveData.ratings) {
+        const rt = liveData.ratings;
+        const stars = (n) => { const num = parseInt(n); if(isNaN(num)) return '—'; return '⭐'.repeat(num); };
+        const grid = document.getElementById('crashGrid');
+        grid.innerHTML = `
+            <div class="crash-card"><div class="cc-stars">${stars(rt.OverallRating)}</div><div class="cc-label">Global NHTSA</div><div class="cc-score">${rt.OverallRating || 'N/R'}/5</div></div>
+            <div class="crash-card"><div class="cc-stars">${stars(rt.OverallFrontCrashRating)}</div><div class="cc-label">Frontale</div><div class="cc-score">${rt.OverallFrontCrashRating || 'N/R'}/5</div></div>
+            <div class="crash-card"><div class="cc-stars">${stars(rt.OverallSideCrashRating)}</div><div class="cc-label">Laterale</div><div class="cc-score">${rt.OverallSideCrashRating || 'N/R'}/5</div></div>
+            <div class="crash-card"><div class="cc-stars">${stars(rt.RolloverRating)}</div><div class="cc-label">Tonneau</div><div class="cc-score">${rt.RolloverRating || 'N/R'}/5</div></div>
+            <div class="crash-card"><div class="cc-label">Plaintes</div><div class="cc-score" style="color:var(--gold);font-size:1.1rem;">${rt.ComplaintsCount ?? '—'}</div></div>
+            <div class="crash-card"><div class="cc-label">Enquetes</div><div class="cc-score" style="color:${(rt.InvestigationCount||0)>0?'var(--red)':'var(--green)'};">${rt.InvestigationCount ?? 0}</div></div>
+        `;
+    }
+
+    // Complaints
+    if (liveData.complaints !== null) {
+        const complaints = liveData.complaints;
+        const total = complaints.length;
+        const injuries = complaints.filter(c => c.numberOfInjuries > 0).length;
+        const crashes = complaints.filter(c => c.crash).length;
+        const fires = complaints.filter(c => c.fire).length;
+
+        document.getElementById('complaintCount').innerHTML = total < 30 ? '<span style="color:var(--green)">' + total + '</span>' : '<span style="color:var(--gold)">' + total + '</span>';
+        document.getElementById('complaintInjuries').innerHTML = injuries === 0 ? '<span style="color:var(--green)">0 &#10003;</span>' : '<span style="color:var(--red)">' + injuries + '</span>';
+        document.getElementById('complaintCrash').innerHTML = crashes === 0 ? '<span style="color:var(--green)">0 &#10003;</span>' : '<span style="color:var(--gold)">' + crashes + '</span>';
+        document.getElementById('complaintFire').innerHTML = fires === 0 ? '<span style="color:var(--green)">0 &#10003;</span>' : '<span style="color:var(--red)">' + fires + '</span>';
+
+        // Group by component
+        const byComp = {};
+        complaints.forEach(c => {
+            const comp = c.components || 'AUTRE';
+            byComp[comp] = (byComp[comp] || 0) + 1;
+        });
+        const sorted = Object.entries(byComp).sort((a,b) => b[1] - a[1]).slice(0, 6);
+        const breakdown = document.getElementById('complaintBreakdown');
+        if (sorted.length > 0) {
+            breakdown.innerHTML = '<ul class="check-list">' + sorted.map(([comp, count]) =>
+                `<li class="check-row"><span class="chk ${count > 10 ? 'warn' : 'pass'}">${count}</span><span class="check-text"><strong>${comp}</strong> — ${count} plainte${count>1?'s':''} (NHTSA live)</span></li>`
+            ).join('') + '</ul>';
+        } else {
+            breakdown.innerHTML = '<p style="font-size:0.82rem;color:var(--green);text-align:center;padding:10px 0;">&#10003; Aucune plainte enregistree</p>';
+        }
+    }
+}
+
 // ===== SCAN =====
 function startScan(){
-    const vin = document.getElementById('vinInput').value || '2HGFC2F59MH528491';
-    document.getElementById('loadVin').textContent = vin.toUpperCase();
+    const vin = document.getElementById('vinInput').value.trim().toUpperCase() || '2HGFC2F59MH528491';
+    currentVin = vin;
+    document.getElementById('loadVin').textContent = vin;
     document.getElementById('loadScreen').classList.add('active');
     document.querySelector('.scanner-hero').style.display = 'none';
+
+    // Start API calls in background
+    apisDone = false;
+    fetchAllAPIs(vin);
 
     const rows = document.querySelectorAll('.step-row');
     const fill = document.getElementById('progFill');
@@ -1528,13 +1657,16 @@ function startScan(){
         } else {
             fill.style.width = '100%';
             pct.textContent = '100%';
-            setTimeout(showReport, 500);
+            // Wait for APIs before showing report
+            function waitAndShow() {
+                if (apisDone) { setTimeout(showReport, 300); }
+                else { setTimeout(waitAndShow, 200); }
+            }
+            waitAndShow();
         }
     }
     setTimeout(next, 400);
 }
-
-// ===== GAUGE (V3-A Center Score — CSS animated rings) =====
 
 // ===== COUNT UP =====
 function countUp(el, target, prefix, suffix, duration){
@@ -1553,12 +1685,24 @@ function countUp(el, target, prefix, suffix, duration){
 
 // ===== SHOW REPORT =====
 function showReport(){
+    // Populate live data first
+    populateLiveData();
+
     document.getElementById('loadScreen').classList.remove('active');
     const rp = document.getElementById('reportPage');
     rp.classList.add('active');
     window.scrollTo({top: 0});
 
-    // Needle is static in SVG (fixed at score 82 = 42deg rotation)
+    // Count API sources that returned data
+    let liveCount = 0;
+    if (liveData.decode) liveCount++;
+    if (liveData.recalls) liveCount++;
+    if (liveData.complaints) liveCount++;
+    if (liveData.ratings) liveCount++;
+
+    // Update success banner
+    document.querySelector('.success-banner p').innerHTML =
+        'Analyse completee — <strong style="color:var(--accent)">' + liveCount + ' API live</strong> + 14 sources demo — Score AI: <strong style="color:var(--green)">82/100</strong>';
 
     // Count ups
     countUp(document.getElementById('scoreNum'), 82, '', '', 1200);
@@ -1574,6 +1718,8 @@ function showReport(){
     gsap.from('.d-card', {y:20, opacity:0, duration:0.4, stagger:0.06, delay:0.9});
     gsap.from('.check-row', {x:-20, opacity:0, duration:0.3, stagger:0.05, delay:1.2});
     gsap.from('.valeur-card', {scale:0.9, opacity:0, duration:0.5, delay:1.6});
+    gsap.from('.recall-card', {y:15, opacity:0, duration:0.3, stagger:0.08, delay:1.4});
+    gsap.from('.crash-card', {scale:0.8, opacity:0, duration:0.3, stagger:0.06, delay:1.6});
     gsap.from('.ent-card', {y:15, opacity:0, duration:0.3, stagger:0.06, delay:1.8});
     gsap.from('.download-bar', {y:20, opacity:0, duration:0.5, delay:2.2});
 }
