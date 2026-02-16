@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoVerif QC — V3-A Score Digital — 2 Exemples</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { overflow-x: hidden; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #060a14;
+            color: #e8ecf2;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 50px 20px 10px;
+        }
+        .page-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem; font-weight: 800;
+            background: linear-gradient(135deg, #00b4d8, #2a9d8f, #f4a61c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .page-header p { color: #7a869c; font-size: 0.85rem; }
+
+        .logo-section {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        .logo-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 4px; text-transform: uppercase;
+            color: #00b4d8; margin-bottom: 10px;
+        }
+        .logo-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem; font-weight: 700;
+            color: white; margin-bottom: 5px;
+        }
+        .logo-desc {
+            font-size: 0.82rem; color: #7a869c;
+            margin-bottom: 36px; line-height: 1.6;
+        }
+
+        .logo-stage {
+            background: radial-gradient(ellipse at center, rgba(0,180,216,0.04) 0%, transparent 70%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 60px 40px;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 28px;
+            position: relative; overflow: hidden;
+            min-height: 420px;
+        }
+
+        .sep {
+            width: 120px; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,180,216,0.3), transparent);
+            margin: 60px auto;
+        }
+
+        /* WORDMARK */
+        .wm {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem; font-weight: 800; letter-spacing: -1px;
+        }
+        .wm .auto { color: white; }
+        .wm .verif {
+            background: linear-gradient(135deg, #00b4d8, #2a9d8f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .wm .qc-badge {
+            display: inline-block; font-size: 0.6rem; font-weight: 800;
+            background: linear-gradient(135deg, #f4a61c, #e63946);
+            color: white; -webkit-text-fill-color: white;
+            padding: 3px 8px; border-radius: 6px;
+            margin-left: 8px; vertical-align: middle; letter-spacing: 1px;
+        }
+
+        /* ============================================ */
+        /*  LOGO CONTAINER — 240x240                    */
+        /* ============================================ */
+        .logo-wrap {
+            perspective: 900px;
+            display: inline-block;
+        }
+        .logo-box {
+            width: 240px; height: 240px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: tiltA 10s ease-in-out infinite;
+        }
+        @keyframes tiltA {
+            0%, 100% { transform: rotateX(6deg) rotateY(-8deg); }
+            33% { transform: rotateX(-3deg) rotateY(10deg); }
+            66% { transform: rotateX(5deg) rotateY(-5deg); }
+        }
+
+        /* CSS animated rings */
+        .logo-box .glow-1 {
+            position: absolute; inset: -8px; border-radius: 50%;
+            border: 1px solid rgba(0,180,216,0.06);
+            transform: translateZ(-2px);
+            animation: glowP 5s ease-in-out infinite;
+        }
+        .logo-box .glow-2 {
+            position: absolute; inset: -18px; border-radius: 50%;
+            border: 1px solid rgba(244,166,28,0.04);
+            transform: translateZ(-4px);
+            animation: glowP 5s ease-in-out infinite 2s;
+        }
+        @keyframes glowP {
+            0%, 100% { opacity: 0.3; box-shadow: none; }
+            50% { opacity: 1; box-shadow: 0 0 30px rgba(0,180,216,0.06); }
+        }
+
+        .logo-box .conic-ring {
+            position: absolute; inset: 2px; border-radius: 50%;
+            border: 1.5px solid transparent;
+            background: linear-gradient(#060a14, #060a14) padding-box,
+                        conic-gradient(from 180deg, rgba(0,180,216,0.35), rgba(42,157,143,0.2), rgba(244,166,28,0.35), rgba(230,57,70,0.2), rgba(0,180,216,0.35)) border-box;
+            transform: translateZ(1px);
+            animation: conicSpin 18s linear infinite;
+        }
+        @keyframes conicSpin { to { rotate: -360deg; } }
+
+        .logo-box .outer-ring {
+            position: absolute; inset: 8px; border-radius: 50%;
+            border: 3px solid transparent;
+            background: linear-gradient(#060a14, #060a14) padding-box,
+                        linear-gradient(135deg, #00b4d8, #2a9d8f, #f4a61c) border-box;
+            transform: translateZ(0);
+            animation: ringGlow 4s ease-in-out infinite;
+        }
+        @keyframes ringGlow {
+            0%, 100% { box-shadow: 0 0 18px rgba(0,180,216,0.12); }
+            50% { box-shadow: 0 0 36px rgba(0,180,216,0.25), 0 0 50px rgba(244,166,28,0.08); }
+        }
+
+        .logo-box .accent-ring {
+            position: absolute; inset: 16px; border-radius: 50%;
+            border: 1.5px solid transparent;
+            background: linear-gradient(#060a14, #060a14) padding-box,
+                        conic-gradient(from 0deg, #00b4d8, #2a9d8f, #f4a61c, #e63946, #00b4d8) border-box;
+            transform: translateZ(2px);
+            animation: accentSpin 12s linear infinite;
+        }
+        @keyframes accentSpin { to { rotate: 360deg; } }
+
+        .logo-box .inner-ring {
+            position: absolute; inset: 24px; border-radius: 50%;
+            border: 1px solid rgba(0,180,216,0.15);
+            transform: translateZ(3px);
+        }
+
+        .logo-box .dial-bg {
+            position: absolute; inset: 30px; border-radius: 50%;
+            background: radial-gradient(circle at 42% 38%, #0e1a2e, #060a14 70%);
+            transform: translateZ(5px);
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.5);
+        }
+
+        .logo-box .geo-svg {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            transform: translateZ(6px);
+            pointer-events: none;
+        }
+
+        .logo-box .center-glow {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(7px);
+            width: 60px; height: 60px;
+            background: radial-gradient(circle, rgba(0,180,216,0.06), transparent 70%);
+            border-radius: 50%;
+            animation: cGlow 4s ease-in-out infinite;
+        }
+        @keyframes cGlow {
+            0%, 100% { transform: translate(-50%, -50%) translateZ(7px) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) translateZ(7px) scale(1.3); opacity: 0.7; }
+        }
+
+        /* Needle */
+        .logo-box .needle {
+            position: absolute;
+            bottom: 42%; left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) translateZ(12px) rotate(-55deg);
+            z-index: 10;
+        }
+        .logo-box .needle-line {
+            width: 1.8px; height: 58px;
+            background: linear-gradient(to top, rgba(244,166,28,0.9), #f4a61c, rgba(244,166,28,0.2));
+            margin: 0 auto; border-radius: 1px;
+            box-shadow: 0 0 8px rgba(244,166,28,0.35);
+        }
+        .logo-box .needle-cap {
+            width: 14px; height: 14px; border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #2a3a54, #1a2640);
+            border: 1.5px solid rgba(244,166,28,0.3);
+            margin: -2px auto 0; position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+        }
+        .logo-box .needle-dot {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px; height: 4px;
+            background: #f4a61c; border-radius: 50%;
+            box-shadow: 0 0 6px rgba(244,166,28,0.6);
+        }
+
+        /* Holographic shine */
+        .logo-box .holo {
+            position: absolute; inset: 30px; border-radius: 50%;
+            background: linear-gradient(135deg, transparent 30%, rgba(0,180,216,0.06) 45%, rgba(244,166,28,0.04) 50%, transparent 65%);
+            transform: translateZ(14px); pointer-events: none;
+            animation: holoShift 6s ease-in-out infinite;
+        }
+        @keyframes holoShift {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ============================================ */
+        /*  EXEMPLE 1: LED BOTTOM — score en bas         */
+        /* ============================================ */
+        .ex1 .digital-score {
+            position: absolute;
+            bottom: 13%; left: 50%;
+            transform: translateX(-50%) translateZ(13px);
+            text-align: center;
+            z-index: 15;
+        }
+        .ex1 .score-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.15rem; font-weight: 800;
+            color: #00e5ff;
+            text-shadow: 0 0 12px rgba(0,229,255,0.5), 0 0 24px rgba(0,229,255,0.2);
+            letter-spacing: 1px;
+            min-width: 40px;
+            display: inline-block;
+        }
+        .ex1 .score-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.3rem; color: rgba(0,180,216,0.5);
+            letter-spacing: 2px; text-transform: uppercase;
+            display: block; margin-top: 1px;
+        }
+        .ex1 .score-bar {
+            width: 44px; height: 3px;
+            background: rgba(0,180,216,0.08);
+            border-radius: 2px;
+            margin: 4px auto 0;
+            overflow: hidden;
+            border: 0.5px solid rgba(0,180,216,0.1);
+        }
+        .ex1 .score-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e63946, #f4a61c, #2a9d8f, #00b4d8);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.15s ease;
+        }
+
+        /* ============================================ */
+        /*  EXEMPLE 2: CENTER LARGE — gros score centre  */
+        /* ============================================ */
+        .ex2 .digital-score-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(13px);
+            text-align: center;
+            z-index: 15;
+        }
+        .ex2 .score-big {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.2rem; font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1;
+            min-width: 70px;
+            display: inline-block;
+            /* Color changes dynamically via JS */
+            color: #00e5ff;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        .ex2 .score-big.low {
+            color: #e63946;
+            text-shadow: 0 0 15px rgba(230,57,70,0.5), 0 0 30px rgba(230,57,70,0.2);
+        }
+        .ex2 .score-big.mid {
+            color: #f4a61c;
+            text-shadow: 0 0 15px rgba(244,166,28,0.5), 0 0 30px rgba(244,166,28,0.2);
+        }
+        .ex2 .score-big.good {
+            color: #2a9d8f;
+            text-shadow: 0 0 15px rgba(42,157,143,0.5), 0 0 30px rgba(42,157,143,0.2);
+        }
+        .ex2 .score-big.excellent {
+            color: #00e5ff;
+            text-shadow: 0 0 15px rgba(0,229,255,0.5), 0 0 30px rgba(0,229,255,0.2);
+        }
+        .ex2 .score-sub {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.42rem; font-weight: 700;
+            color: rgba(0,180,216,0.5);
+            letter-spacing: 3px; text-transform: uppercase;
+            display: block; margin-top: 4px;
+        }
+        .ex2 .score-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(11px);
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,180,216,0.08);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .ex2 .score-ring.glow {
+            border-color: rgba(0,229,255,0.15);
+            box-shadow: 0 0 20px rgba(0,229,255,0.06), inset 0 0 15px rgba(0,229,255,0.03);
+        }
+
+        .page-footer {
+            text-align: center; padding: 50px 20px;
+            color: #7a869c; font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 1.4rem; }
+            .logo-stage { padding: 40px 16px; min-height: 360px; }
+            .logo-box { width: 200px; height: 200px; }
+            .wm { font-size: 1.7rem; }
+            .logo-box .needle-line { height: 48px; }
+            .ex1 .score-num { font-size: 0.95rem; }
+            .ex2 .score-big { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <h1>V3-A Precision — Score Digital</h1>
+    <p>Score numerique synchro avec l'aiguille analogique 0-100 — 2 exemples</p>
+</div>
+
+<!-- ===================== EXEMPLE 1: LED BOTTOM ===================== -->
+<div class="logo-section ex1">
+    <div class="logo-label">Exemple 1</div>
+    <div class="logo-title">LED Dashboard</div>
+    <div class="logo-desc">Score digital LED en bas du cadran avec barre de progression couleur. Le chiffre suit l'aiguille en temps reel. Style tableau de bord automobile. Police Orbitron pour le look digital.</div>
+
+    <div class="logo-stage">
+        <div class="logo-wrap">
+            <div class="logo-box" id="logo1">
+                <div class="glow-1"></div>
+                <div class="glow-2"></div>
+                <div class="conic-ring"></div>
+                <div class="outer-ring"></div>
+                <div class="accent-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="dial-bg"></div>
+
+                <svg class="geo-svg" viewBox="0 0 240 240" fill="none">
+                    <!-- EXTERNAL TICKS -->
+                    <g transform="translate(120,120)">
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.5)" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(30)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(60)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(90)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(120)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(150)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(180)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(210)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(240)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(270)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(300)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(330)"/>
+                        <!-- Minor -->
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(15)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(45)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(75)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(105)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(135)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(165)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(195)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(225)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(255)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(285)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(315)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(345)"/>
+                    </g>
+
+                    <!-- GAUGE ARC -->
+                    <defs>
+                        <linearGradient id="arc1" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#e63946" stop-opacity="0.45"/>
+                            <stop offset="30%" stop-color="#f4a61c" stop-opacity="0.5"/>
+                            <stop offset="65%" stop-color="#2a9d8f" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="#00b4d8" stop-opacity="0.45"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M 54.2 158 A 76 76 0 1 1 185.8 158" fill="none" stroke="url(#arc1)" stroke-width="2.5" stroke-linecap="round"/>
+
+                    <!-- INTERIOR TICKS -->
+                    <g transform="translate(120,120)">
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(230,57,70,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-120)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(230,57,70,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-96)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-72)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-48)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-24)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(42,157,143,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(0)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(42,157,143,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(24)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(48)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(72)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(96)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.65)" stroke-width="1.5" stroke-linecap="round" transform="rotate(120)"/>
+                        <!-- Minor interior -->
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-108)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-84)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-60)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-36)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-12)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(12)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(36)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(60)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(84)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(108)"/>
+                    </g>
+
+                    <!-- NUMBERS -->
+                    <text x="55" y="150" font-family="Space Grotesk" font-size="8" fill="rgba(230,57,70,0.5)" font-weight="700" text-anchor="middle">0</text>
+                    <text x="44" y="90" font-family="Space Grotesk" font-size="7" fill="rgba(255,255,255,0.25)" font-weight="600" text-anchor="middle">25</text>
+                    <text x="120" y="52" font-family="Space Grotesk" font-size="8" fill="rgba(244,166,28,0.5)" font-weight="700" text-anchor="middle">50</text>
+                    <text x="196" y="90" font-family="Space Grotesk" font-size="7" fill="rgba(255,255,255,0.25)" font-weight="600" text-anchor="middle">75</text>
+                    <text x="185" y="150" font-family="Space Grotesk" font-size="8" fill="rgba(0,180,216,0.5)" font-weight="700" text-anchor="middle">100</text>
+
+                    <!-- MONOGRAM -->
+                    <text x="120" y="106" text-anchor="middle" font-family="Space Grotesk" font-size="26" font-weight="800" fill="white" letter-spacing="-2">AV</text>
+                    <line x1="105" y1="110" x2="135" y2="110" stroke="rgba(0,180,216,0.3)" stroke-width="0.8"/>
+                    <text x="120" y="119" text-anchor="middle" font-family="Space Grotesk" font-size="4.5" fill="rgba(0,180,216,0.45)" font-weight="600" letter-spacing="2.5">AUTOVERIF QUEBEC</text>
+                </svg>
+
+                <div class="center-glow"></div>
+
+                <!-- Needle -->
+                <div class="needle" id="needle1">
+                    <div class="needle-line"></div>
+                    <div class="needle-cap"><div class="needle-dot"></div></div>
+                </div>
+
+                <!-- DIGITAL SCORE LED -->
+                <div class="digital-score">
+                    <span class="score-num" id="scoreNum1">0</span>
+                    <span class="score-label">SCORE</span>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="scoreBar1"></div>
+                    </div>
+                </div>
+
+                <div class="holo"></div>
+            </div>
+        </div>
+        <div class="wm"><span class="auto">Auto</span><span class="verif">Verif</span><span class="qc-badge">QC</span></div>
+    </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ===================== EXEMPLE 2: CENTER LARGE ===================== -->
+<div class="logo-section ex2">
+    <div class="logo-label">Exemple 2</div>
+    <div class="logo-title">Center Score</div>
+    <div class="logo-desc">Score geant au centre du cadran, remplace le monogramme AV. La couleur change selon la valeur: rouge (0-25), orange (25-50), vert (50-75), cyan (75-100). Anneau lumineux autour du score. Impact maximal.</div>
+
+    <div class="logo-stage">
+        <div class="logo-wrap">
+            <div class="logo-box" id="logo2">
+                <div class="glow-1"></div>
+                <div class="glow-2"></div>
+                <div class="conic-ring"></div>
+                <div class="outer-ring"></div>
+                <div class="accent-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="dial-bg"></div>
+
+                <svg class="geo-svg" viewBox="0 0 240 240" fill="none">
+                    <!-- EXTERNAL TICKS (same as Ex1) -->
+                    <g transform="translate(120,120)">
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.5)" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(30)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(60)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(90)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(120)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(150)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(180)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(210)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(240)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(244,166,28,0.5)" stroke-width="2" stroke-linecap="round" transform="rotate(270)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.3)" stroke-width="2" stroke-linecap="round" transform="rotate(300)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-100" stroke="rgba(0,180,216,0.4)" stroke-width="2" stroke-linecap="round" transform="rotate(330)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(15)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(45)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(75)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(105)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(135)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(165)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(195)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(225)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(255)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(244,166,28,0.15)" stroke-width="0.8" transform="rotate(285)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(315)"/>
+                        <line x1="0" y1="-110" x2="0" y2="-106" stroke="rgba(0,180,216,0.15)" stroke-width="0.8" transform="rotate(345)"/>
+                    </g>
+
+                    <!-- GAUGE ARC -->
+                    <defs>
+                        <linearGradient id="arc2" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#e63946" stop-opacity="0.45"/>
+                            <stop offset="30%" stop-color="#f4a61c" stop-opacity="0.5"/>
+                            <stop offset="65%" stop-color="#2a9d8f" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="#00b4d8" stop-opacity="0.45"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M 54.2 158 A 76 76 0 1 1 185.8 158" fill="none" stroke="url(#arc2)" stroke-width="2.5" stroke-linecap="round"/>
+
+                    <!-- INTERIOR TICKS -->
+                    <g transform="translate(120,120)">
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(230,57,70,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-120)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(230,57,70,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-96)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-72)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-48)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(244,166,28,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(-24)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(42,157,143,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(0)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(42,157,143,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(24)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.5)" stroke-width="1.5" stroke-linecap="round" transform="rotate(48)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.55)" stroke-width="1.5" stroke-linecap="round" transform="rotate(72)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.6)" stroke-width="1.5" stroke-linecap="round" transform="rotate(96)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-70" stroke="rgba(0,180,216,0.65)" stroke-width="1.5" stroke-linecap="round" transform="rotate(120)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-108)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-84)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-60)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-36)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(-12)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(12)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(36)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(60)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(84)"/>
+                        <line x1="0" y1="-78" x2="0" y2="-74" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" transform="rotate(108)"/>
+                    </g>
+
+                    <!-- NUMBERS -->
+                    <text x="55" y="150" font-family="Space Grotesk" font-size="8" fill="rgba(230,57,70,0.5)" font-weight="700" text-anchor="middle">0</text>
+                    <text x="44" y="90" font-family="Space Grotesk" font-size="7" fill="rgba(255,255,255,0.25)" font-weight="600" text-anchor="middle">25</text>
+                    <text x="120" y="52" font-family="Space Grotesk" font-size="8" fill="rgba(244,166,28,0.5)" font-weight="700" text-anchor="middle">50</text>
+                    <text x="196" y="90" font-family="Space Grotesk" font-size="7" fill="rgba(255,255,255,0.25)" font-weight="600" text-anchor="middle">75</text>
+                    <text x="185" y="150" font-family="Space Grotesk" font-size="8" fill="rgba(0,180,216,0.5)" font-weight="700" text-anchor="middle">100</text>
+
+                    <!-- Small AV under score area -->
+                    <text x="120" y="170" text-anchor="middle" font-family="Space Grotesk" font-size="4" fill="rgba(0,180,216,0.3)" font-weight="700" letter-spacing="2">AUTOVERIF QUEBEC</text>
+                </svg>
+
+                <div class="center-glow"></div>
+
+                <!-- Score ring glow -->
+                <div class="score-ring" id="scoreRing2"></div>
+
+                <!-- CENTER DIGITAL SCORE -->
+                <div class="digital-score-center">
+                    <span class="score-big" id="scoreNum2">0</span>
+                    <span class="score-sub">SCORE CONFIANCE</span>
+                </div>
+
+                <!-- Needle -->
+                <div class="needle" id="needle2">
+                    <div class="needle-line"></div>
+                    <div class="needle-cap"><div class="needle-dot"></div></div>
+                </div>
+
+                <div class="holo"></div>
+            </div>
+        </div>
+        <div class="wm"><span class="auto">Auto</span><span class="verif">Verif</span><span class="qc-badge">QC</span></div>
+    </div>
+</div>
+
+<div class="page-footer">
+    <p>AutoVerif QC — V3-A Score Digital — SeoParAI 2026</p>
+</div>
+
+<script>
+    // Needle animation keyframes (angle in degrees)
+    // Maps to score: angle -55 = score 0, angle +50 = score 95
+    // Formula: score = ((angle + 55) / 105) * 100, clamped 0-100
+    const keyframes = [
+        { t: 0.00, angle: -55 },
+        { t: 0.05, angle: -55 },
+        { t: 0.20, angle: 30 },
+        { t: 0.35, angle: 10 },
+        { t: 0.50, angle: 48 },
+        { t: 0.65, angle: 42 },
+        { t: 0.75, angle: 50 },
+        { t: 0.92, angle: 50 },
+        { t: 1.00, angle: -55 },
+    ];
+
+    const DURATION = 8000; // 8s total cycle
+
+    function getAngleAtTime(elapsed) {
+        const t = (elapsed % DURATION) / DURATION;
+        // Find surrounding keyframes
+        let i = 0;
+        for (; i < keyframes.length - 1; i++) {
+            if (t >= keyframes[i].t && t <= keyframes[i + 1].t) break;
+        }
+        const kf0 = keyframes[i];
+        const kf1 = keyframes[Math.min(i + 1, keyframes.length - 1)];
+        const segT = kf1.t === kf0.t ? 0 : (t - kf0.t) / (kf1.t - kf0.t);
+        // Ease in-out
+        const eased = segT < 0.5 ? 2 * segT * segT : 1 - Math.pow(-2 * segT + 2, 2) / 2;
+        return kf0.angle + (kf1.angle - kf0.angle) * eased;
+    }
+
+    function angleToScore(angle) {
+        return Math.round(Math.max(0, Math.min(100, ((angle + 55) / 105) * 100)));
+    }
+
+    function getScoreClass(score) {
+        if (score < 25) return 'low';
+        if (score < 50) return 'mid';
+        if (score < 75) return 'good';
+        return 'excellent';
+    }
+
+    // Elements
+    const needle1 = document.getElementById('needle1');
+    const needle2 = document.getElementById('needle2');
+    const scoreNum1 = document.getElementById('scoreNum1');
+    const scoreBar1 = document.getElementById('scoreBar1');
+    const scoreNum2 = document.getElementById('scoreNum2');
+    const scoreRing2 = document.getElementById('scoreRing2');
+
+    let startTime = null;
+
+    function animate(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+
+        const angle = getAngleAtTime(elapsed);
+        const score = angleToScore(angle);
+
+        // Needle rotation
+        const needleTransform = `translateX(-50%) translateZ(12px) rotate(${angle}deg)`;
+        needle1.style.transform = needleTransform;
+        needle2.style.transform = needleTransform;
+
+        // Example 1: LED score + bar
+        scoreNum1.textContent = score;
+        scoreBar1.style.width = score + '%';
+
+        // Example 2: Center score + color
+        scoreNum2.textContent = score;
+        const cls = getScoreClass(score);
+        scoreNum2.className = 'score-big ' + cls;
+        if (score > 70) {
+            scoreRing2.classList.add('glow');
+        } else {
+            scoreRing2.classList.remove('glow');
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>
