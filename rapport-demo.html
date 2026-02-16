@@ -1009,64 +1009,32 @@
                 <div class="sg-digital">
                     <span class="sg-score-big" id="scoreNum">0</span>
                     <span class="sg-score-sub">AUTOVERIF SCORE</span>
-                    <span class="sg-score-tag">Fiable</span>
+                    <span class="sg-score-tag" style="background:rgba(136,146,164,0.15);color:var(--text-light);">Score NULL</span>
                 </div>
             </div>
         </div>
 
         <div class="doc-body">
             <!-- VERDICT -->
-            <div class="verdict-bar">
-                <div class="verdict-icon">&#9989;</div>
+            <div class="verdict-bar" style="border-color:rgba(136,146,164,0.2);">
+                <div class="verdict-icon" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</div>
                 <div class="verdict-content">
-                    <h4>Recommandation AI: ACHETER avec confiance</h4>
-                    <p>Profil de risque faible. Aucun drapeau rouge critique. Historique coherent. Negociez le prix selon la valeur marchande estimee.</p>
+                    <h4 style="color:var(--text-light);">Recommandation AI: NULL — Sources insuffisantes</h4>
+                    <p>Le score et la recommandation necessitent les APIs payantes (SAAQ, RDPRM, VinAudit, CPIC). Seules les sources gratuites sont connectees.</p>
                 </div>
             </div>
 
             <!-- ===== SCORE BREAKDOWN ===== -->
-            <div class="section-head"><div class="ico blue">&#127919;</div> Decomposition du score (82/100)</div>
-            <div class="score-breakdown">
-                <div class="sb-item">
-                    <div class="sb-label">Historique accidents</div>
-                    <div class="sb-bar"><div class="sb-fill green" style="width:95%"></div></div>
-                    <div class="sb-score ok">95/100</div>
-                </div>
-                <div class="sb-item">
-                    <div class="sb-label">Odometre</div>
-                    <div class="sb-bar"><div class="sb-fill green" style="width:92%"></div></div>
-                    <div class="sb-score ok">92/100</div>
-                </div>
-                <div class="sb-item">
-                    <div class="sb-label">Liens financiers</div>
-                    <div class="sb-bar"><div class="sb-fill cyan" style="width:100%"></div></div>
-                    <div class="sb-score ok">100/100</div>
-                </div>
-                <div class="sb-item">
-                    <div class="sb-label">Branding / Salvage</div>
-                    <div class="sb-bar"><div class="sb-fill cyan" style="width:100%"></div></div>
-                    <div class="sb-score ok">100/100</div>
-                </div>
-                <div class="sb-item">
-                    <div class="sb-label">Rappels securite</div>
-                    <div class="sb-bar"><div class="sb-fill gold" style="width:60%"></div></div>
-                    <div class="sb-score warn">60/100</div>
-                </div>
-                <div class="sb-item">
-                    <div class="sb-label">Vol / CPIC</div>
-                    <div class="sb-bar"><div class="sb-fill cyan" style="width:100%"></div></div>
-                    <div class="sb-score ok">100/100</div>
-                </div>
-                <div class="sb-item">
-                    <div class="sb-label">Valeur vs prix</div>
-                    <div class="sb-bar"><div class="sb-fill green" style="width:78%"></div></div>
-                    <div class="sb-score ok">78/100</div>
-                </div>
-                <div class="sb-item">
-                    <div class="sb-label">Entretien</div>
-                    <div class="sb-bar"><div class="sb-fill green" style="width:85%"></div></div>
-                    <div class="sb-score ok">85/100</div>
-                </div>
+            <div class="section-head"><div class="ico blue">&#127919;</div> Decomposition du score (NULL — APIs requises)</div>
+            <div class="score-breakdown" id="scoreBreakdown">
+                <div class="sb-item"><div class="sb-label">Historique accidents</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
+                <div class="sb-item"><div class="sb-label">Odometre</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
+                <div class="sb-item"><div class="sb-label">Liens financiers</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
+                <div class="sb-item"><div class="sb-label">Branding / Salvage</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
+                <div class="sb-item" id="sbRecalls"><div class="sb-label">Rappels securite</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
+                <div class="sb-item"><div class="sb-label">Vol / CPIC</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
+                <div class="sb-item"><div class="sb-label">Valeur vs prix</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
+                <div class="sb-item" id="sbComplaints"><div class="sb-label">Plaintes NHTSA</div><div class="sb-bar"><div class="sb-fill" style="width:0%;background:var(--text-light)"></div></div><div class="sb-score" style="color:var(--text-light)">NULL</div></div>
             </div>
 
             <!-- ===== 1. DECODAGE VIN ===== -->
@@ -1089,159 +1057,77 @@
 
             <!-- ===== 2. IMMATRICULATION SAAQ ===== -->
             <div class="section-head"><div class="ico green">&#128197;</div> 2. Historique d'immatriculation — SAAQ</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>SAAQ SAAQclic</span></p>
-            <table class="detail-table">
-                <tr><td class="dt-label">Province actuelle</td><td class="dt-val">Quebec (QC)</td></tr>
-                <tr><td class="dt-label">Statut immatriculation</td><td class="dt-val ok">Active &#10003;</td></tr>
-                <tr><td class="dt-label">Type plaque</td><td class="dt-val">Promenade</td></tr>
-                <tr><td class="dt-label">Premiere immatriculation</td><td class="dt-val">2021-03-15</td></tr>
-                <tr><td class="dt-label">Branding SAAQ</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Declare irrecuperable</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Declare reconstruit</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Declare accidente grave</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Immatricule hors QC</td><td class="dt-val ok">Non — toujours QC &#10003;</td></tr>
-            </table>
-            <div class="timeline-track" style="margin-top:16px;">
-                <div class="tl-entry">
-                    <div class="tl-date">Mars 2021</div>
-                    <div class="tl-info"><strong>Premiere immatriculation</strong> — Concessionnaire Honda Laval, QC</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Mars 2023</div>
-                    <div class="tl-info"><strong>Renouvellement</strong> — Meme proprietaire, QC</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Mars 2025</div>
-                    <div class="tl-info"><strong>Renouvellement</strong> — Meme proprietaire, QC</div>
-                </div>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>SAAQ SAAQclic — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — API SAAQ non connectee</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: Accord partenaire SAAQclic (donnees.ouvertes@saaq.gouv.qc.ca)</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: province, statut, branding, irrecuperable, reconstruit, accidente, historique timeline</p>
             </div>
 
             <!-- ===== 3. HISTORIQUE ODOMETRE ===== -->
             <div class="section-head"><div class="ico blue">&#128200;</div> 3. Historique odometre — Detection fraude AI</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>SAAQ</span> <span class="source-badge"><span class="sb-dot api"></span>VinAudit</span> <span class="source-badge"><span class="sb-dot live"></span>AI Analysis</span></p>
-            <div class="data-cards" style="margin-bottom:12px;">
-                <div class="d-card"><div class="d-label">Odometre actuel</div><div class="d-val" id="odoVal">0 km</div></div>
-                <div class="d-card"><div class="d-label">Moyenne annuelle</div><div class="d-val">11,958 km/an</div></div>
-                <div class="d-card"><div class="d-label">Moyenne QC</div><div class="d-val" style="color:var(--text-light)">15,200 km/an</div></div>
-                <div class="d-card"><div class="d-label">Detection fraude</div><div class="d-val ok">Aucune anomalie &#10003;</div></div>
-            </div>
-            <div class="timeline-track">
-                <div class="tl-entry">
-                    <div class="tl-date">Mars 2021 — Livraison</div>
-                    <div class="tl-info"><span class="tl-km">12 km</span> — Neuf, concessionnaire Honda Laval</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Sept 2021 — Entretien</div>
-                    <div class="tl-info"><span class="tl-km">8,420 km</span> — Changement huile + rotation pneus</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Juin 2022 — Entretien</div>
-                    <div class="tl-info"><span class="tl-km">19,105 km</span> — Entretien 20K, freins inspectes</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Fev 2023 — Entretien</div>
-                    <div class="tl-info"><span class="tl-km">27,340 km</span> — Changement huile + filtre habitacle</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Oct 2023 — Inspection</div>
-                    <div class="tl-info"><span class="tl-km">34,890 km</span> — Inspection mecanique annuelle</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Mai 2024 — Entretien</div>
-                    <div class="tl-info"><span class="tl-km">41,200 km</span> — Entretien 40K, freins + fluide CVT</div>
-                </div>
-                <div class="tl-entry">
-                    <div class="tl-date">Jan 2025 — Dernier releve</div>
-                    <div class="tl-info"><span class="tl-km">47,832 km</span> — Lecture actuelle confirmee &#10003;</div>
-                </div>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>SAAQ — NON CONNECTE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>VinAudit — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — APIs odometre non connectees</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: VinAudit Canada API ($100/mois) ou SAAQ SAAQclic Partenaires</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: lectures odometre, timeline entretien, detection fraude AI, moyenne km/an</p>
             </div>
 
             <!-- ===== 4. VOL / CPIC ===== -->
             <div class="section-head"><div class="ico green">&#128737;</div> 4. Verification vol — CPIC / CIPC / NICB</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>CPIC/CIPC (GRC)</span> <span class="source-badge"><span class="sb-dot live"></span>NICB VINCheck — REF</span></p>
-            <table class="detail-table">
-                <tr><td class="dt-label">Base CPIC nationale</td><td class="dt-val ok">Non recherche &#10003;</td></tr>
-                <tr><td class="dt-label">NICB (USA)</td><td class="dt-val ok">Non recherche &#10003;</td></tr>
-                <tr><td class="dt-label">Interpol</td><td class="dt-val ok">Non signale &#10003;</td></tr>
-                <tr><td class="dt-label">VIN clone detecte</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Derniere verification</td><td class="dt-val">15 fevrier 2026, 14:32 EST</td></tr>
-            </table>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>CPIC/CIPC — NON CONNECTE</span> <span class="source-badge"><span class="sb-dot live"></span>NICB — REF</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — CPIC acces restreint (forces de l'ordre)</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: Partenariat CPIC/GRC ou VinAudit Canada API (agregation CPIC)</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: vol national, NICB USA, Interpol, detection clone VIN</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:2px;">Recherche publique manuelle: <a href="http://app.cpic-cipc.ca/English/search.cfm" target="_blank" style="color:var(--accent);">cpic-cipc.ca</a></p>
+            </div>
 
             <!-- ===== 5. RDPRM ===== -->
             <div class="section-head"><div class="ico gold">&#128176;</div> 5. Registre RDPRM — Droits & privileges</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>RDPRM Quebec</span> <span class="source-badge"><span class="sb-dot gov"></span>PPSA (Provinces)</span></p>
-            <table class="detail-table">
-                <tr><td class="dt-label">Hypotheque mobiliere</td><td class="dt-val ok">Aucune &#10003;</td></tr>
-                <tr><td class="dt-label">Pret automobile actif</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Location / Bail</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Privilege de mecanicien</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Saisie / Reprise</td><td class="dt-val ok">Aucune &#10003;</td></tr>
-                <tr><td class="dt-label">Jugement / Ordonnance</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Creancier enregistre</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Fiducie / Consignation</td><td class="dt-val ok">Aucune &#10003;</td></tr>
-                <tr><td class="dt-label">Droits PPSA hors QC</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-            </table>
-            <div style="background:rgba(42,157,143,0.04); border:1px solid rgba(42,157,143,0.1); border-radius:12px; padding:14px 18px; margin-top:12px;">
-                <p style="font-size:0.82rem; color:var(--green); font-weight:700; margin-bottom:4px;">&#10003; Le vehicule est libre de tout lien financier</p>
-                <p style="font-size:0.75rem; color:var(--text-light);">Le transfert de propriete peut se faire sans obstacle. Aucun creancier ne detient de droit sur ce vehicule au Quebec ni dans les autres provinces canadiennes (PPSA).</p>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>RDPRM — NON CONNECTE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>PPSA — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — RDPRM pas d'API publique ($4/recherche web)</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: RegHub API (RDPRM+PPSA toutes provinces) ou VinAudit Lien Check API</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: hypotheque, pret, bail, privilege mecanicien, saisie, jugement, creancier, fiducie, PPSA</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:2px;">Consultation manuelle: <a href="https://www.rdprm.gouv.qc.ca/Consultation/" target="_blank" style="color:var(--accent);">rdprm.gouv.qc.ca</a></p>
             </div>
 
             <!-- ===== 6. ACCIDENTS / RECLAMATIONS ===== -->
             <div class="section-head"><div class="ico red">&#128165;</div> 6. Historique accidents & reclamations</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>SAAQ</span> <span class="source-badge"><span class="sb-dot api"></span>FCSA (GAA)</span> <span class="source-badge"><span class="sb-dot api"></span>Assureurs QC</span> <span class="source-badge"><span class="sb-dot api"></span>VinAudit</span></p>
-            <table class="detail-table">
-                <tr><td class="dt-label">Nombre d'accidents declares</td><td class="dt-val ok">0 &#10003;</td></tr>
-                <tr><td class="dt-label">Reclamations assurance</td><td class="dt-val ok">0 &#10003;</td></tr>
-                <tr><td class="dt-label">Dommages structurels</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Deploiement airbags</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Declare perte totale</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Dommages par inondation</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Dommages par grele</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Incendie</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">FCSA (Fichier central)</td><td class="dt-val ok">Aucun dossier &#10003;</td></tr>
-                <tr><td class="dt-label">Base de donnees US (AutoCheck)</td><td class="dt-val ok">Aucun dossier &#10003;</td></tr>
-            </table>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>SAAQ — NON CONNECTE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>FCSA — NON CONNECTE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>VinAudit — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — Donnees accidents non disponibles</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: VinAudit Canada API ($100/mois), CARFAX Canada API (enterprise), ou Equite Association</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: accidents declares, reclamations assurance, dommages, airbags, perte totale, inondation, grele, incendie</p>
+            </div>
 
             <!-- ===== 7. ENCHERES SALVAGE ===== -->
             <div class="section-head"><div class="ico red">&#128296;</div> 7. Encheres salvage — Vehicules accidentes</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot api"></span>Copart</span> <span class="source-badge"><span class="sb-dot api"></span>IAAI</span> <span class="source-badge"><span class="sb-dot api"></span>Bidfax</span> <span class="source-badge"><span class="sb-dot api"></span>NMVTIS</span></p>
-            <table class="detail-table">
-                <tr><td class="dt-label">Copart (USA + Canada)</td><td class="dt-val ok">Aucune trace &#10003;</td></tr>
-                <tr><td class="dt-label">IAAI (Insurance Auto Auctions)</td><td class="dt-val ok">Aucune trace &#10003;</td></tr>
-                <tr><td class="dt-label">Bidfax (historique encheres)</td><td class="dt-val ok">Aucune trace &#10003;</td></tr>
-                <tr><td class="dt-label">NMVTIS (titre US)</td><td class="dt-val ok">Aucun titre salvage &#10003;</td></tr>
-                <tr><td class="dt-label">Impact Encan Quebec</td><td class="dt-val ok">Aucune trace &#10003;</td></tr>
-            </table>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>Copart — NON CONNECTE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>IAAI — NON CONNECTE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>NMVTIS — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — Donnees encheres non disponibles</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: Copart/IAAI API via auction-api.app ($50-200/mois) + NMVTIS via ClearVin ($1-3/lookup)</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: Copart, IAAI, Bidfax, NMVTIS titre US, Impact Encan Quebec</p>
+            </div>
 
             <!-- ===== 8. BRANDING / TITRE ===== -->
             <div class="section-head"><div class="ico green">&#128196;</div> 8. Branding & statut du titre</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>SAAQ</span> <span class="source-badge"><span class="sb-dot api"></span>NMVTIS</span> <span class="source-badge"><span class="sb-dot gov"></span>Provinces canadiennes</span></p>
-            <table class="detail-table">
-                <tr><td class="dt-label">Statut titre Quebec</td><td class="dt-val ok">Normal &#10003;</td></tr>
-                <tr><td class="dt-label">Irrecuperable (SAAQ)</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Reconstruit (SAAQ)</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Taxi / Limousine</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Police / Urgence</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Location courte duree</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Flotte commerciale</td><td class="dt-val ok">Non &#10003;</td></tr>
-                <tr><td class="dt-label">Branding hors province</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-                <tr><td class="dt-label">Titre US lemon/salvage</td><td class="dt-val ok">Aucun &#10003;</td></tr>
-            </table>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>SAAQ — NON CONNECTE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>NMVTIS — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — Donnees branding/titre non disponibles</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: SAAQ SAAQclic + NMVTIS + IBC VIN Verify</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: statut titre, irrecuperable, reconstruit, taxi, police, location, flotte, branding provincial, lemon/salvage US</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:2px;">Verification gratuite inondation/incendie: <a href="https://www.ibc.ca/industry-resources/insurance-data-tools/vin-verify" target="_blank" style="color:var(--accent);">IBC VIN Verify</a></p>
+            </div>
 
             <!-- ===== 9. PROPRIETAIRES ===== -->
             <div class="section-head"><div class="ico blue">&#128101;</div> 9. Historique de propriete</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>SAAQ</span></p>
-            <div class="data-cards" style="margin-bottom:12px;">
-                <div class="d-card"><div class="d-label">Nombre de proprietaires</div><div class="d-val">1</div></div>
-                <div class="d-card"><div class="d-label">Type d'utilisation</div><div class="d-val ok">Personnelle</div></div>
-                <div class="d-card"><div class="d-label">Province d'origine</div><div class="d-val">Quebec (QC)</div></div>
-                <div class="d-card"><div class="d-label">Jamais hors QC</div><div class="d-val ok">Confirme &#10003;</div></div>
-            </div>
-            <div class="timeline-track">
-                <div class="tl-entry">
-                    <div class="tl-date">Mars 2021 — Present</div>
-                    <div class="tl-info"><strong>Proprietaire #1</strong> — Usage personnel, Quebec. <span class="tl-km">47,832 km</span> en 4 ans.</div>
-                </div>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>SAAQ — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — Historique propriete non disponible</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: SAAQ SAAQclic Partenaires ou VinAudit Canada API</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: nombre proprietaires, type utilisation, province, timeline transferts</p>
             </div>
 
             <!-- ===== 10. RAPPELS SECURITE ===== -->
@@ -1277,56 +1163,42 @@
 
             <!-- ===== 13. LOI CITRON QC ===== -->
             <div class="section-head"><div class="ico gold">&#128275;</div> 13. Protection Loi Citron — Quebec</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>OPC Quebec</span> <span class="source-badge"><span class="sb-dot live"></span>AI Analysis</span></p>
-            <div class="citron-box">
-                <h4>&#10003; Ce vehicule ne presente aucun signe de citron</h4>
-                <ul class="citron-items">
-                    <li><span class="ci-icon" style="color:var(--green)">&#10003;</span> Aucune reparation majeure repetee pour le meme probleme</li>
-                    <li><span class="ci-icon" style="color:var(--green)">&#10003;</span> Jamais immobilise plus de 30 jours pour reparation depuis l'achat</li>
-                    <li><span class="ci-icon" style="color:var(--green)">&#10003;</span> Aucune tentative de rachat par le fabricant</li>
-                    <li><span class="ci-icon" style="color:var(--green)">&#10003;</span> Pas de defaut de fabrication connu non resolu</li>
-                    <li><span class="ci-icon" style="color:var(--green)">&#10003;</span> Garantie Honda de base: 3 ans / 60,000 km (expiree 2024-03)</li>
-                    <li><span class="ci-icon" style="color:var(--green)">&#10003;</span> Garantie groupe motopropulseur: 5 ans / 100,000 km (active jusqu'a 2026-03)</li>
-                </ul>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>OPC Quebec — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — Analyse Loi Citron necessite historique reparations</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: Historique entretien (CARFAX/VinAudit) + donnees garantie fabricant</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Analyse disponible: reparations repetees, immobilisation 30j+, rachat fabricant, defauts non resolus, garanties</p>
             </div>
 
             <!-- ===== 14. DONNEES QUEBEC ===== -->
             <div class="section-head"><div class="ico blue">&#128200;</div> 14. Donnees ouvertes — Quebec & Montreal</div>
-            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge"><span class="sb-dot gov"></span>Donnees Quebec</span> <span class="source-badge"><span class="sb-dot gov"></span>Ville de Montreal</span></p>
-            <table class="detail-table">
-                <tr><td class="dt-label">Constats d'infraction VIN</td><td class="dt-val ok">0 &#10003;</td></tr>
-                <tr><td class="dt-label">Collision MTL impliquee</td><td class="dt-val ok">0 &#10003;</td></tr>
-                <tr><td class="dt-label">Zone radar frequente</td><td class="dt-val">N/A — Laval</td></tr>
-                <tr><td class="dt-label">Taux collision modele/region</td><td class="dt-val ok">Faible (2.1%)</td></tr>
-                <tr><td class="dt-label">Taux vol modele/region</td><td class="dt-val ok">Faible (0.8%)</td></tr>
-            </table>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>Donnees Quebec — NON INTEGRE</span> <span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>Ville de Montreal — NON INTEGRE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — Datasets Quebec non integres</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Disponible gratuitement (CSV): donneesquebec.ca + donnees.montreal.ca</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: constats infraction, collisions MTL (218K+), zones radar, taux collision/vol par modele/region</p>
+            </div>
 
             <!-- ===== VALEUR ===== -->
-            <div class="valeur-card">
-                <div class="valeur-title">Estimation valeur marchande AI</div>
-                <div class="valeur-amount" id="valeurNum">$0</div>
-                <div class="valeur-range">Fourchette: $22,800 — $26,200 (selon etat et region QC)</div>
+            <div class="valeur-card" style="border-color:rgba(136,146,164,0.15);">
+                <div class="valeur-title" style="color:var(--text-light);">Estimation valeur marchande</div>
+                <div class="valeur-amount" style="color:var(--text-light);">NULL</div>
+                <div class="valeur-range" style="color:var(--text-light);">Necessite: Canadian Black Book API ($65+/mois) ou VMR Canada</div>
                 <div style="display:flex; justify-content:center; gap:20px; margin-top:14px; flex-wrap:wrap;">
-                    <div style="text-align:center;"><div style="font-size:0.65rem; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">Canadian Black Book</div><div style="font-size:1.1rem; font-weight:800; color:white;">$24,100</div></div>
-                    <div style="text-align:center;"><div style="font-size:0.65rem; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">AutoHebdo moyenne</div><div style="font-size:1.1rem; font-weight:800; color:white;">$25,400</div></div>
-                    <div style="text-align:center;"><div style="font-size:0.65rem; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">Depreciation / an</div><div style="font-size:1.1rem; font-weight:800; color:var(--gold);">-12.3%</div></div>
+                    <div style="text-align:center;"><div style="font-size:0.65rem; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">Canadian Black Book</div><div style="font-size:1.1rem; font-weight:800; color:var(--text-light);">NULL</div></div>
+                    <div style="text-align:center;"><div style="font-size:0.65rem; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">AutoHebdo moyenne</div><div style="font-size:1.1rem; font-weight:800; color:var(--text-light);">NULL</div></div>
+                    <div style="text-align:center;"><div style="font-size:0.65rem; color:var(--text-light); text-transform:uppercase; letter-spacing:1px;">Depreciation / an</div><div style="font-size:1.1rem; font-weight:800; color:var(--text-light);">NULL</div></div>
                 </div>
             </div>
 
             <!-- ===== ENTRETIEN ===== -->
             <div class="section-head"><div class="ico gold">&#128295;</div> 15. Calendrier d'entretien recommande</div>
-            <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:4px;">Honda Civic 2021 — 47,832 km — Base: Manuel du proprietaire Honda</p>
-            <div class="entretien-grid">
-                <div class="ent-card"><div class="ent-ico">&#128167;</div><div><div class="ent-label">Huile moteur 0W-20</div><div class="ent-detail">Prochain: 50,000 km (~$60-80)</div></div></div>
-                <div class="ent-card"><div class="ent-ico">&#9881;</div><div><div class="ent-label">Freins avant</div><div class="ent-detail">Inspection: 50,000 km (~$250-400)</div></div></div>
-                <div class="ent-card"><div class="ent-ico">&#127777;</div><div><div class="ent-label">Liquide refroidissement</div><div class="ent-detail">Remplacement: 60,000 km (~$100-150)</div></div></div>
-                <div class="ent-card"><div class="ent-ico">&#128168;</div><div><div class="ent-label">Filtre a air moteur</div><div class="ent-detail">Remplacement: 50,000 km (~$30-50)</div></div></div>
-                <div class="ent-card"><div class="ent-ico">&#9889;</div><div><div class="ent-label">Bougies d'allumage</div><div class="ent-detail">Remplacement: 100,000 km (~$80-120)</div></div></div>
-                <div class="ent-card"><div class="ent-ico">&#128258;</div><div><div class="ent-label">Fluide CVT Honda</div><div class="ent-detail">Remplacement: 60,000 km (~$150-250)</div></div></div>
-                <div class="ent-card"><div class="ent-ico">&#128167;</div><div><div class="ent-label">Liquide de frein</div><div class="ent-detail">Remplacement: 60,000 km (~$80-120)</div></div></div>
-                <div class="ent-card"><div class="ent-ico">&#127777;</div><div><div class="ent-label">Filtre habitacle</div><div class="ent-detail">Remplacement: 50,000 km (~$25-40)</div></div></div>
+            <p style="font-size:0.7rem;color:var(--text-light);margin-bottom:8px;"><span class="source-badge" style="border-color:rgba(136,146,164,0.2);"><span class="sb-dot" style="background:var(--text-light);"></span>Historique entretien — NON CONNECTE</span></p>
+            <div style="background:rgba(136,146,164,0.04);border:1px solid rgba(136,146,164,0.12);border-radius:12px;padding:20px;text-align:center;">
+                <p style="font-size:1rem;font-weight:800;color:var(--text-light);margin-bottom:6px;">NULL — Historique entretien non disponible</p>
+                <p style="font-size:0.75rem;color:var(--text-light);">Necessite: CARFAX Canada API (historique reparations) ou partenariat Fix Auto / CarrXpert</p>
+                <p style="font-size:0.7rem;color:var(--text-light);margin-top:4px;">Donnees disponibles: historique entretien, calendrier recommande, cout estime, intervalles fabricant</p>
             </div>
-            <p class="ent-total">Cout entretien estime prochains 20,000 km: <strong>$670 — $1,050</strong></p>
 
             <!-- ===== 16. CONSOMMATION & EMISSIONS ===== -->
             <div class="section-head"><div class="ico green">&#9981;</div> 16. Consommation & emissions — EPA</div>
@@ -1348,21 +1220,23 @@
 
             <!-- ===== SOMMAIRE CHECKS ===== -->
             <div class="section-head"><div class="ico green">&#128737;</div> Sommaire des verifications (23 sources — 8 LIVE)</div>
-            <ul class="check-list">
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Decodage VIN</strong> — VIN valide, specs confirmees (NHTSA vPIC)</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Immatriculation SAAQ</strong> — Active, aucun branding, jamais hors QC</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Odometre valide</strong> — 47,832 km, progression coherente, aucune fraude</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>CPIC / Vol</strong> — Non recherche, pas de clone VIN</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>RDPRM</strong> — Aucun lien financier, hypotheque, bail ou privilege</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Accidents / Reclamations</strong> — 0 accident, 0 reclamation, aucun dommage</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Encheres salvage</strong> — Aucune trace Copart, IAAI, Bidfax, NMVTIS</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Branding / Titre</strong> — Normal, jamais salvage/reconstruit/taxi/flotte</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Proprietaires</strong> — 1 seul, usage personnel, toujours QC</span></li>
-                <li class="check-row"><span class="chk warn">&#9888;</span><span class="check-text"><strong>Rappels securite</strong> — 1 en attente (freinage TC-2023-045). <strong>A corriger.</strong></span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Crash tests</strong> — 5 etoiles NHTSA, Good IIHS</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Plaintes</strong> — 12 vs 45 moyenne. Aucun patron critique.</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Loi Citron</strong> — Aucun signe. Garantie motopropulseur active.</span></li>
-                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Donnees Quebec</strong> — 0 constat, 0 collision, zone a faible risque</span></li>
+            <ul class="check-list" id="summaryChecks">
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Decodage VIN</strong> — NHTSA vPIC <strong style="color:var(--green);">LIVE</strong></span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Immatriculation SAAQ</strong> — NULL (API non connectee)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Odometre</strong> — NULL (VinAudit/SAAQ requis)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>CPIC / Vol</strong> — NULL (acces restreint forces de l'ordre)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>RDPRM</strong> — NULL (pas d'API publique, $4/recherche)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Accidents / Reclamations</strong> — NULL (VinAudit/CARFAX requis)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Encheres salvage</strong> — NULL (Copart/IAAI API requis)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Branding / Titre</strong> — NULL (SAAQ/NMVTIS requis)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Proprietaires</strong> — NULL (SAAQ requis)</span></li>
+                <li class="check-row"><span class="chk pass" id="summaryRecalls">—</span><span class="check-text"><strong>Rappels securite</strong> — NHTSA + Transport Canada <strong style="color:var(--green);">LIVE</strong></span></li>
+                <li class="check-row"><span class="chk pass" id="summaryCrash">—</span><span class="check-text"><strong>Crash tests</strong> — NHTSA Safety Ratings <strong style="color:var(--green);">LIVE</strong></span></li>
+                <li class="check-row"><span class="chk pass" id="summaryComplaints">—</span><span class="check-text"><strong>Plaintes</strong> — NHTSA Complaints <strong style="color:var(--green);">LIVE</strong></span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Loi Citron</strong> — NULL (historique reparations requis)</span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Donnees Quebec</strong> — NULL (datasets non integres)</span></li>
+                <li class="check-row"><span class="chk pass">&#10003;</span><span class="check-text"><strong>Consommation EPA</strong> — fueleconomy.gov <strong style="color:var(--green);">LIVE</strong></span></li>
+                <li class="check-row"><span class="chk" style="background:rgba(136,146,164,0.1);color:var(--text-light);">—</span><span class="check-text" style="color:var(--text-light);"><strong>Valeur marchande</strong> — NULL (Canadian Black Book requis)</span></li>
             </ul>
 
             <!-- ===== SOURCES ===== -->
@@ -1928,9 +1802,10 @@ function showReport(){
         'Analyse completee — <strong style="color:var(--accent)">' + liveCount + ' API live</strong> + 14 sources demo — Score AI: <strong style="color:var(--green)">82/100</strong>';
 
     // Count ups
-    countUp(document.getElementById('scoreNum'), 82, '', '', 1200);
-    countUp(document.getElementById('odoVal'), 47832, '', ' km', 1000);
-    countUp(document.getElementById('valeurNum'), 24500, '$', '', 1400);
+    // Score = NULL (calculated only with all APIs)
+    document.getElementById('scoreNum').textContent = '—';
+    document.getElementById('scoreNum').style.fontSize = '2rem';
+    document.getElementById('scoreNum').style.color = 'var(--text-light)';
 
     // GSAP animate elements
     gsap.from('.success-check', {scale:0, duration:0.6, ease:'back.out(1.7)', delay:0.1});
