@@ -1,0 +1,127 @@
+============================================================
+EMAIL POUR TON PARTENAIRE — COPIER/COLLER
+============================================================
+
+OBJET: AutoVerif QC — Acces donnees ADESA/OpenLane + APIs encheres pour notre plateforme
+
+---
+
+Bonjour [NOM DU PARTENAIRE],
+
+J'espere que tu vas bien. Je t'ecris concernant notre projet AutoVerif QC — la plateforme de verification vehiculaire pour le Quebec.
+
+On est en train de connecter toutes les sources de donnees pour le scan VIN et il y a 3 choses ou ton acces dealer serait extremement precieux:
+
+
+═══════════════════════════════════════════════
+1. ADESA / OPENLANE (tu as deja acces)
+═══════════════════════════════════════════════
+
+On a besoin de savoir ce que tu peux extraire de ton compte:
+
+  a) Est-ce que tu as acces a un EXPORT CSV ou Excel des vehicules?
+     → Dans ton portail openlane.ca, verifie s'il y a une section
+       "Reports", "Data Export" ou "Download" quelque part
+
+  b) Est-ce que tu peux voir les CONDITION REPORTS complets?
+     → Photos, dommages, codes OBD2, etat des pneus, options
+
+  c) Est-ce que tu as acces a AUTONIQ (autoniq.com)?
+     → C'est l'outil analytics de KAR/OPENLANE, souvent inclus
+       avec le compte ADESA. Ca donne les evaluations de valeur.
+
+  d) Est-ce que tu peux generer des rapports par LOT de vehicules?
+     → Historique de prix d'encheres par marque/modele/annee
+
+Ce qu'on veut faire: utiliser les VRAIS prix d'encheres Quebec pour
+donner une estimation de valeur marchande dans nos rapports. CARFAX
+ne donne PAS les prix — ca serait un avantage majeur pour nous.
+
+Portail: https://www.openlane.ca/en/
+AuctionACCESS: https://www.auctionaccess.com/4357-2/index.html
+Autoniq: https://autoniq.com/
+
+
+═══════════════════════════════════════════════
+2. IAAI (Insurance Auto Auctions) — Encheres salvage
+═══════════════════════════════════════════════
+
+IAAI a un portail B2B avec API pour acceder aux vehicules salvage/
+accidentes. Ils ont aussi le DDR (Dynamic Data Repository) — un
+service par abonnement qui donne acces electronique a TOUTES les
+donnees de vehicules non-vendus, 24/7.
+
+Ce qu'on a besoin:
+  - Historique des vehicules accidentes vendus aux encheres
+  - Photos et donnees de dommages
+  - Prix de vente salvage (pour comparer avec la valeur marche)
+
+Options d'acces:
+  a) API officielle IAAI — via B2B Connect Portal
+     → https://b2b-portal.iaai.com/
+     → Inscription requise, contacter IAAI pour les prix
+
+  b) API tierce (Copart + IAAI combine) — auction-api.app
+     → https://auction-api.app/en/
+     → Light: $200 USD/mois (30K requetes)
+     → Medium: $300 USD/mois (100K requetes)
+     → PRO: $500 USD/mois (500K requetes)
+     → Inclut Copart + IAAI dans un seul abonnement
+
+  c) Autre option tierce: carstat.dev
+     → https://carstat.dev/
+     → 20M+ records historiques d'encheres
+
+Question: Est-ce que tu as deja un acces dealer a IAAI?
+Si oui, est-ce que tu peux te connecter au B2B Connect Portal?
+
+
+═══════════════════════════════════════════════
+3. CANADIAN BLACK BOOK — Valeur vehicules usages
+═══════════════════════════════════════════════
+
+C'est LE standard de l'industrie au Canada pour evaluer les vehicules.
+Ils ont 6 APIs:
+
+  1. Used Car Web API — valeurs wholesale, trade-in, retail, residuel
+  2. Retail Market Insights — 4,700+ concessionnaires, 700K+ annonces
+  3. Custom Trade Value — evaluation personnalisee par condition
+  4. New Car Web API — MSRP, prix facture, residuels
+  5. Recreational Vehicle API — VR
+  6. Cars of Particular Interest — luxe/collection depuis 1946
+
+Pricing: a partir de $65/mois pour le plan de base
+         APIs = cout supplementaire (sur devis)
+
+IMPORTANT — est-ce que tu as deja un acces Canadian Black Book
+via ton reseau dealer? Beaucoup de concessionnaires l'ont inclus
+dans leur abonnement DealerTrack ou vAuto.
+
+Portail developpeur: https://developer.canadianblackbook.com/
+Info API: https://www.canadianblackbook.com/api/
+Support: support@canadianblackbook.com
+Contact: https://www.canadianblackbook.com/contact/
+
+
+═══════════════════════════════════════════════
+RESUME — CE QU'ON A BESOIN DE TOI
+═══════════════════════════════════════════════
+
+□ ADESA/OpenLane: Verifier si export CSV possible dans ton compte
+□ ADESA/OpenLane: Verifier si tu as acces a Autoniq
+□ IAAI: Confirmer si tu as un acces dealer
+□ IAAI: Si oui, essayer le B2B Connect Portal
+□ Canadian Black Book: Verifier si tu as deja acces via ton reseau
+□ Canadian Black Book: Si non, demander un essai via leur site
+
+Chaque source qu'on connecte rend notre rapport plus complet que
+CARFAX et justifie notre prix. Les prix d'encheres et les valuations
+sont les donnees les plus precieuses — personne d'autre au Quebec
+n'offre ca dans un rapport vehiculaire.
+
+Merci et n'hesite pas si tu as des questions!
+
+Michael Perron
+SeoParAI — AutoVerif QC
+514-609-2882
+michaelperron12@gmail.com
