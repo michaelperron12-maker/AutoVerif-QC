@@ -883,9 +883,10 @@
             .vin-input { font-size: 0.85rem; letter-spacing: 1px; }
         }
 
-        /* PDF GENERATION MODE */
+        /* PDF GENERATION MODE — White theme for clean rendering */
         .pdf-mode .report-doc {
-            background: #0b1120 !important;
+            background: #ffffff !important;
+            color: #1a1a2e !important;
             width: 794px !important;
             max-width: 794px !important;
             margin: 0 !important;
@@ -894,27 +895,112 @@
             border: none !important;
         }
         .pdf-mode .doc-header {
+            background: linear-gradient(135deg, #0a1628 0%, #142a45 100%) !important;
             border-radius: 0 !important;
         }
-        .pdf-mode .download-bar,
+        .pdf-mode .doc-body {
+            background: #ffffff !important;
+            color: #1a1a2e !important;
+        }
+        .pdf-mode .doc-body * {
+            color: #1a1a2e !important;
+        }
+        .pdf-mode .doc-body .section-head {
+            color: #0a1628 !important;
+            background: #f0f4f8 !important;
+            border-radius: 8px !important;
+        }
+        .pdf-mode .doc-body .section-head .ico {
+            background: rgba(0,100,180,0.1) !important;
+        }
+        .pdf-mode .doc-body .d-card {
+            background: #f7f9fc !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        .pdf-mode .doc-body .d-val {
+            color: #0a1628 !important;
+        }
+        .pdf-mode .doc-body .d-label {
+            color: #64748b !important;
+        }
+        .pdf-mode .verdict-bar {
+            background: #f0fdf4 !important;
+            border-color: #86efac !important;
+        }
+        .pdf-mode .verdict-bar * { color: #166534 !important; }
+        .pdf-mode .recall-card {
+            background: #fff7ed !important;
+            border: 1px solid #fed7aa !important;
+        }
+        .pdf-mode .recall-card * { color: #9a3412 !important; }
+        .pdf-mode .rc-badge { color: white !important; }
+        .pdf-mode .check-row .chk.pass {
+            background: rgba(34,197,94,0.15) !important;
+            color: #166534 !important;
+        }
+        .pdf-mode .check-row .check-text { color: #1a1a2e !important; }
+        .pdf-mode .check-row .check-text strong { color: #0a1628 !important; }
+        .pdf-mode .source-badge {
+            background: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #475569 !important;
+        }
+        .pdf-mode .source-badge * { color: #475569 !important; }
+        .pdf-mode .sb-dot.live { background: #22c55e !important; }
+        .pdf-mode .valeur-card {
+            background: #f7f9fc !important;
+            border-color: #e2e8f0 !important;
+        }
+        .pdf-mode .valeur-card * { color: #475569 !important; }
+        .pdf-mode .crash-card {
+            background: #f7f9fc !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        .pdf-mode .crash-card * { color: #1a1a2e !important; }
+        .pdf-mode .score-breakdown .sb-item { color: #1a1a2e !important; }
+        .pdf-mode .score-breakdown .sb-bar { background: #e2e8f0 !important; }
+        .pdf-mode .disclaimer {
+            background: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #64748b !important;
+        }
+        .pdf-mode .disclaimer * { color: #64748b !important; }
+        .pdf-mode .download-bar { display: none !important; }
+        .pdf-mode .vehicle-image-band {
+            background: #f0f4f8 !important;
+            padding: 16px 40px; min-height: auto;
+        }
+        .pdf-mode .vehicle-image-band::before { display: none !important; }
         .pdf-mode .vehicle-image-angles,
         .pdf-mode .vehicle-image-label { display: none !important; }
-        .pdf-mode .vehicle-image-band { padding: 16px 40px; min-height: auto; }
-        .pdf-mode .vehicle-image-wrap img { max-width: 400px; }
-        .pdf-mode .section-head {
-            page-break-after: avoid;
-            break-after: avoid;
+        .pdf-mode .vehicle-image-wrap img {
+            max-width: 400px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)) !important;
         }
-        .pdf-mode .recall-card,
-        .pdf-mode .check-row,
-        .pdf-mode .d-card {
-            page-break-inside: avoid;
-            break-inside: avoid;
+        .pdf-mode .score-gauge { display: none !important; }
+        .pdf-mode .detail-table th {
+            background: #f0f4f8 !important;
+            color: #0a1628 !important;
         }
-        .pdf-page-break {
-            page-break-before: always;
-            break-before: always;
-            height: 0; margin: 0; padding: 0;
+        .pdf-mode .detail-table td {
+            background: #ffffff !important;
+            color: #1a1a2e !important;
+            border-color: #e2e8f0 !important;
+        }
+        .pdf-mode .ent-card {
+            background: #f7f9fc !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        .pdf-mode .ent-card * { color: #1a1a2e !important; }
+        .pdf-mode .citron-box {
+            background: #fffbeb !important;
+            border-color: #fde68a !important;
+        }
+        .pdf-mode .citron-box * { color: #92400e !important; }
+        .pdf-mode .check-list { list-style: none !important; }
+        .pdf-mode #pdfWatermark {
+            color: #94a3b8 !important;
+            border-top: 1px solid #e2e8f0 !important;
         }
     </style>
 </head>
@@ -1979,18 +2065,18 @@ async function animDl(){
         reportDoc.appendChild(watermark);
 
         const opt = {
-            margin: [4, 0, 8, 0], // top, right, bottom, left in mm
+            margin: [6, 4, 10, 4],
             filename: filename,
-            image: { type: 'jpeg', quality: 0.92 },
+            image: { type: 'jpeg', quality: 0.95 },
             html2canvas: {
-                scale: 2,
+                scale: 1.5,
                 useCORS: true,
-                allowTaint: true,
-                backgroundColor: '#0b1120',
-                letterRendering: true,
+                allowTaint: false,
+                backgroundColor: '#ffffff',
                 logging: false,
                 width: 794,
-                windowWidth: 794
+                windowWidth: 794,
+                removeContainer: true
             },
             jsPDF: {
                 unit: 'mm',
@@ -1999,9 +2085,8 @@ async function animDl(){
                 compress: true
             },
             pagebreak: {
-                mode: ['avoid-all', 'css', 'legacy'],
-                before: '.pdf-page-break',
-                avoid: ['.section-head', '.recall-card', '.d-card', '.check-row', '.crash-card', '.valeur-card', '.citron-box', '.data-cards']
+                mode: ['css', 'legacy'],
+                avoid: ['.section-head', '.recall-card', '.d-card', '.check-row', '.crash-card', '.valeur-card', '.citron-box']
             }
         };
 
