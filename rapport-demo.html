@@ -1691,13 +1691,26 @@ async function fetchAllAPIs(vin) {
         }
     } catch(e) { console.warn('EPA failed:', e); }
 
+    console.log('=== fetchAllAPIs COMPLETE ===');
+    console.log('decode:', liveData.decode ? 'OK' : 'FAIL');
+    console.log('recalls:', liveData.recalls ? liveData.recalls.length : 'null');
+    console.log('complaints:', liveData.complaints ? liveData.complaints.length : 'null');
+    console.log('ratings:', liveData.ratings ? 'OK' : 'null');
+    console.log('epa:', liveData.epa ? 'OK' : 'null');
     apisDone = true;
 }
 
 // ===== POPULATE REPORT WITH LIVE DATA =====
 function populateLiveData() {
+    console.log('=== populateLiveData START ===');
+    console.log('liveData:', JSON.stringify(liveData, null, 2).substring(0, 500));
     const d = liveData.decode;
-    if (!d) return;
+    if (!d) { console.warn('NO DECODE DATA'); return; }
+    console.log('Decode OK:', d.make, d.model, d.year);
+    console.log('Recalls:', liveData.recalls ? liveData.recalls.length + ' found' : 'null');
+    console.log('Complaints:', liveData.complaints ? liveData.complaints.length + ' found' : 'null');
+    console.log('Ratings:', liveData.ratings ? 'OK' : 'null');
+    console.log('EPA:', liveData.epa ? 'OK' : 'null');
 
     // Header
     const title = (d.make||'') + ' ' + (d.model||'') + ' ' + (d.trim||'') + ' ' + (d.year||'');
@@ -1992,7 +2005,7 @@ function countUp(el, target, prefix, suffix, duration){
 // ===== SHOW REPORT =====
 function showReport(){
     // Populate live data first
-    populateLiveData();
+    try { populateLiveData(); } catch(e) { console.error('populateLiveData CRASHED:', e); }
 
     document.getElementById('loadScreen').classList.remove('active');
     const rp = document.getElementById('reportPage');
