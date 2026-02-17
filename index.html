@@ -1992,12 +1992,12 @@
 <section id="repertoire">
     <div class="container">
         <span class="section-label">Guide de travail — Liens reels</span>
-        <h2 class="section-title">32 APIs & bases de donnees + 13 reseaux de carrosseries</h2>
-        <p class="section-subtitle">Tous les liens sont reels et verifies. Cliquez pour acceder aux APIs, docs, pages d'inscription et endpoints.</p>
+        <h2 class="section-title">APIs & bases de donnees + reseaux de carrosseries du Quebec</h2>
+        <p class="section-subtitle">Sources de donnees pour le marche quebecois. Les APIs quebecoises et canadiennes sont prioritaires. Les sources americaines (NHTSA, EPA) sont utilisees en complement car les memes vehicules sont vendus des deux cotes de la frontiere.</p>
 
         <!-- ========== PARTIE 1: APIs GRATUITES — AUCUNE INSCRIPTION ========== -->
         <h3 style="font-weight: 700; margin-bottom: 16px; color: var(--green); display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.4rem;">&#9889;</span> APIs gratuites — Aucune inscription requise
+            <span style="font-size: 1.4rem;">&#9889;</span> APIs gratuites — Aucune inscription requise <span style="font-size:0.7rem;color:var(--text-light);font-weight:400;margin-left:8px;">Priorite: sources QC/Canada + complement US</span>
         </h3>
 
         <div class="table-wrapper">
@@ -2005,55 +2005,55 @@
                 <thead><tr><th>Source</th><th>Endpoint / URL</th><th>Donnees</th><th>Status</th></tr></thead>
                 <tbody>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>NHTSA vPIC</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Decode VIN</span></td>
+                        <td><strong>NHTSA vPIC</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Complement US — memes vehicules QC</span></td>
                         <td style="font-size:0.75rem;"><a href="https://vpic.nhtsa.dot.gov/api/" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">vpic.nhtsa.dot.gov/api/vehicles/decodevinvalues/{VIN}?format=json</code></td>
                         <td>140+ attributs: marque, modele, annee, moteur, body, transmission, usine</td>
                         <td><span class="badge badge-green">LIVE</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>NHTSA Recalls</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Rappels US</span></td>
+                        <td><strong>NHTSA Recalls</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Complement US</span></td>
                         <td style="font-size:0.75rem;"><a href="https://www.nhtsa.gov/nhtsa-datasets-and-apis" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">api.nhtsa.gov/recalls/recallsByVehicle?make=X&amp;model=X&amp;modelYear=X</code></td>
                         <td>Rappels securite par vehicule (composants, description, dates)</td>
                         <td><span class="badge badge-green">LIVE</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>NHTSA Complaints</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Plaintes consommateurs</span></td>
+                        <td><strong>NHTSA Complaints</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Complement US</span></td>
                         <td style="font-size:0.75rem;"><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">api.nhtsa.gov/complaints/complaintsByVehicle?make=X&amp;model=X&amp;modelYear=X</code></td>
                         <td>Plaintes detaillees (crash, fire, injuries, composants)</td>
                         <td><span class="badge badge-green">LIVE</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>NHTSA Safety Ratings</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Crash tests</span></td>
+                        <td><strong>NHTSA Safety Ratings</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Complement US</span></td>
                         <td style="font-size:0.75rem;"><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">api.nhtsa.gov/SafetyRatings/VehicleId/{id}</code></td>
                         <td>Etoiles NCAP: overall, front, side, rollover</td>
                         <td><span class="badge badge-green">LIVE</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>EPA FuelEconomy</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Consommation</span></td>
+                        <td><strong>EPA FuelEconomy</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Complement US — memes moteurs</span></td>
                         <td style="font-size:0.75rem;"><a href="https://www.fueleconomy.gov/feg/ws/" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">fueleconomy.gov/ws/rest/vehicle/</code></td>
                         <td>Conso essence 1984-2026, MPG, emissions CO2</td>
                         <td><span class="badge badge-green">LIVE</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>Donnees Quebec CKAN</strong><br><span style="font-size:0.65rem;color:var(--text-light);">36 datasets</span></td>
+                        <td><strong>Donnees Quebec CKAN</strong><br><span style="font-size:0.65rem;color:var(--green);font-weight:700;">&#9876; QUEBEC</span></td>
                         <td style="font-size:0.75rem;"><a href="https://www.donneesquebec.ca/page-api/" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">donneesquebec.ca/recherche/api/3/action/</code></td>
-                        <td>SAAQ accidents, radars, constats, vehicules, conditions routieres</td>
+                        <td>SAAQ accidents, vehicules immatricules QC, statistiques Quebec</td>
                         <td><span class="badge badge-green">LIVE</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>Montreal Collisions</strong><br><span style="font-size:0.65rem;color:var(--text-light);">218K+ records</span></td>
+                        <td><strong>Montreal Collisions</strong><br><span style="font-size:0.65rem;color:var(--green);font-weight:700;">&#9876; QUEBEC</span></td>
                         <td style="font-size:0.75rem;"><a href="https://donnees.montreal.ca/dataset/collisions-routieres" target="_blank" style="color:var(--accent);">Dataset</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">donnees.montreal.ca/api/3/action/datastore_search?resource_id=05deae93-d9fc-4acb-9779-e0942b5e962f</code></td>
                         <td>Collisions geoloc depuis 2012, morts/blesses, SPVM</td>
                         <td><span class="badge badge-green">LIVE</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>Statistics Canada WDS</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Stats nationales</span></td>
+                        <td><strong>Statistics Canada WDS</strong><br><span style="font-size:0.65rem;color:var(--accent);">CANADA (filtrable par QC)</span></td>
                         <td style="font-size:0.75rem;"><a href="https://www.statcan.gc.ca/en/developers/wds" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">www150.statcan.gc.ca/t1/wds/rest/</code></td>
                         <td>Immatriculations, collisions par province, demographiques</td>
                         <td><span class="badge badge-green">Gratuit</span></td>
                     </tr>
                     <tr style="background: rgba(42,157,143,0.06);">
-                        <td><strong>NICB VINCheck</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Vol + salvage US</span></td>
+                        <td><strong>NICB VINCheck</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Complement US</span></td>
                         <td style="font-size:0.75rem;"><a href="https://www.nicb.org/vincheck" target="_blank" style="color:var(--accent);">VINCheck</a><br><span style="font-size:0.65rem;color:var(--text-light);">Web form — 5 recherches/jour</span></td>
                         <td>Vol non-recouvre + salvage (assureurs US)</td>
                         <td><span class="badge badge-green">Gratuit</span></td>
@@ -2072,7 +2072,7 @@
                 <thead><tr><th>Source</th><th>URL</th><th>Donnees</th><th>Methode</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td><strong>CPIC Vehicules voles</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Police Canada</span></td>
+                        <td><strong>CPIC Vehicules voles</strong><br><span style="font-size:0.65rem;color:var(--accent);font-weight:700;">CANADA (inclut QC)</span></td>
                         <td style="font-size:0.75rem;"><a href="https://cpic-cipc.ca/sve-rve-eng.htm" target="_blank" style="color:var(--accent);">Formulaire recherche</a></td>
                         <td>145K+ vehicules voles, recherche par VIN</td>
                         <td><span class="badge badge-gold">Form submit</span></td>
@@ -2084,13 +2084,13 @@
                         <td><span class="badge badge-gold">Web scraping</span></td>
                     </tr>
                     <tr>
-                        <td><strong>TC Rappels vehicules</strong><br><span style="font-size:0.65rem;color:var(--text-light);">API v1.3 broken</span></td>
+                        <td><strong>TC Rappels vehicules</strong><br><span style="font-size:0.65rem;color:var(--accent);font-weight:700;">CANADA (inclut QC)</span></td>
                         <td style="font-size:0.75rem;"><a href="https://open.canada.ca/data/en/dataset/1ec92326-47ef-4110-b7ca-959fab03f96d" target="_blank" style="color:var(--accent);">Dataset CSV</a><br><a href="https://wwwapps.tc.gc.ca/Saf-Sec-Sur/7/VRDB-BDRV/search-recherche/menu.aspx?lang=eng" target="_blank" style="color:var(--accent);">Recherche web</a></td>
                         <td>Tous rappels vehicules canadiens (CSV mensuel)</td>
                         <td><span class="badge badge-gold">CSV + scrape</span></td>
                     </tr>
                     <tr>
-                        <td><strong>NCDB (Transport Canada)</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Collisions nationales</span></td>
+                        <td><strong>NCDB (Transport Canada)</strong><br><span style="font-size:0.65rem;color:var(--accent);font-weight:700;">CANADA (filtrable par QC)</span></td>
                         <td style="font-size:0.75rem;"><a href="https://open.canada.ca/data/en/dataset/1eb9eba7-71d1-4b30-9fb1-30cbdab7e63a" target="_blank" style="color:var(--accent);">Dataset CSV</a><br><a href="https://wwwapps2.tc.gc.ca/Saf-Sec-Sur/7/NCDB-BNDC/p.aspx?l=en" target="_blank" style="color:var(--accent);">Outil en ligne</a></td>
                         <td>Toutes collisions police Canada 1999+</td>
                         <td><span class="badge badge-gold">CSV download</span></td>
@@ -2125,12 +2125,6 @@
                         <td style="font-size:0.75rem;"><a href="https://cardog.app/api" target="_blank" style="color:var(--accent);">&#10132; S'inscrire</a> &bull; <a href="https://docs.cardog.ai/" target="_blank" style="color:var(--accent);">API Docs</a> &bull; <a href="https://cardog.app/pricing" target="_blank" style="color:var(--accent);">Prix</a></td>
                         <td>Rappels normalises TC + NHTSA, 500M+ vehicules</td>
                         <td><span class="badge badge-green">$0 = 1000 req</span><br><span style="font-size:0.6rem;">Pro $20/mo, Dev $100/mo</span></td>
-                    </tr>
-                    <tr style="background: rgba(42,157,143,0.04);">
-                        <td><strong>CanLII API</strong><br><span style="font-size:0.65rem;color:var(--green);">GRATUIT</span></td>
-                        <td style="font-size:0.75rem;"><a href="https://www.canlii.org/en/feedback/feedback.html" target="_blank" style="color:var(--accent);">&#10132; Demander cle</a> &bull; <a href="https://github.com/canlii/API_documentation/blob/master/EN.md" target="_blank" style="color:var(--accent);">API Docs</a></td>
-                        <td>Jurisprudence canadienne complete</td>
-                        <td><span class="badge badge-green">Gratuit (4700 req/jour)</span></td>
                     </tr>
                     <tr>
                         <td><strong>DataOne Software</strong><br><span style="font-size:0.65rem;color:var(--text-light);">VIN Canada</span></td>
