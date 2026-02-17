@@ -1984,141 +1984,300 @@
     </div>
 </section>
 
-<!-- REPERTOIRE COMPLET APIs + CARROSSERIES -->
+<!-- REPERTOIRE COMPLET APIs + CARROSSERIES — GUIDE DE TRAVAIL -->
 <section id="repertoire">
     <div class="container">
-        <span class="section-label">Repertoire complet</span>
+        <span class="section-label">Guide de travail — Liens reels</span>
         <h2 class="section-title">32 APIs & bases de donnees + 13 reseaux de carrosseries</h2>
-        <p class="section-subtitle">Inventaire exhaustif de toutes les sources de donnees accidents auto au Quebec (sans Carfax) et des franchises de carrosserie presentes dans la province.</p>
+        <p class="section-subtitle">Tous les liens sont reels et verifies. Cliquez pour acceder aux APIs, docs, pages d'inscription et endpoints.</p>
 
-        <!-- ========== PARTIE 1: APIs & BASES DE DONNÉES ========== -->
-        <h3 style="font-weight: 700; margin-bottom: 16px; color: var(--accent); display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.4rem;">&#128450;</span> APIs & bases de donnees — Accidents auto QC
+        <!-- ========== PARTIE 1: APIs GRATUITES — AUCUNE INSCRIPTION ========== -->
+        <h3 style="font-weight: 700; margin-bottom: 16px; color: var(--green); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">&#9889;</span> APIs gratuites — Aucune inscription requise
         </h3>
 
-        <!-- SAAQ -->
-        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">SAAQ (Donnees ouvertes gratuites)</h4>
         <div class="table-wrapper">
             <table>
-                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <thead><tr><th>Source</th><th>Endpoint / URL</th><th>Donnees</th><th>Status</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>Rapports d'accident</strong></td><td>Rapports police 2011-2022, severite, types vehicules</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Dossiers indemnisation</strong></td><td>Demandes acceptees avec compensation 2015-2022</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Blessures indemnisation</strong></td><td>Demandes avec blessures enregistrees</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Vehicules en circulation</strong></td><td>Parc auto QC par annee, caracteristiques</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Permis de conduire</strong></td><td>Titulaires par categorie/age/region</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Infractions & points</strong></td><td>36 infractions, 5 seuils, bareme complet</td><td>Non (web)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>NHTSA vPIC</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Decode VIN</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://vpic.nhtsa.dot.gov/api/" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">vpic.nhtsa.dot.gov/api/vehicles/decodevinvalues/{VIN}?format=json</code></td>
+                        <td>140+ attributs: marque, modele, annee, moteur, body, transmission, usine</td>
+                        <td><span class="badge badge-green">LIVE</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>NHTSA Recalls</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Rappels US</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.nhtsa.gov/nhtsa-datasets-and-apis" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">api.nhtsa.gov/recalls/recallsByVehicle?make=X&amp;model=X&amp;modelYear=X</code></td>
+                        <td>Rappels securite par vehicule (composants, description, dates)</td>
+                        <td><span class="badge badge-green">LIVE</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>NHTSA Complaints</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Plaintes consommateurs</span></td>
+                        <td style="font-size:0.75rem;"><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">api.nhtsa.gov/complaints/complaintsByVehicle?make=X&amp;model=X&amp;modelYear=X</code></td>
+                        <td>Plaintes detaillees (crash, fire, injuries, composants)</td>
+                        <td><span class="badge badge-green">LIVE</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>NHTSA Safety Ratings</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Crash tests</span></td>
+                        <td style="font-size:0.75rem;"><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">api.nhtsa.gov/SafetyRatings/VehicleId/{id}</code></td>
+                        <td>Etoiles NCAP: overall, front, side, rollover</td>
+                        <td><span class="badge badge-green">LIVE</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>EPA FuelEconomy</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Consommation</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.fueleconomy.gov/feg/ws/" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">fueleconomy.gov/ws/rest/vehicle/</code></td>
+                        <td>Conso essence 1984-2026, MPG, emissions CO2</td>
+                        <td><span class="badge badge-green">LIVE</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>Donnees Quebec CKAN</strong><br><span style="font-size:0.65rem;color:var(--text-light);">36 datasets</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.donneesquebec.ca/page-api/" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">donneesquebec.ca/recherche/api/3/action/</code></td>
+                        <td>SAAQ accidents, radars, constats, vehicules, conditions routieres</td>
+                        <td><span class="badge badge-green">LIVE</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>Montreal Collisions</strong><br><span style="font-size:0.65rem;color:var(--text-light);">218K+ records</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://donnees.montreal.ca/dataset/collisions-routieres" target="_blank" style="color:var(--accent);">Dataset</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">donnees.montreal.ca/api/3/action/datastore_search?resource_id=05deae93-d9fc-4acb-9779-e0942b5e962f</code></td>
+                        <td>Collisions geoloc depuis 2012, morts/blesses, SPVM</td>
+                        <td><span class="badge badge-green">LIVE</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>Statistics Canada WDS</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Stats nationales</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.statcan.gc.ca/en/developers/wds" target="_blank" style="color:var(--accent);">API Docs</a><br><code style="font-size:0.65rem;color:var(--gold);word-break:break-all;">www150.statcan.gc.ca/t1/wds/rest/</code></td>
+                        <td>Immatriculations, collisions par province, demographiques</td>
+                        <td><span class="badge badge-green">Gratuit</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>NICB VINCheck</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Vol + salvage US</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.nicb.org/vincheck" target="_blank" style="color:var(--accent);">VINCheck</a><br><span style="font-size:0.65rem;color:var(--text-light);">Web form — 5 recherches/jour</span></td>
+                        <td>Vol non-recouvre + salvage (assureurs US)</td>
+                        <td><span class="badge badge-green">Gratuit</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Données Québec / MTQ -->
-        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Donnees Quebec & Transport QC</h4>
+        <!-- ========== APIs GRATUITES — WEB SCRAPING ========== -->
+        <h3 style="font-weight: 700; margin: 36px 0 16px; color: var(--gold); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">&#128269;</span> Donnees gratuites — Web scraping requis
+        </h3>
+
         <div class="table-wrapper">
             <table>
-                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <thead><tr><th>Source</th><th>URL</th><th>Donnees</th><th>Methode</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>Localisation accidents</strong></td><td>Geolocalisation par municipalite (Laval+)</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Radar photo — stats</strong></td><td>Constats signifies par appareil photo</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Radar photo — positions</strong></td><td>Localisations radars fixes et mobiles</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Conditions routieres</strong></td><td>446 segments MTQ temps reel (oct-avr)</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Debit circulation</strong></td><td>DJMA, volumes par route/autoroute</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Quebec 511</strong></td><td>Evenements routiers temps reel</td><td>Non officiel</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Open511</strong></td><td>Standard municipal (ex: Repentigny)</td><td>Oui REST</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr>
+                        <td><strong>CPIC Vehicules voles</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Police Canada</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://cpic-cipc.ca/sve-rve-eng.htm" target="_blank" style="color:var(--accent);">Formulaire recherche</a></td>
+                        <td>145K+ vehicules voles, recherche par VIN</td>
+                        <td><span class="badge badge-gold">Form submit</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>IBC VIN Verify</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Branding assurance</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.ibc.ca/industry-resources/insurance-data-tools/vin-verify" target="_blank" style="color:var(--accent);">Widget web</a></td>
+                        <td>Salvage / irreparable (AB, ON, Atlantique seulement)</td>
+                        <td><span class="badge badge-gold">Web scraping</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TC Rappels vehicules</strong><br><span style="font-size:0.65rem;color:var(--text-light);">API v1.3 broken</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://open.canada.ca/data/en/dataset/1ec92326-47ef-4110-b7ca-959fab03f96d" target="_blank" style="color:var(--accent);">Dataset CSV</a><br><a href="https://wwwapps.tc.gc.ca/Saf-Sec-Sur/7/VRDB-BDRV/search-recherche/menu.aspx?lang=eng" target="_blank" style="color:var(--accent);">Recherche web</a></td>
+                        <td>Tous rappels vehicules canadiens (CSV mensuel)</td>
+                        <td><span class="badge badge-gold">CSV + scrape</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>NCDB (Transport Canada)</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Collisions nationales</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://open.canada.ca/data/en/dataset/1eb9eba7-71d1-4b30-9fb1-30cbdab7e63a" target="_blank" style="color:var(--accent);">Dataset CSV</a><br><a href="https://wwwapps2.tc.gc.ca/Saf-Sec-Sur/7/NCDB-BNDC/p.aspx?l=en" target="_blank" style="color:var(--accent);">Outil en ligne</a></td>
+                        <td>Toutes collisions police Canada 1999+</td>
+                        <td><span class="badge badge-gold">CSV download</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>CVS Database</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Specs collision</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://open.canada.ca/data/en/dataset/913f8940-036a-45f2-a5f2-19bde76c1252" target="_blank" style="color:var(--accent);">Dataset CSV</a></td>
+                        <td>Dimensions vehicules pour investigation collision</td>
+                        <td><span class="badge badge-gold">CSV download</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Municipal -->
-        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Donnees municipales</h4>
+        <!-- ========== APIs AVEC INSCRIPTION REQUISE ========== -->
+        <h3 style="font-weight: 700; margin: 36px 0 16px; color: var(--accent); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">&#128274;</span> APIs avec inscription — Free tier ou payant
+        </h3>
+
         <div class="table-wrapper">
             <table>
-                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <thead><tr><th>Source</th><th>Inscription / Docs</th><th>Donnees</th><th>Prix</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>Montreal — Collisions</strong></td><td>Tous accidents depuis 2012, geolocalise, deces/blessures</td><td>Oui (API MTL)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Laval — Accidents</strong></td><td>Accidents territoire Laval (police municipale)</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr style="background: rgba(42,157,143,0.04);">
+                        <td><strong>auto.dev</strong><br><span style="font-size:0.65rem;color:var(--green);">FREE TIER</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.auto.dev/signin?redirectUrl=%2Fonboarding" target="_blank" style="color:var(--accent);">&#10132; S'inscrire</a> &bull; <a href="https://www.auto.dev/pricing" target="_blank" style="color:var(--accent);">Prix</a></td>
+                        <td>VIN decode, rappels, photos, plate-to-VIN, TCO</td>
+                        <td><span class="badge badge-green">$0 = 1000 calls/mois</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.04);">
+                        <td><strong>Cardog API</strong><br><span style="font-size:0.65rem;color:var(--green);">FREE STARTER</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://cardog.app/api" target="_blank" style="color:var(--accent);">&#10132; S'inscrire</a> &bull; <a href="https://docs.cardog.ai/" target="_blank" style="color:var(--accent);">API Docs</a> &bull; <a href="https://cardog.app/pricing" target="_blank" style="color:var(--accent);">Prix</a></td>
+                        <td>Rappels normalises TC + NHTSA, 500M+ vehicules</td>
+                        <td><span class="badge badge-green">$0 = 1000 req</span><br><span style="font-size:0.6rem;">Pro $20/mo, Dev $100/mo</span></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.04);">
+                        <td><strong>CanLII API</strong><br><span style="font-size:0.65rem;color:var(--green);">GRATUIT</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.canlii.org/en/feedback/feedback.html" target="_blank" style="color:var(--accent);">&#10132; Demander cle</a> &bull; <a href="https://github.com/canlii/API_documentation/blob/master/EN.md" target="_blank" style="color:var(--accent);">API Docs</a></td>
+                        <td>Jurisprudence canadienne complete</td>
+                        <td><span class="badge badge-green">Gratuit (4700 req/jour)</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DataOne Software</strong><br><span style="font-size:0.65rem;color:var(--text-light);">VIN Canada</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://offers.dataonesoftware.com/canadian-vin-decoder-api-trial" target="_blank" style="color:var(--accent);">&#10132; Essai gratuit</a></td>
+                        <td>Decodeur VIN specifique vehicules canadiens</td>
+                        <td><span class="badge badge-blue">Essai: 50 VIN / 15j</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>VinAudit Canada</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Historique complet</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.vinaudit.ca/api-subscription" target="_blank" style="color:var(--accent);">&#10132; S'inscrire API</a> &bull; <a href="https://www.vinaudit.ca/vehicle-history-api" target="_blank" style="color:var(--accent);">Docs</a></td>
+                        <td>Titre, odometre, vol, collision, lien, CPIC cross-ref</td>
+                        <td><span class="badge badge-blue">$100-500/mo</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>ClearVIN</strong><br><span style="font-size:0.65rem;color:var(--text-light);">VIN + NMVTIS</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.clearvin.com/en/api-subscribers/#api-subscriber__register" target="_blank" style="color:var(--accent);">&#10132; S'inscrire</a> &bull; <a href="https://clearvin.com/user/register" target="_blank" style="color:var(--accent);">Compte</a></td>
+                        <td>VIN decode, NMVTIS, encheres, valeur marche</td>
+                        <td><span class="badge badge-blue">Sur devis</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Canadian Black Book</strong><br><span style="font-size:0.65rem;color:var(--text-light);">Valeur vehicule</span></td>
+                        <td style="font-size:0.75rem;"><a href="https://developer.canadianblackbook.com/" target="_blank" style="color:var(--accent);">Portail dev</a> &bull; <a href="https://www.canadianblackbook.com/api/" target="_blank" style="color:var(--accent);">Info API</a></td>
+                        <td>Evaluations vehicules usages (standard industrie Canada)</td>
+                        <td><span class="badge badge-gold">Entreprise (contacter)</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Fédéral -->
-        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Federal / Canada</h4>
+        <!-- ========== APIs INDUSTRIE SEULEMENT ========== -->
+        <h3 style="font-weight: 700; margin: 36px 0 16px; color: var(--red); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">&#128683;</span> Acces industrie seulement — Pas d'API publique
+        </h3>
+
         <div class="table-wrapper">
             <table>
-                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <thead><tr><th>Source</th><th>URL info</th><th>Donnees</th><th>Acces</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>NCDB (Transport Canada)</strong></td><td>Toutes collisions police Canada depuis 1999</td><td>Non (CSV)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>TC Rappels vehicules</strong></td><td>Rappels securite tous vehicules canadiens</td><td>Oui REST</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>TC Plaintes defauts</strong></td><td>Plaintes securite consommateurs</td><td>Non (web)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>CVS Database</strong></td><td>Specs vehicules pour investigation collision</td><td>Non (CSV)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Statistics Canada WDS</strong></td><td>Stats nationales collisions, immatriculations</td><td>Oui REST</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>CPIC — Vehicules voles</strong></td><td>145,000+ vehicules voles au Canada</td><td>Oui API</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr>
+                        <td><strong>GAA / FCSA</strong></td>
+                        <td style="font-size:0.75rem;"><a href="https://gaa.qc.ca/fr/fichier-central-des-sinistres-automobiles/en-bref/" target="_blank" style="color:var(--accent);">Info FCSA</a> &bull; <a href="https://gaa.qc.ca/fr/fichier-central-des-sinistres-automobiles/demander-votre-dossier-de-sinistres/" target="_blank" style="color:var(--accent);">Demander son dossier</a></td>
+                        <td>Sinistres auto QC (6 dernieres annees)</td>
+                        <td><span class="badge badge-gold">Individu = son dossier</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>IBC DASH</strong></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.ibc.ca/industry-resources/insurance-data-tools/dash" target="_blank" style="color:var(--accent);">Info DASH</a></td>
+                        <td>Historique complet assurance, reclamations</td>
+                        <td><span class="badge badge-gold">Assureurs seulement</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>IBC VINLink</strong></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.ibc.ca/industry-resources/insurance-data-tools/vinlink-decoder" target="_blank" style="color:var(--accent);">Info VINLink</a></td>
+                        <td>Decodeur VIN assureurs</td>
+                        <td><span class="badge badge-gold">Assureurs seulement</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>CGI AutoPlus</strong></td>
+                        <td style="font-size:0.75rem;"><a href="https://iis.cgi.com/RapidWeb/en/auto-risk/autoplus-reports.aspx" target="_blank" style="color:var(--accent);">Info AutoPlus</a></td>
+                        <td>Polices et reclamations auto Canada</td>
+                        <td><span class="badge badge-gold">Industrie</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>ADESA / OpenLane</strong></td>
+                        <td style="font-size:0.75rem;"><a href="https://www.openlane.ca/" target="_blank" style="color:var(--accent);">OpenLane</a></td>
+                        <td>Encheres vehicules, donnees historiques</td>
+                        <td><span class="badge badge-gold">Dealers seulement</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Assurances -->
-        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Assurances</h4>
+        <!-- ========== DONNÉES DEJA EN DB SUR SERVEUR ========== -->
+        <h3 style="font-weight: 700; margin: 36px 0 16px; color: var(--accent); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">&#128451;</span> Donnees deja importees sur notre serveur (PostgreSQL)
+        </h3>
+
         <div class="table-wrapper">
             <table>
-                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <thead><tr><th>Table DB</th><th>Records</th><th>Source</th><th>URL source</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>GAA / FCSA</strong></td><td>Sinistres auto QC (6 dernieres annees)</td><td>Non</td><td><span class="badge badge-gold">Restreint</span></td></tr>
-                    <tr><td><strong>IBC DASH</strong></td><td>Historique complet assurance, reclamations</td><td>Oui API</td><td><span class="badge badge-gold">Industrie</span></td></tr>
-                    <tr><td><strong>IBC VINLink</strong></td><td>Decodeur VIN assureurs</td><td>Non public</td><td><span class="badge badge-gold">Industrie</span></td></tr>
-                    <tr><td><strong>CGI AutoPlus</strong></td><td>Polices et reclamations auto Canada</td><td>Non public</td><td><span class="badge badge-gold">Industrie</span></td></tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>saaq_rapports_accident</strong></td>
+                        <td style="font-weight: 900; color: var(--green);">1,717,407</td>
+                        <td>SAAQ CSV S3</td>
+                        <td style="font-size:0.75rem;"><a href="https://www.donneesquebec.ca/recherche/dataset/rapports-d-accident" target="_blank" style="color:var(--accent);">Dataset</a></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>qc_constats_infraction</strong></td>
+                        <td style="font-weight: 900; color: var(--green);">356,715</td>
+                        <td>Donnees Quebec CKAN</td>
+                        <td style="font-size:0.75rem;"><a href="https://www.donneesquebec.ca/recherche/dataset/constats-infraction-controle-routier" target="_blank" style="color:var(--accent);">Dataset</a></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>mtl_collisions</strong></td>
+                        <td style="font-weight: 900; color: var(--green);">218,272</td>
+                        <td>Montreal Open Data</td>
+                        <td style="font-size:0.75rem;"><a href="https://donnees.montreal.ca/dataset/collisions-routieres" target="_blank" style="color:var(--accent);">Dataset</a></td>
+                    </tr>
+                    <tr style="background: rgba(42,157,143,0.06);">
+                        <td><strong>jurisprudence</strong></td>
+                        <td style="font-weight: 900; color: var(--green);">38,131</td>
+                        <td>CanLII API</td>
+                        <td style="font-size:0.75rem;"><a href="https://github.com/canlii/API_documentation/blob/master/EN.md" target="_blank" style="color:var(--accent);">API Docs</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>road_conditions</strong></td>
+                        <td style="font-weight: 700;">1,333</td>
+                        <td>MTQ temps reel</td>
+                        <td style="font-size:0.75rem;"><a href="https://www.donneesquebec.ca/recherche/dataset/condition-routiere-hivernale-du-reseau-routier-mtq" target="_blank" style="color:var(--accent);">Dataset</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>conditions_routieres_hiver</strong></td>
+                        <td style="font-weight: 700;">446</td>
+                        <td>MTQ hiver</td>
+                        <td style="font-size:0.75rem;">Meme source</td>
+                    </tr>
+                    <tr>
+                        <td><strong>qc_radar_photo_stats</strong></td>
+                        <td style="font-weight: 700;">384</td>
+                        <td>Donnees Quebec</td>
+                        <td style="font-size:0.75rem;"><a href="https://www.donneesquebec.ca/recherche/dataset/statistiques-constats-signifies-radar-photographique" target="_blank" style="color:var(--accent);">Dataset</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>qc_radar_photo_lieux</strong></td>
+                        <td style="font-weight: 700;">160</td>
+                        <td>Donnees Quebec</td>
+                        <td style="font-size:0.75rem;"><a href="https://www.donneesquebec.ca/recherche/dataset/radar-photo" target="_blank" style="color:var(--accent);">Dataset</a></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- VIN Decoders -->
-        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Decodeurs VIN (sans Carfax)</h4>
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>NHTSA vPIC</strong></td><td>Decodage VIN complet, batch 50, 140+ attributs</td><td>Oui REST</td><td><span class="badge badge-green">100% Gratuit</span></td></tr>
-                    <tr><td><strong>VinAudit Canada</strong></td><td>Historique complet, titre, odometre, vol, collision</td><td>Oui REST</td><td><span class="badge badge-blue">Payant</span></td></tr>
-                    <tr><td><strong>ClearVIN</strong></td><td>VIN US + Canada, 1981-2025</td><td>Oui</td><td><span class="badge badge-blue">Payant</span></td></tr>
-                    <tr><td><strong>DataOne Software</strong></td><td>Decodeur VIN specifique Canada</td><td>Oui</td><td><span class="badge badge-blue">Essai gratuit</span></td></tr>
-                    <tr><td><strong>AutoCheck (Experian)</strong></td><td>Historique vehicule, score, encheres</td><td>Business</td><td><span class="badge badge-blue">Payant</span></td></tr>
-                    <tr><td><strong>Cardog API</strong></td><td>Rappels normalises TC + NHTSA</td><td>Oui</td><td><span class="badge badge-blue">Payant</span></td></tr>
-                    <tr><td><strong>auto.dev</strong></td><td>Decodage VIN instantane</td><td>Oui</td><td><span class="badge badge-green">Free tier</span></td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Stats -->
-        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Statistiques & recherche</h4>
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>Source</th><th>Donnees</th><th>Acces</th></tr></thead>
-                <tbody>
-                    <tr><td><strong>BDSO (ISQ)</strong></td><td>Stats officielles QC: victimes, collisions, dommages</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>Bureau du coroner QC</strong></td><td>Deces par trauma route depuis 1986</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                    <tr><td><strong>CCMTA</strong></td><td>Recherche securite routiere nationale</td><td><span class="badge badge-green">Gratuit</span></td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Résumé API -->
+        <!-- Résumé -->
         <div class="highlight-box" style="margin-top: 32px; padding: 24px;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; text-align: center;">
                 <div>
-                    <div style="font-size: 2rem; font-weight: 900; color: var(--accent);">32</div>
-                    <div style="font-size: 0.75rem; color: var(--text-light);">Sources totales</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--green);">9</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">APIs LIVE sans inscription</div>
                 </div>
                 <div>
-                    <div style="font-size: 2rem; font-weight: 900; color: var(--green);">20+</div>
-                    <div style="font-size: 0.75rem; color: var(--text-light);">Avec API</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--gold);">5</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">Web scraping faisable</div>
                 </div>
                 <div>
-                    <div style="font-size: 2rem; font-weight: 900; color: var(--gold);">18</div>
-                    <div style="font-size: 0.75rem; color: var(--text-light);">100% gratuites</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--accent);">3</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">Free tier (inscription)</div>
                 </div>
                 <div>
-                    <div style="font-size: 2rem; font-weight: 900; color: var(--red);">0</div>
-                    <div style="font-size: 0.75rem; color: var(--text-light);">Dependance Carfax</div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--red);">2.3M+</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">Records en DB serveur</div>
                 </div>
             </div>
         </div>
