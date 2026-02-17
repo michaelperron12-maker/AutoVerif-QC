@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --primary: #080e1a;
@@ -881,6 +882,40 @@
             .glass-card { padding: 16px; }
             .vin-input { font-size: 0.85rem; letter-spacing: 1px; }
         }
+
+        /* PDF GENERATION MODE */
+        .pdf-mode .report-doc {
+            background: #0b1120 !important;
+            width: 794px !important;
+            max-width: 794px !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        .pdf-mode .doc-header {
+            border-radius: 0 !important;
+        }
+        .pdf-mode .download-bar,
+        .pdf-mode .vehicle-image-angles,
+        .pdf-mode .vehicle-image-label { display: none !important; }
+        .pdf-mode .vehicle-image-band { padding: 16px 40px; min-height: auto; }
+        .pdf-mode .vehicle-image-wrap img { max-width: 400px; }
+        .pdf-mode .section-head {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+        .pdf-mode .recall-card,
+        .pdf-mode .check-row,
+        .pdf-mode .d-card {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .pdf-page-break {
+            page-break-before: always;
+            break-before: always;
+            height: 0; margin: 0; padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -1065,7 +1100,7 @@
         <!-- VEHICLE IMAGE -->
         <div class="vehicle-image-band hidden" id="vehicleImageBand">
             <div class="vehicle-image-wrap">
-                <img id="vehicleMainImg" alt="Apercu du vehicule" loading="lazy" />
+                <img id="vehicleMainImg" alt="Apercu du vehicule" loading="lazy" crossorigin="anonymous" />
                 <div class="vehicle-image-angles" id="vehicleAngles"></div>
                 <div class="vehicle-image-label">Rendu 3D — imagin.studio</div>
             </div>
@@ -1606,6 +1641,7 @@ function populateLiveData() {
                 const thumb = document.createElement('img');
                 thumb.src = baseUrl + '&angle=' + angleStr + '&width=120';
                 thumb.alt = 'Angle ' + angleStr;
+                thumb.crossOrigin = 'anonymous';
                 btn.appendChild(thumb);
                 btn.onclick = function() {
                     mainImg.src = baseUrl + '&angle=' + angleStr;
@@ -1913,20 +1949,92 @@ function showReport(){
     gsap.from('.download-bar', {y:20, opacity:0, duration:0.5, delay:2.2});
 }
 
-// ===== DOWNLOAD ANIM =====
-function animDl(){
+// ===== REAL PDF GENERATION =====
+async function animDl(){
     const btn = document.getElementById('dlBtn');
     btn.innerHTML = '&#9889; &nbsp;Preparation du PDF...';
     btn.style.opacity = '0.7';
-    setTimeout(()=>{
+    btn.disabled = true;
+
+    try {
+        const reportDoc = document.querySelector('.report-doc');
+        // Add pdf-mode class for print-specific styles
+        reportDoc.classList.add('pdf-mode');
+
+        // Build filename from vehicle info
+        const d = liveData.decode;
+        const filename = d
+            ? 'AutoVerif_' + (d.make||'').replace(/\s+/g,'') + '_' + (d.model||'').replace(/\s+/g,'') + '_' + (d.year||'') + '_' + currentVin.toUpperCase() + '.pdf'
+            : 'AutoVerif_Rapport_' + currentVin.toUpperCase() + '.pdf';
+
+        // Date for header
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Temporarily inject PDF watermark footer
+        const watermark = document.createElement('div');
+        watermark.id = 'pdfWatermark';
+        watermark.style.cssText = 'text-align:center;padding:20px 40px;border-top:1px solid rgba(255,255,255,0.06);font-size:0.7rem;color:rgba(136,146,164,0.6);';
+        watermark.innerHTML = 'Rapport genere le ' + dateStr + ' par AutoVerif QC — seoparai.com — VIN: ' + currentVin.toUpperCase() + '<br>Ce document est a titre informatif seulement. Il ne constitue pas une garantie sur l\'etat du vehicule.';
+        reportDoc.appendChild(watermark);
+
+        const opt = {
+            margin: [4, 0, 8, 0], // top, right, bottom, left in mm
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#0b1120',
+                letterRendering: true,
+                logging: false,
+                width: 794,
+                windowWidth: 794
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: 'portrait',
+                compress: true
+            },
+            pagebreak: {
+                mode: ['avoid-all', 'css', 'legacy'],
+                before: '.pdf-page-break',
+                avoid: ['.section-head', '.recall-card', '.d-card', '.check-row', '.crash-card', '.valeur-card', '.citron-box', '.data-cards']
+            }
+        };
+
+        await html2pdf().set(opt).from(reportDoc).save();
+
+        // Cleanup
+        reportDoc.classList.remove('pdf-mode');
+        const wm = document.getElementById('pdfWatermark');
+        if (wm) wm.remove();
+
         btn.innerHTML = '&#10003; &nbsp;Rapport telecharge!';
         btn.style.background = 'linear-gradient(135deg, var(--green), #1a8a7e)';
         btn.style.opacity = '1';
-    }, 1500);
-    setTimeout(()=>{
-        btn.innerHTML = '&#128196; &nbsp;Telecharger le rapport PDF';
-        btn.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
-    }, 4000);
+        setTimeout(()=>{
+            btn.innerHTML = '&#128196; &nbsp;Telecharger le rapport PDF';
+            btn.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
+        }, 3000);
+    } catch(err) {
+        console.error('PDF generation error:', err);
+        btn.innerHTML = '&#9888; &nbsp;Erreur — Reessayer';
+        btn.style.background = 'linear-gradient(135deg, var(--red), #c0313e)';
+        btn.style.opacity = '1';
+        // Cleanup on error
+        document.querySelector('.report-doc')?.classList.remove('pdf-mode');
+        const wm = document.getElementById('pdfWatermark');
+        if (wm) wm.remove();
+        setTimeout(()=>{
+            btn.innerHTML = '&#128196; &nbsp;Telecharger le rapport PDF';
+            btn.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-dark))';
+        }, 3000);
+    } finally {
+        btn.disabled = false;
+    }
 }
 
 // ===== RESET =====
