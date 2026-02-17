@@ -1284,6 +1284,7 @@
         <li><a href="#solution">Solution</a></li>
         <li><a href="#citron">Protection</a></li>
         <li><a href="#donnees">Donnees</a></li>
+        <li><a href="#repertoire">Repertoire</a></li>
         <li><a href="#legal">Legal</a></li>
         <li><a href="#prix">Prix</a></li>
         <li><a href="#finances">Finances</a></li>
@@ -1303,6 +1304,7 @@
     <a href="#solution" onclick="closeMobileMenu()">Solution</a>
     <a href="#citron" onclick="closeMobileMenu()">Protection</a>
     <a href="#donnees" onclick="closeMobileMenu()">Donnees</a>
+    <a href="#repertoire" onclick="closeMobileMenu()">Repertoire</a>
     <a href="#legal" onclick="closeMobileMenu()">Legal</a>
     <a href="#prix" onclick="closeMobileMenu()">Prix</a>
     <a href="#finances" onclick="closeMobileMenu()">Finances</a>
@@ -1970,6 +1972,256 @@
                 }
             </style>
         </div>
+    </div>
+</section>
+
+<!-- REPERTOIRE COMPLET APIs + CARROSSERIES -->
+<section id="repertoire">
+    <div class="container">
+        <span class="section-label">Repertoire complet</span>
+        <h2 class="section-title">32 APIs & bases de donnees + 13 reseaux de carrosseries</h2>
+        <p class="section-subtitle">Inventaire exhaustif de toutes les sources de donnees accidents auto au Quebec (sans Carfax) et des franchises de carrosserie presentes dans la province.</p>
+
+        <!-- ========== PARTIE 1: APIs & BASES DE DONNÉES ========== -->
+        <h3 style="font-weight: 700; margin-bottom: 16px; color: var(--accent); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">&#128450;</span> APIs & bases de donnees — Accidents auto QC
+        </h3>
+
+        <!-- SAAQ -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">SAAQ (Donnees ouvertes gratuites)</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Rapports d'accident</strong></td><td>Rapports police 2011-2022, severite, types vehicules</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Dossiers indemnisation</strong></td><td>Demandes acceptees avec compensation 2015-2022</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Blessures indemnisation</strong></td><td>Demandes avec blessures enregistrees</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Vehicules en circulation</strong></td><td>Parc auto QC par annee, caracteristiques</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Permis de conduire</strong></td><td>Titulaires par categorie/age/region</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Infractions & points</strong></td><td>36 infractions, 5 seuils, bareme complet</td><td>Non (web)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Données Québec / MTQ -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Donnees Quebec & Transport QC</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Localisation accidents</strong></td><td>Geolocalisation par municipalite (Laval+)</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Radar photo — stats</strong></td><td>Constats signifies par appareil photo</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Radar photo — positions</strong></td><td>Localisations radars fixes et mobiles</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Conditions routieres</strong></td><td>446 segments MTQ temps reel (oct-avr)</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Debit circulation</strong></td><td>DJMA, volumes par route/autoroute</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Quebec 511</strong></td><td>Evenements routiers temps reel</td><td>Non officiel</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Open511</strong></td><td>Standard municipal (ex: Repentigny)</td><td>Oui REST</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Municipal -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Donnees municipales</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Montreal — Collisions</strong></td><td>Tous accidents depuis 2012, geolocalise, deces/blessures</td><td>Oui (API MTL)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Laval — Accidents</strong></td><td>Accidents territoire Laval (police municipale)</td><td>Oui (CKAN)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Fédéral -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Federal / Canada</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>NCDB (Transport Canada)</strong></td><td>Toutes collisions police Canada depuis 1999</td><td>Non (CSV)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>TC Rappels vehicules</strong></td><td>Rappels securite tous vehicules canadiens</td><td>Oui REST</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>TC Plaintes defauts</strong></td><td>Plaintes securite consommateurs</td><td>Non (web)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>CVS Database</strong></td><td>Specs vehicules pour investigation collision</td><td>Non (CSV)</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Statistics Canada WDS</strong></td><td>Stats nationales collisions, immatriculations</td><td>Oui REST</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>CPIC — Vehicules voles</strong></td><td>145,000+ vehicules voles au Canada</td><td>Oui API</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Assurances -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Assurances</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>GAA / FCSA</strong></td><td>Sinistres auto QC (6 dernieres annees)</td><td>Non</td><td><span class="badge badge-gold">Restreint</span></td></tr>
+                    <tr><td><strong>IBC DASH</strong></td><td>Historique complet assurance, reclamations</td><td>Oui API</td><td><span class="badge badge-gold">Industrie</span></td></tr>
+                    <tr><td><strong>IBC VINLink</strong></td><td>Decodeur VIN assureurs</td><td>Non public</td><td><span class="badge badge-gold">Industrie</span></td></tr>
+                    <tr><td><strong>CGI AutoPlus</strong></td><td>Polices et reclamations auto Canada</td><td>Non public</td><td><span class="badge badge-gold">Industrie</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- VIN Decoders -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Decodeurs VIN (sans Carfax)</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Source</th><th>Donnees</th><th>API?</th><th>Acces</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>NHTSA vPIC</strong></td><td>Decodage VIN complet, batch 50, 140+ attributs</td><td>Oui REST</td><td><span class="badge badge-green">100% Gratuit</span></td></tr>
+                    <tr><td><strong>VinAudit Canada</strong></td><td>Historique complet, titre, odometre, vol, collision</td><td>Oui REST</td><td><span class="badge badge-blue">Payant</span></td></tr>
+                    <tr><td><strong>ClearVIN</strong></td><td>VIN US + Canada, 1981-2025</td><td>Oui</td><td><span class="badge badge-blue">Payant</span></td></tr>
+                    <tr><td><strong>DataOne Software</strong></td><td>Decodeur VIN specifique Canada</td><td>Oui</td><td><span class="badge badge-blue">Essai gratuit</span></td></tr>
+                    <tr><td><strong>AutoCheck (Experian)</strong></td><td>Historique vehicule, score, encheres</td><td>Business</td><td><span class="badge badge-blue">Payant</span></td></tr>
+                    <tr><td><strong>Cardog API</strong></td><td>Rappels normalises TC + NHTSA</td><td>Oui</td><td><span class="badge badge-blue">Payant</span></td></tr>
+                    <tr><td><strong>auto.dev</strong></td><td>Decodage VIN instantane</td><td>Oui</td><td><span class="badge badge-green">Free tier</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Stats -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Statistiques & recherche</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Source</th><th>Donnees</th><th>Acces</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>BDSO (ISQ)</strong></td><td>Stats officielles QC: victimes, collisions, dommages</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>Bureau du coroner QC</strong></td><td>Deces par trauma route depuis 1986</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                    <tr><td><strong>CCMTA</strong></td><td>Recherche securite routiere nationale</td><td><span class="badge badge-green">Gratuit</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Résumé API -->
+        <div class="highlight-box" style="margin-top: 32px; padding: 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; text-align: center;">
+                <div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--accent);">32</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">Sources totales</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--green);">20+</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">Avec API</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--gold);">18</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">100% gratuites</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--red);">0</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light);">Dependance Carfax</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== PARTIE 2: FRANCHISES CARROSSERIE ========== -->
+        <h3 style="font-weight: 700; margin: 48px 0 16px; color: var(--accent); display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">&#128295;</span> Franchises de carrosserie au Quebec
+        </h3>
+        <p style="color: var(--text-light); margin-bottom: 24px; font-size: 0.9rem;">Tous les reseaux de reparation carrosserie presents au Quebec — un marche potentiel pour le portail concessionnaire AutoVerif.</p>
+
+        <!-- Réseaux majeurs -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Reseaux majeurs de collision</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Reseau</th><th>Type</th><th style="white-space: nowrap;">Loc. QC</th><th>Maison-mere</th><th>Assureurs?</th></tr></thead>
+                <tbody>
+                    <tr style="background: rgba(244,166,28,0.06);"><td><strong>CarrXpert</strong></td><td>Reseau concessionnaires</td><td style="font-weight: 800; color: var(--gold);">180+</td><td>CCAQ (Quebec)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>ProColor Collision</strong></td><td>Franchise</td><td style="font-weight: 700;">~100+</td><td>Fix Network World (QC)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>Fix Auto</strong></td><td>Franchise</td><td style="font-weight: 700;">~88</td><td>Fix Network World (Blainville, QC)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>CARSTAR</strong></td><td>Franchise</td><td style="font-weight: 700;">~75</td><td>Driven Brands (USA)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>CSN Collision</strong></td><td>Reseau / membership</td><td style="font-weight: 700;">~20</td><td>CSN Collision (Canada)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>CCS</strong></td><td>Coop concessionnaires</td><td>~5</td><td>CCS (Canada)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>ACX</strong></td><td>Corporate MSO</td><td>4</td><td>AutoCanada (TSX:ACQ)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>Simplicity Car Care</strong></td><td>Franchise</td><td>~5</td><td>Simplicity (Canada)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                    <tr><td><strong>Maaco</strong></td><td>Franchise</td><td>~3</td><td>Driven Brands (USA)</td><td><span class="badge badge-green">Oui</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Réseaux assureurs -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Reseaux preferes des assureurs</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Reseau</th><th style="white-space: nowrap;">Loc. QC</th><th>Assureur lie</th><th>Particularite</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Intact — Reseau Rely</strong></td><td style="font-weight: 700;">~150</td><td>Intact Financial</td><td>Plus ancien reseau assureur au QC (1992)</td></tr>
+                    <tr><td><strong>Desjardins — Partenaires</strong></td><td>Non divulgue</td><td>Desjardins</td><td>Vehicule courtoisie + garantie a vie</td></tr>
+                    <tr><td><strong>CAA-Quebec Approuve</strong></td><td style="font-weight: 700;">~350</td><td>CAA-Quebec</td><td>Certification Cle Verte requise, -3% membres</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Certifications OEM -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Certifications OEM au Quebec</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 24px;">
+            <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px 16px; text-align: center;">
+                <div style="font-weight: 700; color: white; font-size: 0.85rem;">Tesla Approved</div>
+                <div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">Montreal (2 centres)</div>
+            </div>
+            <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px 16px; text-align: center;">
+                <div style="font-weight: 700; color: white; font-size: 0.85rem;">GM Certified</div>
+                <div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">Reseau Mitchell</div>
+            </div>
+            <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px 16px; text-align: center;">
+                <div style="font-weight: 700; color: white; font-size: 0.85rem;">Honda ProFirst</div>
+                <div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">Honda / Acura</div>
+            </div>
+            <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px 16px; text-align: center;">
+                <div style="font-weight: 700; color: white; font-size: 0.85rem;">Toyota Certified</div>
+                <div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">Specs usine</div>
+            </div>
+            <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px 16px; text-align: center;">
+                <div style="font-weight: 700; color: white; font-size: 0.85rem;">BMW Certified</div>
+                <div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">ACX Laval</div>
+            </div>
+            <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px 16px; text-align: center;">
+                <div style="font-weight: 700; color: white; font-size: 0.85rem;">Mercedes Certified</div>
+                <div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">CarrXpert member</div>
+            </div>
+            <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px 16px; text-align: center;">
+                <div style="font-weight: 700; color: white; font-size: 0.85rem;">Nissan / INFINITI</div>
+                <div style="font-size: 0.7rem; color: var(--text-light); margin-top: 4px;">Via CCIAP</div>
+            </div>
+        </div>
+
+        <!-- Associations -->
+        <h4 style="font-weight: 600; margin: 24px 0 12px; color: var(--gold);">Associations & programmes</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Organisme</th><th>Type</th><th>Membres QC</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>CCPQ</strong></td><td>Association professionnelle</td><td>300+ ateliers</td></tr>
+                    <tr><td><strong>CCIAP</strong></td><td>Accreditation nationale</td><td>300+ via CCPQ</td></tr>
+                    <tr><td><strong>Cle Verte</strong></td><td>Certification environnementale</td><td>240+ centres collision</td></tr>
+                    <tr><td><strong>NAPA AUTOPRO Collision</strong></td><td>Banniere pieces</td><td>Multiple</td></tr>
+                    <tr><td><strong>Uni-Select / FinishMaster</strong></td><td>Distributeur pieces/peinture</td><td>16,000+ ateliers supportes</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Highlight box carrosserie -->
+        <div class="highlight-box" style="margin-top: 32px; padding: 24px;">
+            <h4 style="text-align: center; margin-bottom: 16px; color: white;">Pourquoi c'est strategique pour AutoVerif?</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.8rem; margin-bottom: 6px;">&#127970;</div>
+                    <div style="font-weight: 700; color: white; font-size: 0.9rem;">480+ ateliers franchises</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 4px;">Clients potentiels pour le portail concessionnaire</div>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.8rem; margin-bottom: 6px;">&#128176;</div>
+                    <div style="font-weight: 700; color: white; font-size: 0.9rem;">Revenus B2B recurrents</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 4px;">Forfaits batch VIN pour inventaire pre-achat</div>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.8rem; margin-bottom: 6px;">&#129309;</div>
+                    <div style="font-weight: 700; color: white; font-size: 0.9rem;">Partenariats naturels</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 4px;">CarrXpert (CCAQ) = 180+ portes d'entree</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
