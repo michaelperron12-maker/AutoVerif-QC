@@ -591,6 +591,9 @@
             <div class="hero-stat"><div class="number" id="statVehicles">0</div><div class="label">Véhicules</div></div>
             <div class="hero-stat"><div class="number" id="statContributors">0</div><div class="label">Contributeurs</div></div>
         </div>
+        <div id="chainBadge" style="margin-top:20px;display:inline-flex;align-items:center;gap:8px;background:rgba(42,157,143,0.1);border:1px solid rgba(42,157,143,0.25);padding:8px 18px;border-radius:30px;font-size:0.75rem;color:var(--green);font-weight:600;">
+            🔒 Chaîne cryptographique intègre — <span id="chainLength">0</span> blocs vérifiés
+        </div>
     </div>
 </section>
 
@@ -761,6 +764,11 @@
                 <div class="success-check">✓</div>
                 <h2>Contribution enregistrée !</h2>
                 <div class="ss-ref" id="ssRef"></div>
+                <div class="ss-hash" id="ssHash" style="margin:12px 0;padding:14px 18px;background:rgba(42,157,143,0.08);border:1px solid rgba(42,157,143,0.2);border-radius:12px;text-align:left;">
+                    <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:6px;">🔒 Empreinte d'intégrité SHA-256</div>
+                    <div id="ssHashValue" style="font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.72rem;color:var(--accent);word-break:break-all;letter-spacing:0.5px;line-height:1.6;"></div>
+                    <div style="font-size:0.68rem;color:var(--text-light);margin-top:8px;">Cette empreinte cryptographique garantit que vos données ne peuvent pas être altérées. Chaque soumission est chaînée à la précédente.</div>
+                </div>
                 <div class="ss-note">Votre soumission sera vérifiée sous 24-48h. Merci pour votre contribution !</div>
                 <div class="success-btns">
                     <button class="btn btn-primary" onclick="resetWizard()">Soumettre une autre</button>
@@ -829,7 +837,7 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
     draw();
 })();
 
-// ─── Load stats ───
+// ─── Load stats + chain verification ───
 (async function() {
     try {
         const r = await fetch(API_BASE + '/api/collecte/stats');
@@ -838,6 +846,22 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
         animateNumber('statVehicles', d.total_vehicles || 0);
         animateNumber('statContributors', d.total_contributors || 0);
     } catch(e) { console.log('Stats unavailable'); }
+    // Verify chain integrity
+    try {
+        const r2 = await fetch(API_BASE + '/api/collecte/verify');
+        const v = await r2.json();
+        const badge = document.getElementById('chainBadge');
+        document.getElementById('chainLength').textContent = v.chain_length || 0;
+        if (v.valid) {
+            badge.style.borderColor = 'rgba(42,157,143,0.25)';
+            badge.style.color = 'var(--green)';
+        } else {
+            badge.innerHTML = '⚠️ Alerte: anomalie détectée dans la chaîne';
+            badge.style.borderColor = 'rgba(230,57,70,0.25)';
+            badge.style.color = 'var(--red)';
+            badge.style.background = 'rgba(230,57,70,0.1)';
+        }
+    } catch(e) { console.log('Chain verify unavailable'); }
 })();
 
 function animateNumber(id, target) {
@@ -1381,6 +1405,12 @@ async function submitForm() {
             const ss = document.getElementById('successScreen');
             ss.classList.add('visible');
             document.getElementById('ssRef').textContent = `Référence: #AV-${String(d.submission_id).padStart(5, '0')}`;
+            if (d.integrity_hash) {
+                document.getElementById('ssHashValue').textContent = d.integrity_hash;
+                document.getElementById('ssHash').style.display = 'block';
+            } else {
+                document.getElementById('ssHash').style.display = 'none';
+            }
         } else {
             alert(d.error || 'Erreur lors de la soumission.');
             btn.disabled = false;

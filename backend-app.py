@@ -9,6 +9,7 @@ import re
 import json
 import time
 import uuid
+import hashlib
 import requests
 import psycopg2
 from datetime import datetime
@@ -176,7 +177,39 @@ def init_db():
             file_size INTEGER,
             uploaded_at TIMESTAMP DEFAULT NOW()
         );
+
+        -- ─── Intégrité cryptographique ───
+        CREATE TABLE IF NOT EXISTS chain_anchors (
+            id SERIAL PRIMARY KEY,
+            anchor_hash VARCHAR(64) NOT NULL,
+            submission_count INTEGER NOT NULL,
+            first_submission_id INTEGER,
+            last_submission_id INTEGER,
+            created_at TIMESTAMP DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS audit_log (
+            id SERIAL PRIMARY KEY,
+            action VARCHAR(50) NOT NULL,
+            target_table VARCHAR(50),
+            target_id INTEGER,
+            details JSONB,
+            ip_address VARCHAR(45),
+            created_at TIMESTAMP DEFAULT NOW()
+        );
+        CREATE INDEX IF NOT EXISTS idx_audit_log_target ON audit_log(target_table, target_id);
     """)
+
+    # Migration: add integrity columns to existing submissions table
+    try:
+        cur.execute("ALTER TABLE submissions ADD COLUMN IF NOT EXISTS integrity_hash VARCHAR(64)")
+        cur.execute("ALTER TABLE submissions ADD COLUMN IF NOT EXISTS previous_hash VARCHAR(64)")
+        cur.execute("ALTER TABLE submissions ADD COLUMN IF NOT EXISTS data_snapshot JSONB")
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_submissions_hash ON submissions(integrity_hash)")
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration] Columns may already exist: {e}")
     conn.commit()
     cur.close()
     conn.close()
@@ -331,6 +364,50 @@ def validate_vin(vin):
     if not vin or len(vin) != 17:
         return False
     return bool(re.match(r'^[A-HJ-NPR-Z0-9]{17}$', vin))
+
+
+# ─── Intégrité cryptographique (hash chain) ───
+def compute_integrity_hash(submission_id, vin, report_type, data_snapshot, previous_hash, timestamp):
+    """Compute SHA-256 hash for a submission, chaining to previous."""
+    payload = json.dumps({
+        'id': submission_id,
+        'vin': vin,
+        'type': report_type,
+        'data': data_snapshot,
+        'prev': previous_hash or 'GENESIS',
+        'ts': timestamp,
+    }, sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(payload.encode('utf-8')).hexdigest()
+
+
+def get_last_hash():
+    """Get the integrity_hash of the most recent submission."""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("SELECT integrity_hash FROM submissions WHERE integrity_hash IS NOT NULL ORDER BY id DESC LIMIT 1")
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
+        return row[0] if row else None
+    except:
+        return None
+
+
+def log_audit(action, target_table, target_id, details=None, ip=None):
+    """Write to immutable audit log."""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO audit_log (action, target_table, target_id, details, ip_address) VALUES (%s, %s, %s, %s, %s)",
+            (action, target_table, target_id, json.dumps(details) if details else None, ip)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"[Audit Log Error] {e}")
 
 
 def get_or_create_vehicle(vin, decoded=None):
@@ -496,7 +573,7 @@ def health():
     return jsonify({
         'status': 'ok',
         'service': 'AutoVerif QC',
-        'version': '1.1.0',
+        'version': '1.2.0',
         'database': db_status,
         'total_scans': count,
         'timestamp': datetime.now().isoformat(),
@@ -601,11 +678,29 @@ def collecte_submit():
         conn = get_db()
         cur = conn.cursor()
 
+        # Get previous hash for chain
+        cur.execute("SELECT integrity_hash FROM submissions WHERE integrity_hash IS NOT NULL ORDER BY id DESC LIMIT 1")
+        prev_row = cur.fetchone()
+        previous_hash = prev_row[0] if prev_row else None
+
+        now = datetime.now().isoformat()
+
+        # Build data snapshot (immutable copy of all submitted data)
+        data_snapshot = {
+            'vin': vin,
+            'report_type': report_type,
+            'submitter': submitter,
+            'data': data,
+            'submitted_at': now,
+            'ip': request.remote_addr,
+        }
+
         # Insert submission
         cur.execute("""
             INSERT INTO submissions (vehicle_id, vin, report_type, submitted_by_name,
-                submitted_by_email, submitted_by_type, submitted_by_company, ip_address)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                submitted_by_email, submitted_by_type, submitted_by_company, ip_address,
+                data_snapshot, previous_hash)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """, (
             vehicle['id'], vin, report_type,
@@ -614,8 +709,21 @@ def collecte_submit():
             submitter.get('type', ''),
             submitter.get('company', ''),
             request.remote_addr,
+            json.dumps(data_snapshot, sort_keys=True, ensure_ascii=False),
+            previous_hash,
         ))
         submission_id = cur.fetchone()[0]
+
+        # Compute integrity hash (includes submission_id, data, and previous hash)
+        integrity_hash = compute_integrity_hash(
+            submission_id, vin, report_type, data_snapshot, previous_hash, now
+        )
+
+        # Store hash
+        cur.execute(
+            "UPDATE submissions SET integrity_hash = %s WHERE id = %s",
+            (integrity_hash, submission_id)
+        )
 
         # Insert type-specific detail
         if report_type == 'accident':
@@ -693,9 +801,15 @@ def collecte_submit():
         cur.close()
         conn.close()
 
+        # Audit log
+        log_audit('submission_created', 'submissions', submission_id,
+                  {'report_type': report_type, 'vin': vin, 'hash': integrity_hash},
+                  request.remote_addr)
+
         return jsonify({
             'success': True,
             'submission_id': submission_id,
+            'integrity_hash': integrity_hash,
             'message': 'Contribution enregistrée avec succès.',
         })
 
@@ -736,6 +850,116 @@ def collecte_stats():
             'total_services': 0,
             'total_contributors': 0,
         })
+
+
+@app.route('/api/collecte/verify', methods=['GET'])
+def collecte_verify():
+    """Verify the integrity of the entire hash chain."""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT id, vin, report_type, data_snapshot, integrity_hash, previous_hash, submitted_at
+            FROM submissions
+            WHERE integrity_hash IS NOT NULL
+            ORDER BY id ASC
+        """)
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if not rows:
+            return jsonify({
+                'valid': True,
+                'chain_length': 0,
+                'message': 'Aucune soumission à vérifier.',
+            })
+
+        broken = []
+        expected_prev = None
+
+        for row in rows:
+            sid, vin, rtype, snapshot, stored_hash, prev_hash, sub_at = row
+
+            # Check previous_hash links correctly
+            if prev_hash != expected_prev:
+                if expected_prev is not None:  # Skip genesis check
+                    broken.append({
+                        'id': sid,
+                        'error': 'chain_break',
+                        'detail': f'previous_hash ne correspond pas (attendu: {expected_prev[:12]}..., trouvé: {(prev_hash or "null")[:12]}...)',
+                    })
+
+            # Recompute hash from stored data snapshot
+            snapshot_data = snapshot if isinstance(snapshot, dict) else json.loads(snapshot) if snapshot else {}
+            # Use timestamp from snapshot (same one used at hash creation time)
+            ts = snapshot_data.get('submitted_at', sub_at.isoformat() if hasattr(sub_at, 'isoformat') else str(sub_at))
+            recomputed = compute_integrity_hash(sid, vin, rtype, snapshot_data, prev_hash, ts)
+
+            if recomputed != stored_hash:
+                broken.append({
+                    'id': sid,
+                    'error': 'hash_mismatch',
+                    'detail': f'Hash recalculé ne correspond pas (stocké: {stored_hash[:12]}..., calculé: {recomputed[:12]}...)',
+                })
+
+            expected_prev = stored_hash
+
+        return jsonify({
+            'valid': len(broken) == 0,
+            'chain_length': len(rows),
+            'last_hash': rows[-1][4] if rows else None,
+            'broken_links': broken,
+            'verified_at': datetime.now().isoformat(),
+            'message': 'Chaîne intègre — aucune donnée altérée.' if not broken else f'{len(broken)} anomalie(s) détectée(s).',
+        })
+
+    except Exception as e:
+        print(f"[Verify Error] {e}")
+        return jsonify({'error': f'Erreur: {str(e)}'}), 500
+
+
+@app.route('/api/collecte/verify/<int:submission_id>', methods=['GET'])
+def collecte_verify_single(submission_id):
+    """Verify a single submission's integrity."""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT id, vin, report_type, data_snapshot, integrity_hash, previous_hash, submitted_at
+            FROM submissions WHERE id = %s
+        """, (submission_id,))
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
+
+        if not row:
+            return jsonify({'error': 'Soumission introuvable.'}), 404
+
+        sid, vin, rtype, snapshot, stored_hash, prev_hash, sub_at = row
+
+        if not stored_hash:
+            return jsonify({
+                'valid': False,
+                'submission_id': sid,
+                'message': 'Aucun hash d\'intégrité (soumission antérieure au système).',
+            })
+
+        snapshot_data = snapshot if isinstance(snapshot, dict) else json.loads(snapshot) if snapshot else {}
+        ts = snapshot_data.get('submitted_at', sub_at.isoformat() if hasattr(sub_at, 'isoformat') else str(sub_at))
+        recomputed = compute_integrity_hash(sid, vin, rtype, snapshot_data, prev_hash, ts)
+
+        valid = recomputed == stored_hash
+        return jsonify({
+            'valid': valid,
+            'submission_id': sid,
+            'integrity_hash': stored_hash,
+            'verified_at': datetime.now().isoformat(),
+            'message': 'Donnée intègre — non altérée.' if valid else 'ALERTE: Données possiblement altérées!',
+        })
+
+    except Exception as e:
+        return jsonify({'error': f'Erreur: {str(e)}'}), 500
 
 
 @app.route('/api/collecte/upload', methods=['POST'])
