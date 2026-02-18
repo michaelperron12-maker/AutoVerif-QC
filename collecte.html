@@ -15,6 +15,7 @@
             --gold-dark: #d4910a;
             --red: #e63946;
             --green: #2a9d8f;
+            --purple: #8b5cf6;
             --bg: #0b1120;
             --bg-light: #0f1729;
             --card: rgba(255,255,255,0.04);
@@ -55,11 +56,6 @@
         }
         .nav-right a:hover { color: white; }
         .nav-right a.active { color: var(--accent); }
-        .nav-cta {
-            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-            color: white !important; padding: 8px 20px; border-radius: 8px;
-            font-weight: 600; font-size: 0.85rem;
-        }
 
         /* HERO MINI */
         .hero-mini {
@@ -73,34 +69,22 @@
         .hero-mini h1 .accent { color: var(--accent); }
         .hero-mini h1 .gold { color: var(--gold); }
         .hero-mini p { color: var(--text-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 20px; }
-        .stats-row {
-            display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
-        }
-        .stat-item {
-            text-align: center;
-        }
+        .stats-row { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
         .stat-item .stat-num {
-            font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 700;
-            color: var(--accent);
+            font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 700; color: var(--accent);
         }
         .stat-item .stat-label {
-            font-size: 0.75rem; color: var(--text-light); text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px;
         }
 
         /* FORM CONTAINER */
-        .form-container {
-            max-width: 920px; margin: 0 auto; padding: 0 20px 60px;
-        }
+        .form-container { max-width: 920px; margin: 0 auto; padding: 0 20px 60px; }
 
         /* GLASS SECTION */
         .section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 28px 32px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(12px);
+            background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+            padding: 28px 32px; margin-bottom: 20px; backdrop-filter: blur(12px);
             transition: border-color 0.3s;
         }
         .section:hover { border-color: rgba(0,180,216,0.15); }
@@ -118,9 +102,9 @@
         .section-icon.red { background: rgba(230,57,70,0.15); }
         .section-icon.green { background: rgba(42,157,143,0.15); }
         .section-icon.purple { background: rgba(139,92,246,0.15); }
+        .section-icon.orange { background: rgba(251,146,60,0.15); }
         .section-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.15rem; font-weight: 700; flex: 1;
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; flex: 1;
         }
         .section-badge {
             font-size: 0.7rem; padding: 3px 10px; border-radius: 20px;
@@ -140,10 +124,7 @@
         .section.collapsed .section-toggle { transform: rotate(-90deg); }
 
         /* FORM ELEMENTS */
-        .form-row {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-            margin-bottom: 16px;
-        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
         .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
         .form-row.single { grid-template-columns: 1fr; }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -151,23 +132,24 @@
             font-size: 0.8rem; font-weight: 600; color: var(--text-light);
             text-transform: uppercase; letter-spacing: 0.5px;
         }
+        .field-label {
+            font-size: 0.8rem; font-weight: 600; color: var(--text-light);
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: block;
+        }
         input, select, textarea {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 10px; padding: 12px 16px;
-            color: var(--text); font-family: 'Inter', sans-serif;
-            font-size: 0.95rem; outline: none;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            border-radius: 10px; padding: 12px 16px; color: var(--text);
+            font-family: 'Inter', sans-serif; font-size: 0.95rem; outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         input:focus, select:focus, textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
+            border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
         }
         input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
-        select { cursor: pointer; appearance: none;
+        select {
+            cursor: pointer; appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892a4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 14px center;
-            padding-right: 36px;
+            background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
         }
         select option { background: #1a2332; color: var(--text); }
         textarea { resize: vertical; min-height: 80px; }
@@ -181,59 +163,30 @@
         .vehicle-card {
             display: none; background: rgba(0,180,216,0.06);
             border: 1px solid rgba(0,180,216,0.2); border-radius: 16px;
-            padding: 20px; margin-top: 16px;
-            display: none; align-items: center; gap: 20px;
+            padding: 20px; margin-top: 16px; align-items: center; gap: 20px;
         }
         .vehicle-card.show { display: flex; }
-        .vehicle-card img {
-            width: 200px; height: auto; border-radius: 12px;
-            object-fit: cover; flex-shrink: 0;
-        }
-        .vehicle-info h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.3rem; font-weight: 700; margin-bottom: 4px;
-        }
-        .vehicle-info .vin-display {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
-            color: var(--accent); margin-bottom: 8px;
-        }
-        .vehicle-specs {
-            display: flex; flex-wrap: wrap; gap: 8px;
-        }
-        .spec-tag {
-            font-size: 0.75rem; padding: 4px 10px; border-radius: 6px;
-            background: rgba(255,255,255,0.06); color: var(--text-light);
-        }
+        .vehicle-card img { width: 200px; height: auto; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+        .vehicle-info h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+        .vehicle-info .vin-display { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent); margin-bottom: 8px; }
+        .vehicle-specs { display: flex; flex-wrap: wrap; gap: 8px; }
+        .spec-tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.06); color: var(--text-light); }
 
         /* CHECKBOX GRID */
-        .check-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px; margin-bottom: 16px;
-        }
+        .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px; }
         .check-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 14px; border-radius: 10px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            cursor: pointer; transition: all 0.2s;
-            user-select: none;
+            display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            cursor: pointer; transition: all 0.2s; user-select: none;
         }
         .check-item:hover { border-color: rgba(0,180,216,0.3); background: rgba(0,180,216,0.04); }
-        .check-item.checked {
-            border-color: var(--accent); background: rgba(0,180,216,0.08);
-        }
-        .check-item input[type="checkbox"] {
-            display: none;
-        }
+        .check-item.checked { border-color: var(--accent); background: rgba(0,180,216,0.08); }
+        .check-item input[type="checkbox"] { display: none; }
         .check-box {
-            width: 20px; height: 20px; border-radius: 6px;
-            border: 2px solid var(--border); flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
+            width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
         }
-        .check-item.checked .check-box {
-            border-color: var(--accent); background: var(--accent);
-        }
+        .check-item.checked .check-box { border-color: var(--accent); background: var(--accent); }
         .check-box::after {
             content: ''; display: block; width: 6px; height: 10px;
             border: solid white; border-width: 0 2px 2px 0;
@@ -243,15 +196,10 @@
         .check-label { font-size: 0.88rem; font-weight: 500; }
 
         /* RADIO CARDS */
-        .radio-cards {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 10px; margin-bottom: 16px;
-        }
+        .radio-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 16px; }
         .radio-card {
-            padding: 14px; border-radius: 12px;
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.03);
-            cursor: pointer; text-align: center;
+            padding: 14px; border-radius: 12px; border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03); cursor: pointer; text-align: center;
             transition: all 0.2s; user-select: none;
         }
         .radio-card:hover { border-color: rgba(0,180,216,0.3); }
@@ -260,18 +208,13 @@
         .radio-card .rc-icon { font-size: 1.6rem; margin-bottom: 6px; }
         .radio-card .rc-text { font-size: 0.85rem; font-weight: 600; }
 
-        /* SEVERITY SELECTOR */
-        .severity-row {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
-            margin-bottom: 16px;
-        }
+        /* SEVERITY */
+        .severity-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
         .severity-btn {
-            padding: 14px; border-radius: 12px; text-align: center;
-            cursor: pointer; border: 2px solid var(--border);
-            background: rgba(255,255,255,0.03); transition: all 0.2s;
-            user-select: none;
+            padding: 14px; border-radius: 12px; text-align: center; cursor: pointer;
+            border: 2px solid var(--border); background: rgba(255,255,255,0.03);
+            transition: all 0.2s; user-select: none;
         }
-        .severity-btn:hover { opacity: 0.9; }
         .severity-btn.sel-minor { border-color: var(--green); background: rgba(42,157,143,0.12); }
         .severity-btn.sel-moderate { border-color: var(--gold); background: rgba(244,166,28,0.12); }
         .severity-btn.sel-major { border-color: var(--red); background: rgba(230,57,70,0.12); }
@@ -285,41 +228,33 @@
             gap: 6px; max-width: 300px; margin: 0 auto 16px;
         }
         .impact-zone {
-            border-radius: 8px; border: 1px solid var(--border);
-            background: rgba(255,255,255,0.03); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: 600; color: var(--text-light);
-            transition: all 0.2s; user-select: none;
+            border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 600; color: var(--text-light); transition: all 0.2s; user-select: none;
         }
         .impact-zone:hover { border-color: rgba(230,57,70,0.4); }
         .impact-zone.hit { border-color: var(--red); background: rgba(230,57,70,0.2); color: var(--red); }
-        .impact-center { grid-column: 2; grid-row: 2; border: 1px dashed var(--border);
-            background: rgba(255,255,255,0.02); font-size: 1.4rem; cursor: default; }
+        .impact-center { grid-column: 2; grid-row: 2; border: 1px dashed var(--border); background: rgba(255,255,255,0.02); font-size: 1.4rem; cursor: default; }
 
         /* TOGGLE */
-        .toggle-row {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
-        }
+        .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .toggle {
-            width: 44px; height: 24px; border-radius: 12px;
-            background: rgba(255,255,255,0.1); cursor: pointer;
-            position: relative; transition: background 0.3s; flex-shrink: 0;
+            width: 44px; height: 24px; border-radius: 12px; background: rgba(255,255,255,0.1);
+            cursor: pointer; position: relative; transition: background 0.3s; flex-shrink: 0;
         }
         .toggle::after {
             content: ''; position: absolute; left: 3px; top: 3px;
-            width: 18px; height: 18px; border-radius: 50%;
-            background: white; transition: transform 0.3s;
+            width: 18px; height: 18px; border-radius: 50%; background: white; transition: transform 0.3s;
         }
         .toggle.on { background: var(--accent); }
+        .toggle.on.red { background: var(--red); }
         .toggle.on::after { transform: translateX(20px); }
         .toggle-label { font-size: 0.9rem; font-weight: 500; }
 
         /* PHOTO UPLOAD */
         .photo-zone {
-            border: 2px dashed var(--border); border-radius: 16px;
-            padding: 30px; text-align: center; cursor: pointer;
-            transition: all 0.3s; margin-bottom: 16px;
-            position: relative; overflow: hidden;
+            border: 2px dashed var(--border); border-radius: 16px; padding: 30px; text-align: center;
+            cursor: pointer; transition: all 0.3s; margin-bottom: 16px; position: relative; overflow: hidden;
         }
         .photo-zone:hover { border-color: var(--accent); background: rgba(0,180,216,0.03); }
         .photo-zone.drag-over { border-color: var(--accent); background: rgba(0,180,216,0.06); }
@@ -327,52 +262,31 @@
         .photo-zone .pz-icon { font-size: 2.2rem; margin-bottom: 8px; }
         .photo-zone .pz-text { font-size: 0.9rem; color: var(--text-light); }
         .photo-zone .pz-hint { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 4px; }
-        .photo-preview {
-            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
-        }
-        .photo-thumb {
-            width: 80px; height: 80px; border-radius: 10px;
-            object-fit: cover; border: 2px solid var(--border);
-            position: relative;
-        }
-        .photo-thumb-wrap {
-            position: relative; width: 80px; height: 80px;
-        }
+        .photo-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .photo-thumb { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; border: 2px solid var(--border); }
+        .photo-thumb-wrap { position: relative; width: 80px; height: 80px; }
         .photo-thumb-wrap .photo-remove {
-            position: absolute; top: -6px; right: -6px;
-            width: 20px; height: 20px; border-radius: 50%;
-            background: var(--red); color: white; border: none;
-            font-size: 0.7rem; cursor: pointer; display: flex;
-            align-items: center; justify-content: center;
-            z-index: 2;
+            position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%;
+            background: var(--red); color: white; border: none; font-size: 0.7rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; z-index: 2;
         }
 
         /* SUBMIT */
-        .submit-section {
-            text-align: center; padding: 32px;
-        }
-        .submit-confirm {
-            display: flex; align-items: center; justify-content: center;
-            gap: 10px; margin-bottom: 20px; cursor: pointer; user-select: none;
-        }
+        .submit-section { text-align: center; padding: 32px; }
+        .submit-confirm { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; cursor: pointer; user-select: none; }
         .submit-confirm .check-box { width: 22px; height: 22px; }
         .submit-confirm span { font-size: 0.95rem; color: var(--text-light); }
         .btn-submit {
             background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-            color: white; border: none; padding: 16px 48px;
-            border-radius: 14px; font-size: 1.1rem; font-weight: 700;
-            cursor: pointer; transition: all 0.3s;
-            font-family: 'Space Grotesk', sans-serif;
-            letter-spacing: 0.5px;
+            color: white; border: none; padding: 16px 48px; border-radius: 14px;
+            font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.5px;
             box-shadow: 0 4px 24px rgba(0,180,216,0.25);
         }
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,180,216,0.35); }
-        .btn-submit:disabled {
-            opacity: 0.4; cursor: not-allowed; transform: none;
-            box-shadow: none;
-        }
+        .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* SUCCESS */
+        /* SUCCESS OVERLAY */
         .success-overlay {
             display: none; position: fixed; inset: 0; z-index: 9999;
             background: rgba(11,17,32,0.95); backdrop-filter: blur(20px);
@@ -380,72 +294,50 @@
         }
         .success-overlay.show { display: flex; }
         .success-card {
-            background: var(--card); border: 1px solid rgba(42,157,143,0.3);
-            border-radius: 24px; padding: 48px; text-align: center;
-            max-width: 500px; width: 90%;
+            background: var(--card); border: 1px solid rgba(42,157,143,0.3); border-radius: 24px;
+            padding: 48px; text-align: center; max-width: 500px; width: 90%;
         }
         .success-check {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: rgba(42,157,143,0.15); margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem;
+            width: 80px; height: 80px; border-radius: 50%; background: rgba(42,157,143,0.15);
+            margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
         }
-        .success-card h2 {
-            font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem;
-            color: var(--green); margin-bottom: 8px;
-        }
-        .success-card .ref-number {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
-            color: var(--accent); margin-bottom: 8px;
-        }
+        .success-card h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; color: var(--green); margin-bottom: 8px; }
+        .success-card .ref-number { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--accent); margin-bottom: 8px; }
         .success-card .hash-display {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
-            color: var(--text-light); word-break: break-all;
-            background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;
-            margin: 12px 0;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-light);
+            word-break: break-all; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin: 12px 0;
         }
         .hash-label { font-size: 0.7rem; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
         .btn-new {
-            margin-top: 20px; background: rgba(255,255,255,0.08);
-            color: var(--text); border: 1px solid var(--border);
-            padding: 12px 32px; border-radius: 10px; font-size: 0.95rem;
-            font-weight: 600; cursor: pointer; transition: all 0.2s;
+            margin-top: 20px; background: rgba(255,255,255,0.08); color: var(--text);
+            border: 1px solid var(--border); padding: 12px 32px; border-radius: 10px;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
         }
         .btn-new:hover { border-color: var(--accent); color: var(--accent); }
 
-        /* LOADING */
+        /* SPINNER */
         .spinner {
             display: inline-block; width: 20px; height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white; border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
             margin-right: 8px; vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* TYPE SECTIONS HIDDEN BY DEFAULT */
+        /* TYPE SECTIONS */
         .type-section { display: none; }
         .type-section.active { display: block; }
 
         /* FOOTER */
-        footer {
-            text-align: center; padding: 40px 20px 30px;
-            border-top: 1px solid var(--border);
-        }
-        footer .footer-brand {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.9rem; color: var(--text-light);
-        }
+        footer { text-align: center; padding: 40px 20px 30px; border-top: 1px solid var(--border); }
+        footer .footer-brand { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; color: var(--text-light); }
         footer .footer-brand strong { color: var(--accent); }
-        footer .footer-legal {
-            font-size: 0.72rem; color: rgba(255,255,255,0.3);
-            margin-top: 8px; max-width: 600px; margin-left: auto; margin-right: auto;
-        }
+        footer .footer-legal { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-top: 8px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
             nav { padding: 0 16px; }
-            .nav-right a:not(.nav-cta) { display: none; }
+            .nav-right a:not(.active) { display: none; }
             .hero-mini { padding: 90px 20px 30px; }
             .hero-mini h1 { font-size: 1.6rem; }
             .stats-row { gap: 20px; }
@@ -458,20 +350,14 @@
             .vehicle-card { flex-direction: column; text-align: center; }
             .vehicle-card img { width: 160px; }
         }
-        @media (max-width: 480px) {
-            .radio-cards { grid-template-columns: 1fr; }
-        }
-
-        /* HIDDEN FIELD SECTIONS */
-        .detail-fields { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
-        .divider { height: 1px; background: var(--border); margin: 16px 0; }
+        @media (max-width: 480px) { .radio-cards { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-    <a class="nav-logo" href="index.html">
+    <a class="nav-logo" href="https://seoparai.com/autoverif/rapport-vps.html">
         <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="100" height="100" rx="22" fill="url(#g1)"/>
             <path d="M50 18L26 78h12l4-12h16l4 12h12L50 18zm-4 38l4-14 4 14H46z" fill="white"/>
@@ -482,9 +368,8 @@
         <span><span class="nav-auto">Auto</span><span class="nav-verif">Verif</span><span class="nav-qc">QC</span></span>
     </a>
     <div class="nav-right">
-        <a href="index.html">Accueil</a>
-        <a href="rapport-vps.html">Scanner VIN</a>
-        <a href="collecte.html" class="active">Contribuer</a>
+        <a href="https://seoparai.com/autoverif/rapport-vps.html">Scanner VIN</a>
+        <a href="https://seoparai.com/autoverif/collecte.html" class="active">Contribuer</a>
     </div>
 </nav>
 
@@ -493,25 +378,16 @@
     <h1><span class="accent">Contribuer</span> à l'historique <span class="gold">véhiculaire</span></h1>
     <p>Aidez-nous à bâtir la plus grande base de données véhiculaire du Québec. Chaque contribution compte.</p>
     <div class="stats-row">
-        <div class="stat-item">
-            <div class="stat-num" id="stat-submissions">--</div>
-            <div class="stat-label">Soumissions</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-num" id="stat-vehicles">--</div>
-            <div class="stat-label">Véhicules</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-num" id="stat-contributors">--</div>
-            <div class="stat-label">Contributeurs</div>
-        </div>
+        <div class="stat-item"><div class="stat-num" id="stat-submissions">--</div><div class="stat-label">Soumissions</div></div>
+        <div class="stat-item"><div class="stat-num" id="stat-vehicles">--</div><div class="stat-label">Véhicules</div></div>
+        <div class="stat-item"><div class="stat-num" id="stat-contributors">--</div><div class="stat-label">Contributeurs</div></div>
     </div>
 </div>
 
 <!-- FORM -->
 <div class="form-container">
 
-    <!-- SECTION 1: VIN -->
+    <!-- S1: VIN -->
     <div class="section" id="sec-vin">
         <div class="section-header" onclick="toggleSection('sec-vin')">
             <div class="section-icon cyan">&#128270;</div>
@@ -523,9 +399,7 @@
             <div class="form-row single">
                 <div class="form-group">
                     <label>Numéro VIN (17 caractères)</label>
-                    <input type="text" class="vin-input" id="vin-input" maxlength="17"
-                           placeholder="Ex: 2HGFC2F59MH528491"
-                           oninput="handleVinInput(this)">
+                    <input type="text" class="vin-input" id="vin-input" maxlength="17" placeholder="Ex: 2HGFC2F59MH528491" oninput="handleVinInput(this)">
                     <div id="vin-status" style="font-size:0.8rem;margin-top:4px;"></div>
                 </div>
             </div>
@@ -540,7 +414,7 @@
         </div>
     </div>
 
-    <!-- SECTION 2: QUI ÊTES-VOUS -->
+    <!-- S2: QUI ÊTES-VOUS -->
     <div class="section" id="sec-submitter">
         <div class="section-header" onclick="toggleSection('sec-submitter')">
             <div class="section-icon gold">&#128100;</div>
@@ -550,52 +424,23 @@
         </div>
         <div class="section-body">
             <div class="radio-cards" id="submitter-type">
-                <div class="radio-card" onclick="selectRadio(this,'submitter-type','garage')">
-                    <input type="radio" name="sub_type" value="garage">
-                    <div class="rc-icon">&#128295;</div>
-                    <div class="rc-text">Garage</div>
-                </div>
-                <div class="radio-card" onclick="selectRadio(this,'submitter-type','concessionnaire')">
-                    <input type="radio" name="sub_type" value="concessionnaire">
-                    <div class="rc-icon">&#127970;</div>
-                    <div class="rc-text">Concessionnaire</div>
-                </div>
-                <div class="radio-card" onclick="selectRadio(this,'submitter-type','assurance')">
-                    <input type="radio" name="sub_type" value="assurance">
-                    <div class="rc-icon">&#128203;</div>
-                    <div class="rc-text">Assurance</div>
-                </div>
-                <div class="radio-card" onclick="selectRadio(this,'submitter-type','particulier')">
-                    <input type="radio" name="sub_type" value="particulier">
-                    <div class="rc-icon">&#128587;</div>
-                    <div class="rc-text">Particulier</div>
-                </div>
-                <div class="radio-card" onclick="selectRadio(this,'submitter-type','saaq')">
-                    <input type="radio" name="sub_type" value="saaq">
-                    <div class="rc-icon">&#127963;</div>
-                    <div class="rc-text">SAAQ / Gouv</div>
-                </div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','garage')"><input type="radio" name="sub_type" value="garage"><div class="rc-icon">&#128295;</div><div class="rc-text">Garage</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','concessionnaire')"><input type="radio" name="sub_type" value="concessionnaire"><div class="rc-icon">&#127970;</div><div class="rc-text">Concessionnaire</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','assurance')"><input type="radio" name="sub_type" value="assurance"><div class="rc-icon">&#128203;</div><div class="rc-text">Assurance</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','particulier')"><input type="radio" name="sub_type" value="particulier"><div class="rc-icon">&#128587;</div><div class="rc-text">Particulier</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','saaq')"><input type="radio" name="sub_type" value="saaq"><div class="rc-icon">&#127963;</div><div class="rc-text">SAAQ / Gouv</div></div>
             </div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Nom complet</label>
-                    <input type="text" id="sub-name" placeholder="Jean Tremblay">
-                </div>
-                <div class="form-group">
-                    <label>Courriel</label>
-                    <input type="email" id="sub-email" placeholder="jean@garage.ca">
-                </div>
+                <div class="form-group"><label>Nom complet</label><input type="text" id="sub-name" placeholder="Jean Tremblay"></div>
+                <div class="form-group"><label>Courriel</label><input type="email" id="sub-email" placeholder="jean@garage.ca"></div>
             </div>
-            <div class="form-row single" id="company-row">
-                <div class="form-group">
-                    <label>Entreprise / Établissement</label>
-                    <input type="text" id="sub-company" placeholder="Garage Tremblay Inc.">
-                </div>
+            <div class="form-row single">
+                <div class="form-group"><label>Entreprise / Établissement</label><input type="text" id="sub-company" placeholder="Garage Tremblay Inc."></div>
             </div>
         </div>
     </div>
 
-    <!-- SECTION 3: TYPE DE RAPPORT (multi-select) -->
+    <!-- S3: TYPE DE RAPPORT (multi-select) -->
     <div class="section" id="sec-type">
         <div class="section-header" onclick="toggleSection('sec-type')">
             <div class="section-icon green">&#128221;</div>
@@ -606,36 +451,19 @@
         <div class="section-body">
             <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:14px;">Sélectionnez un ou plusieurs types de rapport à soumettre.</p>
             <div class="check-grid" id="report-types">
-                <label class="check-item" onclick="toggleCheck(this,'accident')">
-                    <input type="checkbox" value="accident">
-                    <div class="check-box"></div>
-                    <span class="check-label">&#128165; Accident</span>
-                </label>
-                <label class="check-item" onclick="toggleCheck(this,'service')">
-                    <input type="checkbox" value="service">
-                    <div class="check-box"></div>
-                    <span class="check-label">&#128736; Entretien / Réparation</span>
-                </label>
-                <label class="check-item" onclick="toggleCheck(this,'ownership')">
-                    <input type="checkbox" value="ownership">
-                    <div class="check-box"></div>
-                    <span class="check-label">&#128100; Changement propriétaire</span>
-                </label>
-                <label class="check-item" onclick="toggleCheck(this,'inspection')">
-                    <input type="checkbox" value="inspection">
-                    <div class="check-box"></div>
-                    <span class="check-label">&#9989; Inspection SAAQ</span>
-                </label>
-                <label class="check-item" onclick="toggleCheck(this,'recall_completion')">
-                    <input type="checkbox" value="recall_completion">
-                    <div class="check-box"></div>
-                    <span class="check-label">&#128276; Rappel complété</span>
-                </label>
+                <label class="check-item" onclick="toggleCheck(this,'accident')"><input type="checkbox" value="accident"><div class="check-box"></div><span class="check-label">&#128165; Accident</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'service')"><input type="checkbox" value="service"><div class="check-box"></div><span class="check-label">&#128736; Entretien / Réparation</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'ownership')"><input type="checkbox" value="ownership"><div class="check-box"></div><span class="check-label">&#128100; Changement propriétaire</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'inspection')"><input type="checkbox" value="inspection"><div class="check-box"></div><span class="check-label">&#9989; Inspection</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'recall_completion')"><input type="checkbox" value="recall_completion"><div class="check-box"></div><span class="check-label">&#128276; Rappel complété</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'title_brand')"><input type="checkbox" value="title_brand"><div class="check-box"></div><span class="check-label">&#128196; Titre / Branding</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'lien')"><input type="checkbox" value="lien"><div class="check-box"></div><span class="check-label">&#128179; Lien / Financement</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'theft')"><input type="checkbox" value="theft"><div class="check-box"></div><span class="check-label">&#128274; Vol / Récupération</span></label>
             </div>
         </div>
     </div>
 
-    <!-- SECTION 4: ACCIDENT DETAILS (shown when checked) -->
+    <!-- S4: ACCIDENT -->
     <div class="section type-section" id="sec-accident" data-type="accident">
         <div class="section-header" onclick="toggleSection('sec-accident')">
             <div class="section-icon red">&#128165;</div>
@@ -643,37 +471,28 @@
             <button class="section-toggle">&#9660;</button>
         </div>
         <div class="section-body">
+            <div class="form-row three">
+                <div class="form-group"><label>Date de l'accident</label><input type="date" id="acc-date"></div>
+                <div class="form-group"><label>Odomètre (km)</label><input type="number" id="acc-odo" placeholder="Ex: 85000" min="0"></div>
+                <div class="form-group"><label>Coût estimé ($)</label><input type="number" id="acc-cost" placeholder="Ex: 5000" min="0"></div>
+            </div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Date de l'accident</label>
-                    <input type="date" id="acc-date">
-                </div>
-                <div class="form-group">
-                    <label>Coût estimé des dommages ($)</label>
-                    <input type="number" id="acc-cost" placeholder="Ex: 5000" min="0">
-                </div>
+                <div class="form-group"><label>Lieu de l'accident</label><input type="text" id="acc-location" placeholder="Ex: Montréal, QC"></div>
+                <div class="form-group"><label>No. rapport police</label><input type="text" id="acc-police" placeholder="Optionnel"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Compagnie d'assurance</label><input type="text" id="acc-insurance-co" placeholder="Ex: Desjardins, Intact..."></div>
+                <div class="form-group"><label>No. réclamation assurance</label><input type="text" id="acc-insurance-num" placeholder="Optionnel"></div>
             </div>
 
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Sévérité</label>
+            <span class="field-label">Sévérité</span>
             <div class="severity-row" id="severity-sel">
-                <div class="severity-btn" onclick="selectSeverity(this,'minor')">
-                    <div class="sv-icon">&#9898;</div>
-                    <div class="sv-label" style="color:var(--green)">Mineur</div>
-                    <div class="sv-desc">Cosmétique, bosses, égratignures</div>
-                </div>
-                <div class="severity-btn" onclick="selectSeverity(this,'moderate')">
-                    <div class="sv-icon">&#128992;</div>
-                    <div class="sv-label" style="color:var(--gold)">Modéré</div>
-                    <div class="sv-desc">Panneaux remplacés, mécanique touchée</div>
-                </div>
-                <div class="severity-btn" onclick="selectSeverity(this,'major')">
-                    <div class="sv-icon">&#128308;</div>
-                    <div class="sv-label" style="color:var(--red)">Majeur</div>
-                    <div class="sv-desc">Dommages structurels, perte totale</div>
-                </div>
+                <div class="severity-btn" onclick="selectSeverity(this,'minor')"><div class="sv-icon">&#9898;</div><div class="sv-label" style="color:var(--green)">Mineur</div><div class="sv-desc">Cosmétique, bosses, égratignures</div></div>
+                <div class="severity-btn" onclick="selectSeverity(this,'moderate')"><div class="sv-icon">&#128992;</div><div class="sv-label" style="color:var(--gold)">Modéré</div><div class="sv-desc">Panneaux remplacés, mécanique</div></div>
+                <div class="severity-btn" onclick="selectSeverity(this,'major')"><div class="sv-icon">&#128308;</div><div class="sv-label" style="color:var(--red)">Majeur</div><div class="sv-desc">Structurel, perte totale</div></div>
             </div>
 
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Point(s) d'impact</label>
+            <span class="field-label">Point(s) d'impact</span>
             <div class="impact-grid" id="impact-grid">
                 <div class="impact-zone" onclick="toggleImpact(this)" data-zone="front-left">AV-G</div>
                 <div class="impact-zone" onclick="toggleImpact(this)" data-zone="front">AVANT</div>
@@ -686,63 +505,38 @@
                 <div class="impact-zone" onclick="toggleImpact(this)" data-zone="rear-right">AR-D</div>
             </div>
 
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Détails supplémentaires</label>
-            <div class="check-grid" style="margin-bottom:16px;">
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" id="acc-airbag">
-                    <div class="check-box"></div>
-                    <span class="check-label">Coussins gonflables déployés</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" id="acc-structural">
-                    <div class="check-box"></div>
-                    <span class="check-label">Dommages structurels</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" id="acc-flood">
-                    <div class="check-box"></div>
-                    <span class="check-label">Dommages par eau / inondation</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" id="acc-fire">
-                    <div class="check-box"></div>
-                    <span class="check-label">Dommages par feu</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" id="acc-theft">
-                    <div class="check-box"></div>
-                    <span class="check-label">Vol / vandalisme</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" id="acc-towing">
-                    <div class="check-box"></div>
-                    <span class="check-label">Remorquage requis</span>
-                </label>
+            <span class="field-label">Détails</span>
+            <div class="check-grid">
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-airbag"><div class="check-box"></div><span class="check-label">Coussins gonflables déployés</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-structural"><div class="check-box"></div><span class="check-label">Dommages structurels / cadre</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-flood"><div class="check-box"></div><span class="check-label">Dommages par eau / inondation</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-fire"><div class="check-box"></div><span class="check-label">Dommages par feu</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-hail"><div class="check-box"></div><span class="check-label">Dommages par grêle</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-theft"><div class="check-box"></div><span class="check-label">Vol / vandalisme</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-towing"><div class="check-box"></div><span class="check-label">Remorquage requis</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-rollover"><div class="check-box"></div><span class="check-label">Tonneau / capotage</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" id="acc-totalloss"><div class="check-box"></div><span class="check-label">Perte totale déclarée</span></label>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle" id="acc-drivable-toggle" onclick="toggleDrivable(this)"></div>
+                <span class="toggle-label">Véhicule roulable après l'accident</span>
             </div>
 
             <div class="form-row single">
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="acc-desc" placeholder="Décrivez les circonstances de l'accident..."></textarea>
-                </div>
+                <div class="form-group"><label>Description</label><textarea id="acc-desc" placeholder="Décrivez les circonstances de l'accident..."></textarea></div>
             </div>
 
-            <!-- PHOTOS ACCIDENT -->
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos de l'accident</label>
-            <div class="photo-zone" id="photo-accident" onclick="document.getElementById('file-accident').click()"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="handleDrop(event,'accident')">
+            <span class="field-label">Photos de l'accident</span>
+            <div class="photo-zone" onclick="document.getElementById('file-accident').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event,'accident')">
                 <input type="file" id="file-accident" multiple accept="image/*" onchange="handleFiles(this.files,'accident')">
-                <div class="pz-icon">&#128247;</div>
-                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
-                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
+                <div class="pz-icon">&#128247;</div><div class="pz-text">Glissez vos photos ou cliquez</div><div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
             </div>
             <div class="photo-preview" id="preview-accident"></div>
         </div>
     </div>
 
-    <!-- SECTION 5: SERVICE/ENTRETIEN -->
+    <!-- S5: SERVICE -->
     <div class="section type-section" id="sec-service" data-type="service">
         <div class="section-header" onclick="toggleSection('sec-service')">
             <div class="section-icon gold">&#128736;</div>
@@ -750,131 +544,50 @@
             <button class="section-toggle">&#9660;</button>
         </div>
         <div class="section-body">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Date du service</label>
-                    <input type="date" id="svc-date">
-                </div>
-                <div class="form-group">
-                    <label>Odomètre (km)</label>
-                    <input type="number" id="svc-odo" placeholder="Ex: 85000" min="0">
-                </div>
+            <div class="form-row three">
+                <div class="form-group"><label>Date du service</label><input type="date" id="svc-date"></div>
+                <div class="form-group"><label>Odomètre (km)</label><input type="number" id="svc-odo" placeholder="Ex: 85000" min="0"></div>
+                <div class="form-group"><label>Coût total ($)</label><input type="number" id="svc-cost" placeholder="Ex: 850" min="0"></div>
             </div>
 
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Type(s) de service effectué</label>
+            <span class="field-label">Type(s) de service effectué</span>
             <div class="check-grid" id="svc-types">
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="oil_change">
-                    <div class="check-box"></div>
-                    <span class="check-label">Changement d'huile</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="brakes">
-                    <div class="check-box"></div>
-                    <span class="check-label">Freins</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="tires">
-                    <div class="check-box"></div>
-                    <span class="check-label">Pneus</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="transmission">
-                    <div class="check-box"></div>
-                    <span class="check-label">Transmission</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="engine">
-                    <div class="check-box"></div>
-                    <span class="check-label">Moteur</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="suspension">
-                    <div class="check-box"></div>
-                    <span class="check-label">Suspension</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="exhaust">
-                    <div class="check-box"></div>
-                    <span class="check-label">Échappement</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="electrical">
-                    <div class="check-box"></div>
-                    <span class="check-label">Électrique</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="ac_heating">
-                    <div class="check-box"></div>
-                    <span class="check-label">A/C / Chauffage</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="body_paint">
-                    <div class="check-box"></div>
-                    <span class="check-label">Carrosserie / Peinture</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="battery">
-                    <div class="check-box"></div>
-                    <span class="check-label">Batterie</span>
-                </label>
-                <label class="check-item" onclick="toggleCheckSimple(this)">
-                    <input type="checkbox" value="other">
-                    <div class="check-box"></div>
-                    <span class="check-label">Autre</span>
-                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="oil_change"><div class="check-box"></div><span class="check-label">Changement d'huile</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="brakes"><div class="check-box"></div><span class="check-label">Freins</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="tires"><div class="check-box"></div><span class="check-label">Pneus</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="transmission"><div class="check-box"></div><span class="check-label">Transmission</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="engine"><div class="check-box"></div><span class="check-label">Moteur</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="suspension"><div class="check-box"></div><span class="check-label">Suspension</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="exhaust"><div class="check-box"></div><span class="check-label">Échappement</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="electrical"><div class="check-box"></div><span class="check-label">Électrique</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="ac_heating"><div class="check-box"></div><span class="check-label">A/C / Chauffage</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="body_paint"><div class="check-box"></div><span class="check-label">Carrosserie / Peinture</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="battery"><div class="check-box"></div><span class="check-label">Batterie</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="timing_belt"><div class="check-box"></div><span class="check-label">Courroie distribution</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="alignment"><div class="check-box"></div><span class="check-label">Alignement</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="glass"><div class="check-box"></div><span class="check-label">Pare-brise / Vitres</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="steering"><div class="check-box"></div><span class="check-label">Direction</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="other"><div class="check-box"></div><span class="check-label">Autre</span></label>
             </div>
 
             <div class="form-row">
-                <div class="form-group">
-                    <label>Établissement / Garage</label>
-                    <input type="text" id="svc-facility" placeholder="Nom du garage">
-                </div>
-                <div class="form-group">
-                    <label>Coût total ($)</label>
-                    <input type="number" id="svc-cost" placeholder="Ex: 850" min="0">
+                <div class="form-group"><label>Établissement / Garage</label><input type="text" id="svc-facility" placeholder="Nom du garage"></div>
+                <div class="form-group"><label>Pièces utilisées</label>
+                    <select id="svc-parts"><option value="na">— Non spécifié —</option><option value="oem">OEM (Manufacturier)</option><option value="aftermarket">Aftermarket</option><option value="used">Usagées</option><option value="mixed">Mélange</option></select>
                 </div>
             </div>
+            <div class="form-row single"><div class="form-group"><label>Description des travaux</label><textarea id="svc-desc" placeholder="Détails des travaux effectués..."></textarea></div></div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Pièces utilisées</label>
-                    <select id="svc-parts">
-                        <option value="na">— Non spécifié —</option>
-                        <option value="oem">OEM (Manufacturier)</option>
-                        <option value="aftermarket">Aftermarket</option>
-                        <option value="used">Usagées</option>
-                        <option value="mixed">Mélange</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>&nbsp;</label>
-                </div>
-            </div>
-
-            <div class="form-row single">
-                <div class="form-group">
-                    <label>Description des travaux</label>
-                    <textarea id="svc-desc" placeholder="Détails des travaux effectués..."></textarea>
-                </div>
-            </div>
-
-            <!-- PHOTOS SERVICE -->
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos / Factures</label>
-            <div class="photo-zone" id="photo-service" onclick="document.getElementById('file-service').click()"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="handleDrop(event,'service')">
+            <span class="field-label">Photos / Factures</span>
+            <div class="photo-zone" onclick="document.getElementById('file-service').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event,'service')">
                 <input type="file" id="file-service" multiple accept="image/*" onchange="handleFiles(this.files,'service')">
-                <div class="pz-icon">&#128247;</div>
-                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
-                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
+                <div class="pz-icon">&#128247;</div><div class="pz-text">Glissez vos photos ou cliquez</div><div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
             </div>
             <div class="photo-preview" id="preview-service"></div>
         </div>
     </div>
 
-    <!-- SECTION 6: CHANGEMENT PROPRIÉTAIRE -->
+    <!-- S6: OWNERSHIP -->
     <div class="section type-section" id="sec-ownership" data-type="ownership">
         <div class="section-header" onclick="toggleSection('sec-ownership')">
             <div class="section-icon purple">&#128100;</div>
@@ -882,134 +595,85 @@
             <button class="section-toggle">&#9660;</button>
         </div>
         <div class="section-body">
+            <div class="form-row three">
+                <div class="form-group"><label>Date du transfert</label><input type="date" id="own-date"></div>
+                <div class="form-group"><label>Prix de vente ($)</label><input type="number" id="own-price" placeholder="Ex: 15000" min="0"></div>
+                <div class="form-group"><label>Odomètre (km)</label><input type="number" id="own-odo" placeholder="Ex: 120000" min="0"></div>
+            </div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Date du transfert</label>
-                    <input type="date" id="own-date">
+                <div class="form-group"><label>Ancien propriétaire</label>
+                    <select id="own-prev"><option value="unknown">— Non spécifié —</option><option value="particulier">Particulier</option><option value="concessionnaire">Concessionnaire</option><option value="location">Compagnie de location</option><option value="flotte">Flotte commerciale</option><option value="gouvernement">Gouvernement</option><option value="assurance">Assurance (reconstruction)</option><option value="taxi">Taxi / Rideshare</option><option value="ecole">École de conduite</option></select>
                 </div>
-                <div class="form-group">
-                    <label>Prix de vente ($)</label>
-                    <input type="number" id="own-price" placeholder="Ex: 15000" min="0">
+                <div class="form-group"><label>Nouveau propriétaire</label>
+                    <select id="own-new"><option value="unknown">— Non spécifié —</option><option value="particulier">Particulier</option><option value="concessionnaire">Concessionnaire</option><option value="location">Compagnie de location</option><option value="flotte">Flotte commerciale</option><option value="gouvernement">Gouvernement</option><option value="taxi">Taxi / Rideshare</option></select>
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Ancien propriétaire</label>
-                    <select id="own-prev">
-                        <option value="unknown">— Non spécifié —</option>
-                        <option value="particulier">Particulier</option>
-                        <option value="concessionnaire">Concessionnaire</option>
-                        <option value="location">Compagnie de location</option>
-                        <option value="flotte">Flotte commerciale</option>
-                        <option value="gouvernement">Gouvernement</option>
-                        <option value="assurance">Assurance (reconstruction)</option>
-                    </select>
+                <div class="form-group"><label>Province</label>
+                    <select id="own-province"><option value="QC">Québec</option><option value="ON">Ontario</option><option value="NB">Nouveau-Brunswick</option><option value="NS">Nouvelle-Écosse</option><option value="PE">Île-du-Prince-Édouard</option><option value="NL">Terre-Neuve</option><option value="MB">Manitoba</option><option value="SK">Saskatchewan</option><option value="AB">Alberta</option><option value="BC">Colombie-Britannique</option><option value="YT">Yukon</option><option value="NT">Territoires du Nord-Ouest</option><option value="NU">Nunavut</option><option value="US">États-Unis</option><option value="OTHER">Autre pays</option></select>
                 </div>
-                <div class="form-group">
-                    <label>Nouveau propriétaire</label>
-                    <select id="own-new">
-                        <option value="unknown">— Non spécifié —</option>
-                        <option value="particulier">Particulier</option>
-                        <option value="concessionnaire">Concessionnaire</option>
-                        <option value="location">Compagnie de location</option>
-                        <option value="flotte">Flotte commerciale</option>
-                        <option value="gouvernement">Gouvernement</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Province</label>
-                    <select id="own-province">
-                        <option value="QC">Québec</option>
-                        <option value="ON">Ontario</option>
-                        <option value="NB">Nouveau-Brunswick</option>
-                        <option value="NS">Nouvelle-Écosse</option>
-                        <option value="PE">Île-du-Prince-Édouard</option>
-                        <option value="NL">Terre-Neuve</option>
-                        <option value="MB">Manitoba</option>
-                        <option value="SK">Saskatchewan</option>
-                        <option value="AB">Alberta</option>
-                        <option value="BC">Colombie-Britannique</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Odomètre au transfert (km)</label>
-                    <input type="number" id="own-odo" placeholder="Ex: 120000" min="0">
+                <div class="form-group"><label>Usage du véhicule</label>
+                    <select id="own-usage"><option value="">— Non spécifié —</option><option value="personnel">Personnel</option><option value="commercial">Commercial</option><option value="location">Location</option><option value="taxi">Taxi / Uber / Lyft</option><option value="livraison">Livraison</option><option value="police">Police / Urgence</option><option value="flotte">Flotte d'entreprise</option><option value="ecole_conduite">École de conduite</option></select>
                 </div>
             </div>
 
-            <!-- PHOTOS OWNERSHIP -->
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos / Documents</label>
-            <div class="photo-zone" id="photo-ownership" onclick="document.getElementById('file-ownership').click()"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="handleDrop(event,'ownership')">
+            <span class="field-label">Photos / Documents</span>
+            <div class="photo-zone" onclick="document.getElementById('file-ownership').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event,'ownership')">
                 <input type="file" id="file-ownership" multiple accept="image/*" onchange="handleFiles(this.files,'ownership')">
-                <div class="pz-icon">&#128247;</div>
-                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
-                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
+                <div class="pz-icon">&#128247;</div><div class="pz-text">Glissez vos photos ou cliquez</div><div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
             </div>
             <div class="photo-preview" id="preview-ownership"></div>
         </div>
     </div>
 
-    <!-- SECTION 7: INSPECTION SAAQ -->
+    <!-- S7: INSPECTION (expanded) -->
     <div class="section type-section" id="sec-inspection" data-type="inspection">
         <div class="section-header" onclick="toggleSection('sec-inspection')">
             <div class="section-icon green">&#9989;</div>
-            <div class="section-title">Inspection SAAQ / Mécanique</div>
+            <div class="section-title">Inspection</div>
             <button class="section-toggle">&#9660;</button>
         </div>
         <div class="section-body">
+            <span class="field-label">Type d'inspection</span>
+            <div class="radio-cards" id="insp-type-sel">
+                <div class="radio-card" onclick="selectRadio(this,'insp-type-sel','saaq_mecanique')"><input type="radio" name="insp_type" value="saaq_mecanique"><div class="rc-icon">&#127963;</div><div class="rc-text">SAAQ Mécanique</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-type-sel','pre_achat')"><input type="radio" name="insp_type" value="pre_achat"><div class="rc-icon">&#128269;</div><div class="rc-text">Pré-achat</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-type-sel','securite')"><input type="radio" name="insp_type" value="securite"><div class="rc-icon">&#128737;</div><div class="rc-text">Sécurité (ON/AB)</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-type-sel','emissions')"><input type="radio" name="insp_type" value="emissions"><div class="rc-icon">&#127811;</div><div class="rc-text">Émissions</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-type-sel','hors_province')"><input type="radio" name="insp_type" value="hors_province"><div class="rc-icon">&#128666;</div><div class="rc-text">Hors-province</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-type-sel','commercial')"><input type="radio" name="insp_type" value="commercial"><div class="rc-icon">&#128666;</div><div class="rc-text">Véhicule commercial</div></div>
+            </div>
+
+            <div class="form-row three">
+                <div class="form-group"><label>Date de l'inspection</label><input type="date" id="insp-date"></div>
+                <div class="form-group"><label>Odomètre (km)</label><input type="number" id="insp-odo" placeholder="Ex: 95000" min="0"></div>
+                <div class="form-group"><label>No. formulaire SAAQ</label><input type="text" id="insp-form" placeholder="Optionnel"></div>
+            </div>
+
+            <span class="field-label">Résultat</span>
+            <div class="radio-cards" id="insp-result" style="max-width:500px;">
+                <div class="radio-card" onclick="selectRadio(this,'insp-result','pass')" style="border-color:rgba(42,157,143,0.3)"><input type="radio" name="insp_result" value="pass"><div class="rc-icon" style="color:var(--green)">&#9989;</div><div class="rc-text" style="color:var(--green)">Réussi</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-result','conditional')" style="border-color:rgba(244,166,28,0.3)"><input type="radio" name="insp_result" value="conditional"><div class="rc-icon" style="color:var(--gold)">&#9888;</div><div class="rc-text" style="color:var(--gold)">Conditionnel</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-result','fail')" style="border-color:rgba(230,57,70,0.3)"><input type="radio" name="insp_result" value="fail"><div class="rc-icon" style="color:var(--red)">&#10060;</div><div class="rc-text" style="color:var(--red)">Échoué</div></div>
+            </div>
+
             <div class="form-row">
-                <div class="form-group">
-                    <label>Date de l'inspection</label>
-                    <input type="date" id="insp-date">
-                </div>
-                <div class="form-group">
-                    <label>Odomètre (km)</label>
-                    <input type="number" id="insp-odo" placeholder="Ex: 95000" min="0">
-                </div>
+                <div class="form-group"><label>Inspecteur (nom)</label><input type="text" id="insp-inspector" placeholder="Nom de l'inspecteur"></div>
+                <div class="form-group"><label>No. permis mandataire SAAQ</label><input type="text" id="insp-permit" placeholder="Optionnel"></div>
             </div>
+            <div class="form-row single"><div class="form-group"><label>Établissement</label><input type="text" id="insp-facility" placeholder="Nom du garage mandataire"></div></div>
+            <div class="form-row single"><div class="form-group"><label>Notes / Défaillances</label><textarea id="insp-notes" placeholder="Points vérifiés, défaillances observées..."></textarea></div></div>
 
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Résultat</label>
-            <div class="radio-cards" id="insp-result" style="max-width:400px;">
-                <div class="radio-card" onclick="selectRadio(this,'insp-result','pass')" style="border-color:rgba(42,157,143,0.3);">
-                    <input type="radio" name="insp_result" value="pass">
-                    <div class="rc-icon" style="color:var(--green)">&#9989;</div>
-                    <div class="rc-text" style="color:var(--green)">Réussi</div>
-                </div>
-                <div class="radio-card" onclick="selectRadio(this,'insp-result','fail')" style="border-color:rgba(230,57,70,0.3);">
-                    <input type="radio" name="insp_result" value="fail">
-                    <div class="rc-icon" style="color:var(--red)">&#10060;</div>
-                    <div class="rc-text" style="color:var(--red)">Échoué</div>
-                </div>
-            </div>
-
-            <div class="form-row single">
-                <div class="form-group">
-                    <label>Notes / Détails</label>
-                    <textarea id="insp-notes" placeholder="Points vérifiés, défaillances observées..."></textarea>
-                </div>
-            </div>
-
-            <!-- PHOTOS INSPECTION -->
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos du rapport</label>
-            <div class="photo-zone" id="photo-inspection" onclick="document.getElementById('file-inspection').click()"
-                 ondragover="event.preventDefault();this.classList.add('drag-over')"
-                 ondragleave="this.classList.remove('drag-over')"
-                 ondrop="handleDrop(event,'inspection')">
+            <span class="field-label">Photos du rapport</span>
+            <div class="photo-zone" onclick="document.getElementById('file-inspection').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event,'inspection')">
                 <input type="file" id="file-inspection" multiple accept="image/*" onchange="handleFiles(this.files,'inspection')">
-                <div class="pz-icon">&#128247;</div>
-                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
-                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
+                <div class="pz-icon">&#128247;</div><div class="pz-text">Glissez vos photos ou cliquez</div><div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
             </div>
             <div class="photo-preview" id="preview-inspection"></div>
         </div>
     </div>
 
-    <!-- SECTION 8: RAPPEL COMPLÉTÉ -->
+    <!-- S8: RECALL -->
     <div class="section type-section" id="sec-recall" data-type="recall_completion">
         <div class="section-header" onclick="toggleSection('sec-recall')">
             <div class="section-icon cyan">&#128276;</div>
@@ -1017,22 +681,125 @@
             <button class="section-toggle">&#9660;</button>
         </div>
         <div class="section-body">
+            <div class="form-row three">
+                <div class="form-group"><label>Numéro du rappel</label><input type="text" id="rec-number" placeholder="Ex: 2024-123"></div>
+                <div class="form-group"><label>Date de complétion</label><input type="date" id="rec-date"></div>
+                <div class="form-group"><label>Odomètre (km)</label><input type="number" id="rec-odo" placeholder="Optionnel" min="0"></div>
+            </div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Numéro du rappel</label>
-                    <input type="text" id="rec-number" placeholder="Ex: 2024-123">
+                <div class="form-group"><label>Établissement</label><input type="text" id="rec-facility" placeholder="Concessionnaire ou garage"></div>
+                <div class="form-group"><label>Composant affecté</label><input type="text" id="rec-component" placeholder="Ex: Système de freinage"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Type de remède</label>
+                    <select id="rec-remedy"><option value="">— Non spécifié —</option><option value="repair">Réparation</option><option value="replace">Remplacement pièce</option><option value="software">Mise à jour logicielle</option><option value="refund">Remboursement</option></select>
                 </div>
-                <div class="form-group">
-                    <label>Date de complétion</label>
-                    <input type="date" id="rec-date">
+                <div class="form-group"><label>&nbsp;</label></div>
+            </div>
+            <div class="form-row single"><div class="form-group"><label>Description du rappel</label><textarea id="rec-desc" placeholder="Description du problème et de la correction..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S9: TITLE BRAND (NEW) -->
+    <div class="section type-section" id="sec-title" data-type="title_brand">
+        <div class="section-header" onclick="toggleSection('sec-title')">
+            <div class="section-icon orange">&#128196;</div>
+            <div class="section-title">Titre / Branding véhiculaire</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <span class="field-label">Type de branding</span>
+            <div class="radio-cards" id="brand-type-sel">
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','clean')" style="border-color:rgba(42,157,143,0.3)"><input type="radio" name="brand_type" value="clean"><div class="rc-icon" style="color:var(--green)">&#9989;</div><div class="rc-text" style="color:var(--green)">Clean / Normal</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','salvage')"><input type="radio" name="brand_type" value="salvage"><div class="rc-icon" style="color:var(--red)">&#9888;</div><div class="rc-text" style="color:var(--red)">Salvage</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','rebuilt')"><input type="radio" name="brand_type" value="rebuilt"><div class="rc-icon" style="color:var(--gold)">&#128295;</div><div class="rc-text" style="color:var(--gold)">Rebuilt / Reconstruit</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','vga')"><input type="radio" name="brand_type" value="vga"><div class="rc-icon" style="color:var(--red)">&#127988;</div><div class="rc-text" style="color:var(--red)">VGA (SAAQ)</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','irreparable')"><input type="radio" name="brand_type" value="irreparable"><div class="rc-icon">&#10060;</div><div class="rc-text">Irréparable</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','flood')"><input type="radio" name="brand_type" value="flood"><div class="rc-icon">&#127754;</div><div class="rc-text">Inondation</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','fire')"><input type="radio" name="brand_type" value="fire"><div class="rc-icon">&#128293;</div><div class="rc-text">Incendie</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','lemon')"><input type="radio" name="brand_type" value="lemon"><div class="rc-icon">&#127819;</div><div class="rc-text">Lemon / Rachat</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','stolen')"><input type="radio" name="brand_type" value="stolen"><div class="rc-icon">&#128274;</div><div class="rc-text">Volé / Récupéré</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'brand-type-sel','odometer')"><input type="radio" name="brand_type" value="odometer"><div class="rc-icon">&#128200;</div><div class="rc-text">Odomètre suspect</div></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"><label>Date du branding</label><input type="date" id="brand-date"></div>
+                <div class="form-group"><label>Province / État source</label>
+                    <select id="brand-province"><option value="QC">Québec</option><option value="ON">Ontario</option><option value="AB">Alberta</option><option value="BC">Colombie-Britannique</option><option value="MB">Manitoba</option><option value="SK">Saskatchewan</option><option value="NB">Nouveau-Brunswick</option><option value="NS">Nouvelle-Écosse</option><option value="US">États-Unis</option><option value="OTHER">Autre</option></select>
                 </div>
             </div>
-            <div class="form-row single">
-                <div class="form-group">
-                    <label>Établissement</label>
-                    <input type="text" id="rec-facility" placeholder="Concessionnaire ou garage ayant complété le rappel">
+            <div class="form-row">
+                <div class="form-group"><label>Compagnie d'assurance</label><input type="text" id="brand-insurance" placeholder="Si perte totale déclarée"></div>
+                <div class="form-group"><label>Montant perte totale ($)</label><input type="number" id="brand-amount" placeholder="Optionnel" min="0"></div>
+            </div>
+            <div class="form-row single"><div class="form-group"><label>Source de l'information</label><input type="text" id="brand-source" placeholder="Ex: SAAQ, RDPRM, assurance..."></div></div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="brand-notes" placeholder="Détails supplémentaires..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S10: LIEN / FINANCEMENT (NEW) -->
+    <div class="section type-section" id="sec-lien" data-type="lien">
+        <div class="section-header" onclick="toggleSection('sec-lien')">
+            <div class="section-icon gold">&#128179;</div>
+            <div class="section-title">Lien / Financement (RDPRM / PPSA)</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group"><label>Créancier / Institution</label><input type="text" id="lien-holder" placeholder="Ex: Desjardins, RBC, TD..."></div>
+                <div class="form-group"><label>Type de lien</label>
+                    <select id="lien-type"><option value="">— Non spécifié —</option><option value="hypotheque">Hypothèque mobilière</option><option value="reservation">Réservation de propriété</option><option value="leasing">Location (leasing)</option><option value="pret">Prêt auto</option></select>
                 </div>
             </div>
+            <div class="form-row three">
+                <div class="form-group"><label>Montant ($)</label><input type="number" id="lien-amount" placeholder="Ex: 25000" min="0"></div>
+                <div class="form-group"><label>Date d'inscription</label><input type="date" id="lien-reg-date"></div>
+                <div class="form-group"><label>Date de radiation</label><input type="date" id="lien-discharge-date"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Statut</label>
+                    <select id="lien-status"><option value="active">Actif</option><option value="discharged">Radié / Payé</option><option value="renewed">Renouvelé</option></select>
+                </div>
+                <div class="form-group"><label>Province</label>
+                    <select id="lien-province"><option value="QC">Québec (RDPRM)</option><option value="ON">Ontario (PPSA)</option><option value="AB">Alberta (PPSA)</option><option value="BC">Colombie-Britannique (PPSA)</option><option value="OTHER">Autre</option></select>
+                </div>
+            </div>
+            <div class="form-row single"><div class="form-group"><label>No. inscription RDPRM / PPSA</label><input type="text" id="lien-reg-num" placeholder="Optionnel"></div></div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="lien-notes" placeholder="Détails supplémentaires..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S11: THEFT / RECOVERY (NEW) -->
+    <div class="section type-section" id="sec-theft" data-type="theft">
+        <div class="section-header" onclick="toggleSection('sec-theft')">
+            <div class="section-icon red">&#128274;</div>
+            <div class="section-title">Vol / Récupération</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group"><label>Date du vol</label><input type="date" id="theft-date-stolen"></div>
+                <div class="form-group"><label>Date de récupération</label><input type="date" id="theft-date-recovered"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>No. rapport police</label><input type="text" id="theft-police" placeholder="Numéro du rapport"></div>
+                <div class="form-group"><label>Corps policier</label><input type="text" id="theft-jurisdiction" placeholder="Ex: SPVM, SQ, GRC..."></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Lieu de récupération</label><input type="text" id="theft-recovery-loc" placeholder="Ville, province"></div>
+                <div class="form-group"><label>État à la récupération</label>
+                    <select id="theft-condition"><option value="">— Non spécifié —</option><option value="undamaged">Intact / Sans dommages</option><option value="damaged">Endommagé</option><option value="stripped">Dépouillé (pièces manquantes)</option><option value="burned">Incendié</option></select>
+                </div>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle" id="theft-insurance-toggle" onclick="toggleGeneric(this,'theft-insurance')"></div>
+                <span class="toggle-label">Réclamation d'assurance déposée</span>
+                <input type="hidden" id="theft-insurance" value="false">
+            </div>
+
+            <div class="form-row single"><div class="form-group"><label>Pièces manquantes</label><textarea id="theft-parts" placeholder="Liste des pièces manquantes à la récupération..."></textarea></div></div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="theft-notes" placeholder="Détails supplémentaires..."></textarea></div></div>
         </div>
     </div>
 
@@ -1043,9 +810,7 @@
                 <div class="check-box" id="confirm-box"></div>
                 <span>Je confirme que ces informations sont exactes et vérifiables.</span>
             </div>
-            <button class="btn-submit" id="btn-submit" disabled onclick="submitForm()">
-                Soumettre la contribution
-            </button>
+            <button class="btn-submit" id="btn-submit" disabled onclick="submitForm()">Soumettre la contribution</button>
             <div id="submit-status" style="margin-top:12px;font-size:0.85rem;"></div>
         </div>
     </div>
@@ -1073,409 +838,255 @@
 </footer>
 
 <script>
-// ─── CONFIG ───
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8930'
-    : 'https://seoparai.com/autoverif';
+    ? 'http://localhost:8930' : 'https://seoparai.com/autoverif';
 
-// ─── STATE ───
-let vehicleData = null;
-let selectedTypes = new Set();
-let selectedSeverity = null;
-let selectedImpacts = new Set();
-let selectedSubmitterType = null;
-let inspectionResult = null;
-let confirmed = false;
-let photoFiles = { accident: [], service: [], ownership: [], inspection: [] };
+// STATE
+let vehicleData = null, selectedTypes = new Set(), selectedSeverity = null, selectedImpacts = new Set();
+let selectedSubmitterType = null, inspectionResult = null, inspectionType = null, brandType = null;
+let confirmed = false, drivableState = true;
+let photoFiles = { accident:[], service:[], ownership:[], inspection:[] };
 
-// ─── LOAD STATS ───
-async function loadStats() {
-    try {
-        const r = await fetch(`${API_BASE}/api/collecte/stats`);
-        const d = await r.json();
-        document.getElementById('stat-submissions').textContent = d.total_submissions || 0;
-        document.getElementById('stat-vehicles').textContent = d.total_vehicles || 0;
-        document.getElementById('stat-contributors').textContent = d.total_contributors || 0;
-    } catch(e) {}
-}
-loadStats();
+// LOAD STATS
+(async()=>{try{const r=await fetch(`${API_BASE}/api/collecte/stats`);const d=await r.json();document.getElementById('stat-submissions').textContent=d.total_submissions||0;document.getElementById('stat-vehicles').textContent=d.total_vehicles||0;document.getElementById('stat-contributors').textContent=d.total_contributors||0;}catch(e){}})();
 
-// ─── VIN INPUT ───
-let vinTimeout = null;
-function handleVinInput(el) {
-    el.value = el.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, '');
-    const vin = el.value;
-    const status = document.getElementById('vin-status');
-
-    if (vin.length < 17) {
-        status.innerHTML = `<span style="color:var(--text-light)">${vin.length}/17 caractères</span>`;
-        document.getElementById('vehicle-card').classList.remove('show');
-        vehicleData = null;
-        return;
-    }
-
-    status.innerHTML = '<span style="color:var(--accent)"><span class="spinner"></span>Décodage VIN...</span>';
-
+// VIN INPUT
+let vinTimeout=null;
+function handleVinInput(el){
+    el.value=el.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
+    const vin=el.value,status=document.getElementById('vin-status');
+    if(vin.length<17){status.innerHTML=`<span style="color:var(--text-light)">${vin.length}/17 caractères</span>`;document.getElementById('vehicle-card').classList.remove('show');vehicleData=null;return;}
+    status.innerHTML='<span style="color:var(--accent)"><span class="spinner"></span>Décodage VIN...</span>';
     clearTimeout(vinTimeout);
-    vinTimeout = setTimeout(async () => {
-        try {
-            const r = await fetch(`${API_BASE}/api/collecte/vin-check/${vin}`);
-            const d = await r.json();
-            if (d.error) {
-                status.innerHTML = `<span style="color:var(--red)">${d.error}</span>`;
-                vehicleData = null;
-                return;
-            }
-            vehicleData = d;
-            const v = d.vehicle;
-            document.getElementById('vehicle-name').textContent = `${v.year} ${v.make} ${v.model}`;
-            document.getElementById('vehicle-vin').textContent = vin;
-            document.getElementById('vehicle-img').src = d.image_url;
-            document.getElementById('vehicle-img').style.display = '';
-
-            const specs = document.getElementById('vehicle-specs');
-            specs.innerHTML = '';
-            const tags = [v.body, v.engine ? v.engine + 'L' : '', v.fuel, v.drive, v.transmission].filter(Boolean);
-            tags.forEach(t => { specs.innerHTML += `<span class="spec-tag">${t}</span>`; });
-            if (d.existing_records > 0) {
-                specs.innerHTML += `<span class="spec-tag" style="background:rgba(0,180,216,0.15);color:var(--accent)">${d.existing_records} rapport(s) existant(s)</span>`;
-            }
-
-            document.getElementById('vehicle-card').classList.add('show');
-            status.innerHTML = `<span style="color:var(--green)">&#9989; Véhicule identifié</span>`;
-        } catch(e) {
-            status.innerHTML = `<span style="color:var(--red)">Erreur de connexion</span>`;
-            vehicleData = null;
-        }
-    }, 300);
+    vinTimeout=setTimeout(async()=>{try{const r=await fetch(`${API_BASE}/api/collecte/vin-check/${vin}`);const d=await r.json();
+        if(d.error){status.innerHTML=`<span style="color:var(--red)">${d.error}</span>`;vehicleData=null;return;}
+        vehicleData=d;const v=d.vehicle;
+        document.getElementById('vehicle-name').textContent=`${v.year} ${v.make} ${v.model}`;
+        document.getElementById('vehicle-vin').textContent=vin;
+        document.getElementById('vehicle-img').src=d.image_url;document.getElementById('vehicle-img').style.display='';
+        const specs=document.getElementById('vehicle-specs');specs.innerHTML='';
+        [v.body,v.engine?v.engine+'L':'',v.fuel,v.drive,v.transmission].filter(Boolean).forEach(t=>{specs.innerHTML+=`<span class="spec-tag">${t}</span>`;});
+        if(d.existing_records>0)specs.innerHTML+=`<span class="spec-tag" style="background:rgba(0,180,216,0.15);color:var(--accent)">${d.existing_records} rapport(s)</span>`;
+        document.getElementById('vehicle-card').classList.add('show');
+        status.innerHTML='<span style="color:var(--green)">&#9989; Véhicule identifié</span>';
+    }catch(e){status.innerHTML='<span style="color:var(--red)">Erreur de connexion</span>';vehicleData=null;}},300);
 }
 
-// ─── SECTION TOGGLE ───
-function toggleSection(id) {
-    document.getElementById(id).classList.toggle('collapsed');
+// SECTION TOGGLE
+function toggleSection(id){document.getElementById(id).classList.toggle('collapsed');}
+
+// RADIO CARDS
+function selectRadio(el,groupId,value){
+    document.getElementById(groupId).querySelectorAll('.radio-card').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');el.querySelector('input').checked=true;
+    if(groupId==='submitter-type')selectedSubmitterType=value;
+    if(groupId==='insp-result')inspectionResult=value;
+    if(groupId==='insp-type-sel')inspectionType=value;
+    if(groupId==='brand-type-sel')brandType=value;
 }
 
-// ─── RADIO CARDS ───
-function selectRadio(el, groupId, value) {
-    const group = document.getElementById(groupId);
-    group.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    el.querySelector('input').checked = true;
+// REPORT TYPE TOGGLE
+function toggleCheck(el,type){
+    el.classList.toggle('checked');const cb=el.querySelector('input');cb.checked=!cb.checked;
+    if(cb.checked)selectedTypes.add(type);else selectedTypes.delete(type);
+    document.querySelectorAll('.type-section').forEach(s=>{s.classList.toggle('active',selectedTypes.has(s.dataset.type));});
+}
+function toggleCheckSimple(el){el.classList.toggle('checked');const cb=el.querySelector('input');cb.checked=!cb.checked;}
 
-    if (groupId === 'submitter-type') selectedSubmitterType = value;
-    if (groupId === 'insp-result') inspectionResult = value;
+// SEVERITY
+function selectSeverity(el,level){
+    document.querySelectorAll('#severity-sel .severity-btn').forEach(b=>b.className='severity-btn');
+    el.classList.add('sel-'+level);selectedSeverity=level;
 }
 
-// ─── REPORT TYPE TOGGLE (multi-select) ───
-function toggleCheck(el, type) {
-    el.classList.toggle('checked');
-    const cb = el.querySelector('input');
-    cb.checked = !cb.checked;
+// IMPACT
+function toggleImpact(el){el.classList.toggle('hit');const z=el.dataset.zone;if(selectedImpacts.has(z))selectedImpacts.delete(z);else selectedImpacts.add(z);}
 
-    if (cb.checked) {
-        selectedTypes.add(type);
-    } else {
-        selectedTypes.delete(type);
-    }
-    updateTypeSections();
+// TOGGLES
+function toggleDrivable(el){drivableState=!drivableState;el.classList.toggle('on',!drivableState);el.classList.toggle('red',!drivableState);}
+function toggleGeneric(el,inputId){const inp=document.getElementById(inputId);const val=inp.value==='true'?'false':'true';inp.value=val;el.classList.toggle('on',val==='true');}
+
+// CONFIRM
+function toggleConfirm(){
+    confirmed=!confirmed;const box=document.getElementById('confirm-box');
+    box.style.borderColor=confirmed?'var(--accent)':'';box.style.background=confirmed?'var(--accent)':'';
+    document.getElementById('btn-submit').disabled=!confirmed;
 }
 
-function updateTypeSections() {
-    document.querySelectorAll('.type-section').forEach(sec => {
-        const t = sec.dataset.type;
-        if (selectedTypes.has(t)) {
-            sec.classList.add('active');
-        } else {
-            sec.classList.remove('active');
-        }
+// PHOTOS
+function handleFiles(files,cat){const max=5,maxS=5*1024*1024,ex=photoFiles[cat]||[];
+    for(let i=0;i<files.length&&ex.length<max;i++){if(files[i].size>maxS||!files[i].type.startsWith('image/'))continue;ex.push(files[i]);}
+    photoFiles[cat]=ex;renderPreviews(cat);
+}
+function handleDrop(e,cat){e.preventDefault();e.currentTarget.classList.remove('drag-over');handleFiles(e.dataTransfer.files,cat);}
+function renderPreviews(cat){
+    const c=document.getElementById('preview-'+cat);c.innerHTML='';
+    photoFiles[cat].forEach((f,i)=>{const w=document.createElement('div');w.className='photo-thumb-wrap';
+        const img=document.createElement('img');img.className='photo-thumb';img.src=URL.createObjectURL(f);
+        const btn=document.createElement('button');btn.className='photo-remove';btn.innerHTML='&#10005;';
+        btn.onclick=e=>{e.stopPropagation();photoFiles[cat].splice(i,1);renderPreviews(cat);};
+        w.appendChild(img);w.appendChild(btn);c.appendChild(w);
     });
 }
 
-// ─── SIMPLE CHECKBOX TOGGLE ───
-function toggleCheckSimple(el) {
-    el.classList.toggle('checked');
-    const cb = el.querySelector('input');
-    cb.checked = !cb.checked;
-}
+// GET SERVICE TYPES
+function getServiceTypes(){const t=[];document.querySelectorAll('#svc-types .check-item').forEach(item=>{const cb=item.querySelector('input');if(item.classList.contains('checked')||cb.checked)t.push(cb.value);});return t;}
 
-// ─── SEVERITY ───
-function selectSeverity(el, level) {
-    document.querySelectorAll('#severity-sel .severity-btn').forEach(b => {
-        b.className = 'severity-btn';
-    });
-    el.classList.add('sel-' + level);
-    selectedSeverity = level;
-}
-
-// ─── IMPACT ZONES ───
-function toggleImpact(el) {
-    el.classList.toggle('hit');
-    const zone = el.dataset.zone;
-    if (selectedImpacts.has(zone)) {
-        selectedImpacts.delete(zone);
-    } else {
-        selectedImpacts.add(zone);
+// BUILD REPORT DATA
+function buildReportData(type){
+    const d={};
+    if(type==='accident'){
+        d.date=document.getElementById('acc-date').value||null;
+        d.severity=selectedSeverity||'minor';
+        d.impact_point=Array.from(selectedImpacts).join(',')||'unknown';
+        d.airbag_deployed=!!document.getElementById('acc-airbag')?.checked;
+        d.structural_damage=!!document.getElementById('acc-structural')?.checked;
+        d.flood_damage=!!document.getElementById('acc-flood')?.checked;
+        d.fire_damage=!!document.getElementById('acc-fire')?.checked;
+        d.hail_damage=!!document.getElementById('acc-hail')?.checked;
+        d.theft_vandalism=!!document.getElementById('acc-theft')?.checked;
+        d.towing_required=!!document.getElementById('acc-towing')?.checked;
+        d.rollover=!!document.getElementById('acc-rollover')?.checked;
+        d.total_loss=!!document.getElementById('acc-totalloss')?.checked;
+        d.drivable=drivableState;
+        d.estimated_cost=parseFloat(document.getElementById('acc-cost').value)||null;
+        d.odometer_km=parseInt(document.getElementById('acc-odo').value)||null;
+        d.accident_location=document.getElementById('acc-location').value.trim();
+        d.police_report_number=document.getElementById('acc-police').value.trim();
+        d.insurance_company=document.getElementById('acc-insurance-co').value.trim();
+        d.insurance_claim_number=document.getElementById('acc-insurance-num').value.trim();
+        d.description=document.getElementById('acc-desc').value.trim();
     }
-}
-
-// ─── CONFIRM TOGGLE ───
-function toggleConfirm() {
-    confirmed = !confirmed;
-    const box = document.getElementById('confirm-box');
-    box.parentElement.classList.toggle('checked-state');
-    if (confirmed) {
-        box.style.borderColor = 'var(--accent)';
-        box.style.background = 'var(--accent)';
-    } else {
-        box.style.borderColor = '';
-        box.style.background = '';
+    else if(type==='service'){
+        d.date=document.getElementById('svc-date').value||null;
+        d.odometer_km=parseInt(document.getElementById('svc-odo').value)||null;
+        d.service_type=getServiceTypes().join(', ')||'other';
+        d.facility_name=document.getElementById('svc-facility').value.trim();
+        d.cost=parseFloat(document.getElementById('svc-cost').value)||null;
+        d.parts_type=document.getElementById('svc-parts').value;
+        d.description=document.getElementById('svc-desc').value.trim();
     }
-    document.getElementById('btn-submit').disabled = !confirmed;
-}
-
-// ─── PHOTO UPLOAD ───
-function handleFiles(files, category) {
-    const maxFiles = 5;
-    const maxSize = 5 * 1024 * 1024;
-    const existing = photoFiles[category] || [];
-
-    for (let i = 0; i < files.length && existing.length < maxFiles; i++) {
-        if (files[i].size > maxSize) continue;
-        if (!files[i].type.startsWith('image/')) continue;
-        existing.push(files[i]);
+    else if(type==='ownership'){
+        d.date=document.getElementById('own-date').value||null;
+        d.sale_price=parseFloat(document.getElementById('own-price').value)||null;
+        d.odometer_km=parseInt(document.getElementById('own-odo').value)||null;
+        d.previous_owner_type=document.getElementById('own-prev').value;
+        d.new_owner_type=document.getElementById('own-new').value;
+        d.province=document.getElementById('own-province').value;
+        d.usage_type=document.getElementById('own-usage').value;
     }
-    photoFiles[category] = existing;
-    renderPhotoPreviews(category);
-}
-
-function handleDrop(event, category) {
-    event.preventDefault();
-    event.currentTarget.classList.remove('drag-over');
-    handleFiles(event.dataTransfer.files, category);
-}
-
-function renderPhotoPreviews(category) {
-    const container = document.getElementById('preview-' + category);
-    container.innerHTML = '';
-    photoFiles[category].forEach((file, idx) => {
-        const wrap = document.createElement('div');
-        wrap.className = 'photo-thumb-wrap';
-        const img = document.createElement('img');
-        img.className = 'photo-thumb';
-        img.src = URL.createObjectURL(file);
-        const btn = document.createElement('button');
-        btn.className = 'photo-remove';
-        btn.innerHTML = '&#10005;';
-        btn.onclick = (e) => {
-            e.stopPropagation();
-            photoFiles[category].splice(idx, 1);
-            renderPhotoPreviews(category);
-        };
-        wrap.appendChild(img);
-        wrap.appendChild(btn);
-        container.appendChild(wrap);
-    });
-}
-
-// ─── GATHER CHECKED VALUES ───
-function getCheckedValues(containerId) {
-    const items = [];
-    document.querySelectorAll(`#${containerId} .check-item.checked input, #${containerId} input:checked`).forEach(cb => {
-        if (cb.value) items.push(cb.value);
-    });
-    return items;
-}
-
-// ─── SUBMIT FORM ───
-async function submitForm() {
-    const vin = document.getElementById('vin-input').value.trim().toUpperCase();
-    if (!vin || vin.length !== 17) {
-        showStatus('Veuillez entrer un VIN valide de 17 caractères.', 'red');
-        return;
+    else if(type==='inspection'){
+        d.date=document.getElementById('insp-date').value||null;
+        d.result=inspectionResult||'pass';
+        d.inspection_type=inspectionType||'saaq_mecanique';
+        d.odometer_km=parseInt(document.getElementById('insp-odo').value)||null;
+        d.inspector_name=document.getElementById('insp-inspector').value.trim();
+        d.facility_name=document.getElementById('insp-facility').value.trim();
+        d.facility_permit=document.getElementById('insp-permit').value.trim();
+        d.notes=document.getElementById('insp-notes').value.trim();
     }
-    if (!selectedSubmitterType) {
-        showStatus('Veuillez indiquer qui vous êtes.', 'red');
-        return;
+    else if(type==='recall_completion'){
+        d.recall_number=document.getElementById('rec-number').value.trim();
+        d.date=document.getElementById('rec-date').value||null;
+        d.facility_name=document.getElementById('rec-facility').value.trim();
+        d.component=document.getElementById('rec-component').value.trim();
+        d.remedy_type=document.getElementById('rec-remedy').value;
+        d.recall_description=document.getElementById('rec-desc').value.trim();
+        d.odometer_km=parseInt(document.getElementById('rec-odo').value)||null;
     }
-    if (selectedTypes.size === 0) {
-        showStatus('Veuillez sélectionner au moins un type de rapport.', 'red');
-        return;
+    else if(type==='title_brand'){
+        d.brand_type=brandType||'clean';
+        d.date=document.getElementById('brand-date').value||null;
+        d.province=document.getElementById('brand-province').value;
+        d.insurance_company=document.getElementById('brand-insurance').value.trim();
+        d.total_loss_amount=parseFloat(document.getElementById('brand-amount').value)||null;
+        d.source=document.getElementById('brand-source').value.trim();
+        d.notes=document.getElementById('brand-notes').value.trim();
     }
+    else if(type==='lien'){
+        d.lien_holder=document.getElementById('lien-holder').value.trim();
+        d.lien_type=document.getElementById('lien-type').value;
+        d.lien_amount=parseFloat(document.getElementById('lien-amount').value)||null;
+        d.registration_date=document.getElementById('lien-reg-date').value||null;
+        d.discharge_date=document.getElementById('lien-discharge-date').value||null;
+        d.lien_status=document.getElementById('lien-status').value;
+        d.province=document.getElementById('lien-province').value;
+        d.registration_number=document.getElementById('lien-reg-num').value.trim();
+        d.notes=document.getElementById('lien-notes').value.trim();
+    }
+    else if(type==='theft'){
+        d.date_stolen=document.getElementById('theft-date-stolen').value||null;
+        d.date_recovered=document.getElementById('theft-date-recovered').value||null;
+        d.police_report_number=document.getElementById('theft-police').value.trim();
+        d.police_jurisdiction=document.getElementById('theft-jurisdiction').value.trim();
+        d.recovery_location=document.getElementById('theft-recovery-loc').value.trim();
+        d.condition_at_recovery=document.getElementById('theft-condition').value;
+        d.insurance_claim=document.getElementById('theft-insurance').value==='true';
+        d.parts_missing=document.getElementById('theft-parts').value.trim();
+        d.notes=document.getElementById('theft-notes').value.trim();
+    }
+    return d;
+}
 
-    const btn = document.getElementById('btn-submit');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Soumission en cours...';
+// SUBMIT
+async function submitForm(){
+    const vin=document.getElementById('vin-input').value.trim().toUpperCase();
+    if(!vin||vin.length!==17){showStatus('Veuillez entrer un VIN valide de 17 caractères.','red');return;}
+    if(!selectedSubmitterType){showStatus('Veuillez indiquer qui vous êtes.','red');return;}
+    if(selectedTypes.size===0){showStatus('Veuillez sélectionner au moins un type de rapport.','red');return;}
 
-    const submitter = {
-        name: document.getElementById('sub-name').value.trim(),
-        email: document.getElementById('sub-email').value.trim(),
-        type: selectedSubmitterType,
-        company: document.getElementById('sub-company').value.trim(),
-    };
+    const btn=document.getElementById('btn-submit');btn.disabled=true;
+    btn.innerHTML='<span class="spinner"></span>Soumission en cours...';
+    const submitter={name:document.getElementById('sub-name').value.trim(),email:document.getElementById('sub-email').value.trim(),type:selectedSubmitterType,company:document.getElementById('sub-company').value.trim()};
 
-    let lastResult = null;
-    let errorOccurred = false;
-
-    for (const reportType of selectedTypes) {
-        const data = buildReportData(reportType);
-
-        try {
-            const r = await fetch(`${API_BASE}/api/collecte/submit`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ vin, report_type: reportType, submitter, data }),
-            });
-            const result = await r.json();
-
-            if (result.error) {
-                showStatus(`Erreur (${reportType}): ${result.error}`, 'red');
-                errorOccurred = true;
-                break;
+    let lastResult=null,errorOccurred=false;
+    for(const rt of selectedTypes){
+        const data=buildReportData(rt);
+        try{
+            const r=await fetch(`${API_BASE}/api/collecte/submit`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vin,report_type:rt,submitter,data})});
+            const result=await r.json();
+            if(result.error){showStatus(`Erreur (${rt}): ${result.error}`,'red');errorOccurred=true;break;}
+            lastResult=result;
+            if(photoFiles[rt]&&photoFiles[rt].length>0){
+                const fd=new FormData();fd.append('submission_id',result.submission_id);
+                photoFiles[rt].forEach(f=>fd.append('photos',f));
+                try{await fetch(`${API_BASE}/api/collecte/upload`,{method:'POST',body:fd});}catch(e){}
             }
-            lastResult = result;
-
-            // Upload photos for this report type if any
-            if (photoFiles[reportType] && photoFiles[reportType].length > 0) {
-                const formData = new FormData();
-                formData.append('submission_id', result.submission_id);
-                photoFiles[reportType].forEach(f => formData.append('photos', f));
-                try {
-                    await fetch(`${API_BASE}/api/collecte/upload`, {
-                        method: 'POST',
-                        body: formData,
-                    });
-                } catch(e) {}
-            }
-        } catch(e) {
-            showStatus('Erreur de connexion au serveur.', 'red');
-            errorOccurred = true;
-            break;
-        }
+        }catch(e){showStatus('Erreur de connexion au serveur.','red');errorOccurred=true;break;}
     }
-
-    if (!errorOccurred && lastResult) {
-        document.getElementById('success-ref').textContent = `REF: AVQ-${String(lastResult.submission_id).padStart(6, '0')}`;
-        document.getElementById('success-hash').textContent = lastResult.integrity_hash;
+    if(!errorOccurred&&lastResult){
+        document.getElementById('success-ref').textContent=`REF: AVQ-${String(lastResult.submission_id).padStart(6,'0')}`;
+        document.getElementById('success-hash').textContent=lastResult.integrity_hash;
         document.getElementById('success-overlay').classList.add('show');
-        loadStats();
     }
-
-    btn.disabled = false;
-    btn.textContent = 'Soumettre la contribution';
+    btn.disabled=false;btn.textContent='Soumettre la contribution';
 }
 
-function buildReportData(type) {
-    const data = {};
+function showStatus(msg,color){const el=document.getElementById('submit-status');el.innerHTML=`<span style="color:var(--${color})">${msg}</span>`;setTimeout(()=>el.innerHTML='',5000);}
 
-    if (type === 'accident') {
-        data.date = document.getElementById('acc-date').value || null;
-        data.severity = selectedSeverity || 'minor';
-        data.impact_point = Array.from(selectedImpacts).join(',') || 'unknown';
-        data.airbag_deployed = document.getElementById('acc-airbag')?.checked || false;
-        data.structural_damage = document.getElementById('acc-structural')?.checked || false;
-        data.flood_damage = document.getElementById('acc-flood')?.checked || false;
-        data.fire_damage = document.getElementById('acc-fire')?.checked || false;
-        data.theft_vandalism = document.getElementById('acc-theft')?.checked || false;
-        data.towing_required = document.getElementById('acc-towing')?.checked || false;
-        data.estimated_cost = parseFloat(document.getElementById('acc-cost').value) || null;
-        data.description = document.getElementById('acc-desc').value.trim();
-    }
-
-    else if (type === 'service') {
-        data.date = document.getElementById('svc-date').value || null;
-        data.odometer_km = parseInt(document.getElementById('svc-odo').value) || null;
-        data.service_type = getServiceTypes().join(', ') || 'other';
-        data.facility_name = document.getElementById('svc-facility').value.trim();
-        data.cost = parseFloat(document.getElementById('svc-cost').value) || null;
-        data.parts_type = document.getElementById('svc-parts').value;
-        data.description = document.getElementById('svc-desc').value.trim();
-    }
-
-    else if (type === 'ownership') {
-        data.date = document.getElementById('own-date').value || null;
-        data.sale_price = parseFloat(document.getElementById('own-price').value) || null;
-        data.previous_owner_type = document.getElementById('own-prev').value;
-        data.new_owner_type = document.getElementById('own-new').value;
-        data.province = document.getElementById('own-province').value;
-        data.odometer_km = parseInt(document.getElementById('own-odo').value) || null;
-    }
-
-    else if (type === 'inspection') {
-        data.date = document.getElementById('insp-date').value || null;
-        data.result = inspectionResult || 'pass';
-        data.odometer_km = parseInt(document.getElementById('insp-odo').value) || null;
-        data.notes = document.getElementById('insp-notes').value.trim();
-    }
-
-    else if (type === 'recall_completion') {
-        data.recall_number = document.getElementById('rec-number').value.trim();
-        data.date = document.getElementById('rec-date').value || null;
-        data.facility_name = document.getElementById('rec-facility').value.trim();
-    }
-
-    return data;
-}
-
-function getServiceTypes() {
-    const types = [];
-    document.querySelectorAll('#svc-types .check-item').forEach(item => {
-        const cb = item.querySelector('input');
-        if (item.classList.contains('checked') || cb.checked) {
-            types.push(cb.value);
-        }
-    });
-    return types;
-}
-
-function showStatus(msg, color) {
-    const el = document.getElementById('submit-status');
-    el.innerHTML = `<span style="color:var(--${color})">${msg}</span>`;
-    setTimeout(() => el.innerHTML = '', 5000);
-}
-
-// ─── RESET ───
-function resetForm() {
+// RESET
+function resetForm(){
     document.getElementById('success-overlay').classList.remove('show');
-    document.getElementById('vin-input').value = '';
-    document.getElementById('vehicle-card').classList.remove('show');
-    vehicleData = null;
-    selectedTypes.clear();
-    selectedSeverity = null;
-    selectedImpacts.clear();
-    selectedSubmitterType = null;
-    inspectionResult = null;
-    confirmed = false;
-    photoFiles = { accident: [], service: [], ownership: [], inspection: [] };
-
-    // Reset checkboxes
-    document.querySelectorAll('.check-item.checked').forEach(el => el.classList.remove('checked'));
-    document.querySelectorAll('.check-item input').forEach(cb => cb.checked = false);
-    // Reset radio cards
-    document.querySelectorAll('.radio-card.selected').forEach(el => el.classList.remove('selected'));
-    // Reset severity
-    document.querySelectorAll('.severity-btn').forEach(b => b.className = 'severity-btn');
-    // Reset impacts
-    document.querySelectorAll('.impact-zone.hit').forEach(el => el.classList.remove('hit'));
-    // Reset inputs
-    document.querySelectorAll('input[type="text"],input[type="number"],input[type="email"],input[type="date"],textarea').forEach(el => el.value = '');
-    document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
-    // Reset photos
-    ['accident','service','ownership','inspection'].forEach(c => {
-        document.getElementById('preview-' + c).innerHTML = '';
-    });
-    // Reset confirm
-    const box = document.getElementById('confirm-box');
-    box.style.borderColor = '';
-    box.style.background = '';
-    document.getElementById('btn-submit').disabled = true;
-    // Reset type sections
-    updateTypeSections();
-    // Reset VIN status
-    document.getElementById('vin-status').innerHTML = '';
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('vin-input').value='';document.getElementById('vehicle-card').classList.remove('show');
+    vehicleData=null;selectedTypes.clear();selectedSeverity=null;selectedImpacts.clear();
+    selectedSubmitterType=null;inspectionResult=null;inspectionType=null;brandType=null;
+    confirmed=false;drivableState=true;
+    photoFiles={accident:[],service:[],ownership:[],inspection:[]};
+    document.querySelectorAll('.check-item.checked').forEach(el=>el.classList.remove('checked'));
+    document.querySelectorAll('.check-item input').forEach(cb=>cb.checked=false);
+    document.querySelectorAll('.radio-card.selected').forEach(el=>el.classList.remove('selected'));
+    document.querySelectorAll('.severity-btn').forEach(b=>b.className='severity-btn');
+    document.querySelectorAll('.impact-zone.hit').forEach(el=>el.classList.remove('hit'));
+    document.querySelectorAll('input[type="text"],input[type="number"],input[type="email"],input[type="date"],textarea').forEach(el=>el.value='');
+    document.querySelectorAll('select').forEach(el=>el.selectedIndex=0);
+    ['accident','service','ownership','inspection'].forEach(c=>{const p=document.getElementById('preview-'+c);if(p)p.innerHTML='';});
+    document.getElementById('confirm-box').style.borderColor='';document.getElementById('confirm-box').style.background='';
+    document.getElementById('btn-submit').disabled=true;
+    document.querySelectorAll('.type-section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('vin-status').innerHTML='';
+    document.querySelectorAll('.toggle.on').forEach(t=>{t.classList.remove('on','red');});
+    window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
-
 </body>
 </html>

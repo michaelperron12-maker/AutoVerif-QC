@@ -210,6 +210,115 @@ def init_db():
     except Exception as e:
         conn.rollback()
         print(f"[Migration] Columns may already exist: {e}")
+
+    # Migration v2: expanded accident_reports fields (industry standard)
+    try:
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS odometer_km INTEGER")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS flood_damage BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS fire_damage BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS theft_vandalism BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS towing_required BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS drivable BOOLEAN DEFAULT TRUE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS total_loss BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS police_report_number VARCHAR(100)")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS insurance_claim_number VARCHAR(100)")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS insurance_company VARCHAR(200)")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS rollover BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS hail_damage BOOLEAN DEFAULT FALSE")
+        cur.execute("ALTER TABLE accident_reports ADD COLUMN IF NOT EXISTS accident_location VARCHAR(200)")
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v2 accident] {e}")
+
+    # Migration v2: expanded ownership_changes fields
+    try:
+        cur.execute("ALTER TABLE ownership_changes ADD COLUMN IF NOT EXISTS odometer_km INTEGER")
+        cur.execute("ALTER TABLE ownership_changes ADD COLUMN IF NOT EXISTS title_brand VARCHAR(50)")
+        cur.execute("ALTER TABLE ownership_changes ADD COLUMN IF NOT EXISTS usage_type VARCHAR(50)")
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v2 ownership] {e}")
+
+    # Migration v2: expanded inspections fields
+    try:
+        cur.execute("ALTER TABLE inspections ADD COLUMN IF NOT EXISTS inspection_type VARCHAR(50) DEFAULT 'saaq_mecanique'")
+        cur.execute("ALTER TABLE inspections ADD COLUMN IF NOT EXISTS inspector_name VARCHAR(200)")
+        cur.execute("ALTER TABLE inspections ADD COLUMN IF NOT EXISTS facility_name VARCHAR(200)")
+        cur.execute("ALTER TABLE inspections ADD COLUMN IF NOT EXISTS facility_permit VARCHAR(100)")
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v2 inspections] {e}")
+
+    # Migration v2: expanded recall_completions fields
+    try:
+        cur.execute("ALTER TABLE recall_completions ADD COLUMN IF NOT EXISTS recall_description TEXT")
+        cur.execute("ALTER TABLE recall_completions ADD COLUMN IF NOT EXISTS component VARCHAR(200)")
+        cur.execute("ALTER TABLE recall_completions ADD COLUMN IF NOT EXISTS remedy_type VARCHAR(50)")
+        cur.execute("ALTER TABLE recall_completions ADD COLUMN IF NOT EXISTS odometer_km INTEGER")
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v2 recalls] {e}")
+
+    # New tables v2: title_brands, liens, theft_records
+    try:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS title_brands (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                brand_date DATE,
+                brand_type VARCHAR(50) NOT NULL,
+                province VARCHAR(10),
+                previous_brand VARCHAR(50),
+                insurance_company VARCHAR(200),
+                total_loss_amount DECIMAL(10,2),
+                source VARCHAR(100),
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_title_brands_sub ON title_brands(submission_id);
+
+            CREATE TABLE IF NOT EXISTS liens (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                lien_holder VARCHAR(200) NOT NULL,
+                lien_type VARCHAR(50),
+                lien_amount DECIMAL(12,2),
+                registration_date DATE,
+                discharge_date DATE,
+                lien_status VARCHAR(30) DEFAULT 'active',
+                province VARCHAR(10) DEFAULT 'QC',
+                registration_number VARCHAR(100),
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_liens_sub ON liens(submission_id);
+
+            CREATE TABLE IF NOT EXISTS theft_records (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                date_stolen DATE,
+                police_report_number VARCHAR(100),
+                police_jurisdiction VARCHAR(200),
+                date_recovered DATE,
+                recovery_location VARCHAR(200),
+                condition_at_recovery VARCHAR(50),
+                parts_missing TEXT,
+                insurance_claim BOOLEAN DEFAULT FALSE,
+                duration_days INTEGER,
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_theft_sub ON theft_records(submission_id);
+        """)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v2 new tables] {e}")
+
     conn.commit()
     cur.close()
     conn.close()
@@ -662,7 +771,7 @@ def collecte_submit():
         return jsonify({'error': 'VIN invalide.'}), 400
 
     report_type = body.get('report_type', '')
-    valid_types = ['accident', 'service', 'ownership', 'inspection', 'recall_completion']
+    valid_types = ['accident', 'service', 'ownership', 'inspection', 'recall_completion', 'title_brand', 'lien', 'theft']
     if report_type not in valid_types:
         return jsonify({'error': f'Type invalide. Valides: {", ".join(valid_types)}'}), 400
 
@@ -729,8 +838,11 @@ def collecte_submit():
         if report_type == 'accident':
             cur.execute("""
                 INSERT INTO accident_reports (submission_id, accident_date, severity,
-                    impact_point, airbag_deployed, structural_damage, estimated_cost, description)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    impact_point, airbag_deployed, structural_damage, estimated_cost, description,
+                    odometer_km, flood_damage, fire_damage, theft_vandalism, towing_required,
+                    drivable, total_loss, police_report_number, insurance_claim_number,
+                    insurance_company, rollover, hail_damage, accident_location)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 submission_id,
                 data.get('date'),
@@ -740,6 +852,19 @@ def collecte_submit():
                 data.get('structural_damage', False),
                 data.get('estimated_cost') or None,
                 data.get('description', ''),
+                data.get('odometer_km') or None,
+                data.get('flood_damage', False),
+                data.get('fire_damage', False),
+                data.get('theft_vandalism', False),
+                data.get('towing_required', False),
+                data.get('drivable', True),
+                data.get('total_loss', False),
+                data.get('police_report_number', '') or None,
+                data.get('insurance_claim_number', '') or None,
+                data.get('insurance_company', '') or None,
+                data.get('rollover', False),
+                data.get('hail_damage', False),
+                data.get('accident_location', '') or None,
             ))
 
         elif report_type == 'service':
@@ -761,8 +886,9 @@ def collecte_submit():
         elif report_type == 'ownership':
             cur.execute("""
                 INSERT INTO ownership_changes (submission_id, change_date,
-                    previous_owner_type, new_owner_type, province, sale_price)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                    previous_owner_type, new_owner_type, province, sale_price,
+                    odometer_km, title_brand, usage_type)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 submission_id,
                 data.get('date'),
@@ -770,31 +896,101 @@ def collecte_submit():
                 data.get('new_owner_type', 'unknown'),
                 data.get('province', 'QC'),
                 data.get('sale_price') or None,
+                data.get('odometer_km') or None,
+                data.get('title_brand', '') or None,
+                data.get('usage_type', '') or None,
             ))
 
         elif report_type == 'inspection':
             cur.execute("""
                 INSERT INTO inspections (submission_id, inspection_date, result,
-                    odometer_km, notes)
-                VALUES (%s, %s, %s, %s, %s)
+                    odometer_km, notes, inspection_type, inspector_name,
+                    facility_name, facility_permit)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 submission_id,
                 data.get('date'),
                 data.get('result', 'pass'),
                 data.get('odometer_km') or None,
                 data.get('notes', ''),
+                data.get('inspection_type', 'saaq_mecanique'),
+                data.get('inspector_name', '') or None,
+                data.get('facility_name', '') or None,
+                data.get('facility_permit', '') or None,
             ))
 
         elif report_type == 'recall_completion':
             cur.execute("""
                 INSERT INTO recall_completions (submission_id, recall_number,
-                    completion_date, facility_name)
-                VALUES (%s, %s, %s, %s)
+                    completion_date, facility_name, recall_description,
+                    component, remedy_type, odometer_km)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 submission_id,
                 data.get('recall_number', ''),
                 data.get('date'),
                 data.get('facility_name', ''),
+                data.get('recall_description', '') or None,
+                data.get('component', '') or None,
+                data.get('remedy_type', '') or None,
+                data.get('odometer_km') or None,
+            ))
+
+        elif report_type == 'title_brand':
+            cur.execute("""
+                INSERT INTO title_brands (submission_id, brand_date, brand_type,
+                    province, previous_brand, insurance_company, total_loss_amount,
+                    source, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                submission_id,
+                data.get('date'),
+                data.get('brand_type', 'clean'),
+                data.get('province', 'QC'),
+                data.get('previous_brand', '') or None,
+                data.get('insurance_company', '') or None,
+                data.get('total_loss_amount') or None,
+                data.get('source', '') or None,
+                data.get('notes', ''),
+            ))
+
+        elif report_type == 'lien':
+            cur.execute("""
+                INSERT INTO liens (submission_id, lien_holder, lien_type,
+                    lien_amount, registration_date, discharge_date, lien_status,
+                    province, registration_number, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                submission_id,
+                data.get('lien_holder', ''),
+                data.get('lien_type', '') or None,
+                data.get('lien_amount') or None,
+                data.get('registration_date') or None,
+                data.get('discharge_date') or None,
+                data.get('lien_status', 'active'),
+                data.get('province', 'QC'),
+                data.get('registration_number', '') or None,
+                data.get('notes', ''),
+            ))
+
+        elif report_type == 'theft':
+            cur.execute("""
+                INSERT INTO theft_records (submission_id, date_stolen,
+                    police_report_number, police_jurisdiction, date_recovered,
+                    recovery_location, condition_at_recovery, parts_missing,
+                    insurance_claim, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                submission_id,
+                data.get('date_stolen'),
+                data.get('police_report_number', '') or None,
+                data.get('police_jurisdiction', '') or None,
+                data.get('date_recovered') or None,
+                data.get('recovery_location', '') or None,
+                data.get('condition_at_recovery', '') or None,
+                data.get('parts_missing', '') or None,
+                data.get('insurance_claim', False),
+                data.get('notes', ''),
             ))
 
         conn.commit()
@@ -965,10 +1161,9 @@ def collecte_verify_single(submission_id):
 @app.route('/api/collecte/upload', methods=['POST'])
 def collecte_upload():
     """Upload photos for a submission."""
-    if 'files' not in request.files:
+    files = request.files.getlist('photos') or request.files.getlist('files')
+    if not files:
         return jsonify({'error': 'Aucun fichier envoyé.'}), 400
-
-    files = request.files.getlist('files')
     if len(files) > 5:
         return jsonify({'error': 'Maximum 5 fichiers par soumission.'}), 400
 
