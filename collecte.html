@@ -459,6 +459,12 @@
                 <label class="check-item" onclick="toggleCheck(this,'title_brand')"><input type="checkbox" value="title_brand"><div class="check-box"></div><span class="check-label">&#128196; Titre / Branding</span></label>
                 <label class="check-item" onclick="toggleCheck(this,'lien')"><input type="checkbox" value="lien"><div class="check-box"></div><span class="check-label">&#128179; Lien / Financement</span></label>
                 <label class="check-item" onclick="toggleCheck(this,'theft')"><input type="checkbox" value="theft"><div class="check-box"></div><span class="check-label">&#128274; Vol / Récupération</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'obd_diagnostic')"><input type="checkbox" value="obd_diagnostic"><div class="check-box"></div><span class="check-label">&#128268; OBD-II / Diagnostic</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'auction')"><input type="checkbox" value="auction"><div class="check-box"></div><span class="check-label">&#128296; Enchères</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'fleet_history')"><input type="checkbox" value="fleet_history"><div class="check-box"></div><span class="check-label">&#128666; Flotte / Location</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'import_export')"><input type="checkbox" value="import_export"><div class="check-box"></div><span class="check-label">&#127758; Import / Export</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'emissions')"><input type="checkbox" value="emissions"><div class="check-box"></div><span class="check-label">&#127811; Émissions</span></label>
+                <label class="check-item" onclick="toggleCheck(this,'modification')"><input type="checkbox" value="modification"><div class="check-box"></div><span class="check-label">&#128295; Modification</span></label>
             </div>
         </div>
     </div>
@@ -584,6 +590,15 @@
                 <div class="pz-icon">&#128247;</div><div class="pz-text">Glissez vos photos ou cliquez</div><div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
             </div>
             <div class="photo-preview" id="preview-service"></div>
+
+            <span class="field-label" style="margin-top:16px;">Véhicule électrique / Hybride (si applicable)</span>
+            <div class="form-row three">
+                <div class="form-group"><label>Santé batterie (SOH %)</label><input type="number" id="svc-ev-soh" placeholder="Ex: 92" min="0" max="100" step="0.1"></div>
+                <div class="form-group"><label>Capacité batterie (kWh)</label><input type="number" id="svc-ev-kwh" placeholder="Ex: 62.5" min="0" step="0.1"></div>
+                <div class="form-group"><label>Type service EV</label>
+                    <select id="svc-ev-type"><option value="">— N/A —</option><option value="battery_check">Diagnostic batterie</option><option value="battery_replace">Remplacement batterie</option><option value="charge_port">Port de charge</option><option value="motor">Moteur électrique</option><option value="inverter">Onduleur</option><option value="cooling">Refroidissement batterie</option></select>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -803,6 +818,284 @@
         </div>
     </div>
 
+    <!-- S12: OBD-II / DIAGNOSTIC -->
+    <div class="section type-section" id="sec-obd" data-type="obd_diagnostic">
+        <div class="section-header" onclick="toggleSection('sec-obd')">
+            <div class="section-icon cyan">&#128268;</div>
+            <div class="section-title">OBD-II / Diagnostic</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row three">
+                <div class="form-group"><label>Date du scan</label><input type="date" id="obd-date"></div>
+                <div class="form-group"><label>Odomètre (km)</label><input type="number" id="obd-odo" placeholder="Tableau de bord" min="0"></div>
+                <div class="form-group"><label>Odomètre ECU (km)</label><input type="number" id="obd-ecu-odo" placeholder="Lecture ECU" min="0"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Outil de scan</label><input type="text" id="obd-tool" placeholder="Ex: Launch X431, Autel MS906..."></div>
+                <div class="form-group"><label>&nbsp;</label></div>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle" id="obd-mil-toggle" onclick="toggleGeneric(this,'obd-mil')"></div>
+                <span class="toggle-label">MIL (Check Engine Light) allumé</span>
+                <input type="hidden" id="obd-mil" value="false">
+            </div>
+
+            <div class="form-row single"><div class="form-group"><label>Codes DTC actifs</label><input type="text" id="obd-dtc-active" placeholder="Ex: P0300, P0171, P0420 (séparés par virgule)"></div></div>
+            <div class="form-row single"><div class="form-group"><label>Codes DTC pending</label><input type="text" id="obd-dtc-pending" placeholder="Codes en attente de confirmation"></div></div>
+            <div class="form-row single"><div class="form-group"><label>Codes DTC permanents</label><input type="text" id="obd-dtc-permanent" placeholder="Codes ne pouvant être effacés"></div></div>
+
+            <span class="field-label">Readiness Monitors</span>
+            <div class="check-grid" id="obd-monitors">
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="catalyst"><div class="check-box"></div><span class="check-label">Catalyseur</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="evap"><div class="check-box"></div><span class="check-label">Système évaporatif</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="o2_sensor"><div class="check-box"></div><span class="check-label">Sonde O2</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="egr"><div class="check-box"></div><span class="check-label">EGR</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="misfire"><div class="check-box"></div><span class="check-label">Ratés d'allumage</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="fuel_system"><div class="check-box"></div><span class="check-label">Système carburant</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="secondary_air"><div class="check-box"></div><span class="check-label">Air secondaire</span></label>
+                <label class="check-item" onclick="toggleCheckSimple(this)"><input type="checkbox" value="ac_refrigerant"><div class="check-box"></div><span class="check-label">Réfrigérant A/C</span></label>
+            </div>
+
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="obd-notes" placeholder="Observations, freeze frame data..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S13: ENCHÈRES -->
+    <div class="section type-section" id="sec-auction" data-type="auction">
+        <div class="section-header" onclick="toggleSection('sec-auction')">
+            <div class="section-icon gold">&#128296;</div>
+            <div class="section-title">Données d'enchères</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row three">
+                <div class="form-group"><label>Date de vente</label><input type="date" id="auc-date"></div>
+                <div class="form-group"><label>Maison d'enchères</label>
+                    <select id="auc-house"><option value="">— Sélectionner —</option><option value="Manheim">Manheim</option><option value="ADESA">ADESA / OPENLANE</option><option value="Copart">Copart</option><option value="IAAI">IAAI (Insurance Auto Auctions)</option><option value="Impact">Impact Auto Auctions</option><option value="Other">Autre</option></select>
+                </div>
+                <div class="form-group"><label>No. lot</label><input type="text" id="auc-lot" placeholder="Optionnel"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Lieu</label><input type="text" id="auc-location" placeholder="Ex: Montréal, QC"></div>
+                <div class="form-group"><label>Prix de vente ($)</label><input type="number" id="auc-price" placeholder="Optionnel" min="0"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Type de vente</label>
+                    <select id="auc-sale-type"><option value="">— Non spécifié —</option><option value="wholesale">Wholesale (gros)</option><option value="salvage">Salvage</option><option value="donation">Donation</option><option value="government">Gouvernement</option><option value="repo">Reprise de possession</option></select>
+                </div>
+                <div class="form-group"><label>Type de vendeur</label>
+                    <select id="auc-seller"><option value="">— Non spécifié —</option><option value="dealer">Concessionnaire</option><option value="fleet">Flotte</option><option value="rental">Location</option><option value="insurance">Assurance</option><option value="manufacturer">Manufacturier</option><option value="government">Gouvernement</option><option value="private">Particulier</option></select>
+                </div>
+            </div>
+
+            <span class="field-label">Rapport de condition</span>
+            <div class="form-row three">
+                <div class="form-group"><label>Grade NAAA (1.0-5.0)</label><input type="number" id="auc-grade" placeholder="Ex: 3.5" min="1" max="5" step="0.1"></div>
+                <div class="form-group"><label>Extérieur</label>
+                    <select id="auc-ext"><option value="">—</option><option value="excellent">Excellent</option><option value="good">Bon</option><option value="fair">Moyen</option><option value="poor">Mauvais</option></select>
+                </div>
+                <div class="form-group"><label>Intérieur</label>
+                    <select id="auc-int"><option value="">—</option><option value="excellent">Excellent</option><option value="good">Bon</option><option value="fair">Moyen</option><option value="poor">Mauvais</option></select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Mécanique</label>
+                    <select id="auc-mech"><option value="">—</option><option value="excellent">Excellent</option><option value="good">Bon</option><option value="fair">Moyen</option><option value="poor">Mauvais</option></select>
+                </div>
+                <div class="form-group"><label>Odeur</label>
+                    <select id="auc-odor"><option value="">Aucune</option><option value="smoke">Fumée</option><option value="pet">Animal</option><option value="mildew">Moisissure</option><option value="chemical">Chimique</option></select>
+                </div>
+            </div>
+
+            <span class="field-label">Profondeur pneus (mm)</span>
+            <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+                <div class="form-group"><label>AV-G</label><input type="number" id="auc-tire-fl" placeholder="mm" min="0" max="15" step="0.1"></div>
+                <div class="form-group"><label>AV-D</label><input type="number" id="auc-tire-fr" placeholder="mm" min="0" max="15" step="0.1"></div>
+                <div class="form-group"><label>AR-G</label><input type="number" id="auc-tire-rl" placeholder="mm" min="0" max="15" step="0.1"></div>
+                <div class="form-group"><label>AR-D</label><input type="number" id="auc-tire-rr" placeholder="mm" min="0" max="15" step="0.1"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"><label>Nb. clés</label><input type="number" id="auc-keys" placeholder="Ex: 2" min="0" max="10"></div>
+                <div class="form-group"><label>&nbsp;</label></div>
+            </div>
+            <div class="toggle-row">
+                <div class="toggle on" id="auc-run-toggle" onclick="toggleGeneric(this,'auc-run')"></div>
+                <span class="toggle-label">Véhicule roule et démarre (Run & Drive)</span>
+                <input type="hidden" id="auc-run" value="true">
+            </div>
+            <div class="form-row single"><div class="form-group"><label>Annonces de dommages</label><textarea id="auc-damage" placeholder="Damage announcements..."></textarea></div></div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="auc-notes" placeholder="Notes additionnelles..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S14: FLOTTE / LOCATION -->
+    <div class="section type-section" id="sec-fleet" data-type="fleet_history">
+        <div class="section-header" onclick="toggleSection('sec-fleet')">
+            <div class="section-icon purple">&#128666;</div>
+            <div class="section-title">Historique flotte / Location / Usage commercial</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <span class="field-label">Type d'usage</span>
+            <div class="radio-cards" id="fleet-usage-sel">
+                <div class="radio-card" onclick="selectRadio(this,'fleet-usage-sel','rental')"><input type="radio" name="fleet_usage" value="rental"><div class="rc-icon">&#128663;</div><div class="rc-text">Location</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'fleet-usage-sel','taxi')"><input type="radio" name="fleet_usage" value="taxi"><div class="rc-icon">&#128661;</div><div class="rc-text">Taxi / Uber</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'fleet-usage-sel','police')"><input type="radio" name="fleet_usage" value="police"><div class="rc-icon">&#128660;</div><div class="rc-text">Police / Urgence</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'fleet-usage-sel','delivery')"><input type="radio" name="fleet_usage" value="delivery"><div class="rc-icon">&#128230;</div><div class="rc-text">Livraison</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'fleet-usage-sel','fleet')"><input type="radio" name="fleet_usage" value="fleet"><div class="rc-icon">&#127970;</div><div class="rc-text">Flotte entreprise</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'fleet-usage-sel','driving_school')"><input type="radio" name="fleet_usage" value="driving_school"><div class="rc-icon">&#128218;</div><div class="rc-text">École conduite</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'fleet-usage-sel','government')"><input type="radio" name="fleet_usage" value="government"><div class="rc-icon">&#127963;</div><div class="rc-text">Gouvernement</div></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Compagnie</label><input type="text" id="fleet-company" placeholder="Ex: Enterprise, Uber, SPVM..."></div>
+                <div class="form-group"><label>Province</label>
+                    <select id="fleet-province"><option value="QC">Québec</option><option value="ON">Ontario</option><option value="AB">Alberta</option><option value="BC">Colombie-Britannique</option><option value="OTHER">Autre</option></select>
+                </div>
+            </div>
+            <div class="form-row three">
+                <div class="form-group"><label>Date entrée flotte</label><input type="date" id="fleet-date-in"></div>
+                <div class="form-group"><label>Date sortie flotte</label><input type="date" id="fleet-date-out"></div>
+                <div class="form-group"><label>Km pendant la flotte</label><input type="number" id="fleet-mileage" placeholder="Optionnel" min="0"></div>
+            </div>
+            <div class="form-row single"><div class="form-group"><label>Nb. conducteurs estimé</label><input type="number" id="fleet-drivers" placeholder="Optionnel" min="0"></div></div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="fleet-notes" placeholder="Détails supplémentaires..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S15: IMPORT / EXPORT -->
+    <div class="section type-section" id="sec-import" data-type="import_export">
+        <div class="section-header" onclick="toggleSection('sec-import')">
+            <div class="section-icon green">&#127758;</div>
+            <div class="section-title">Import / Export cross-border</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <span class="field-label">Direction</span>
+            <div class="radio-cards" id="ie-direction-sel" style="max-width:400px;">
+                <div class="radio-card" onclick="selectRadio(this,'ie-direction-sel','import')"><input type="radio" name="ie_dir" value="import"><div class="rc-icon">&#11015;</div><div class="rc-text">Import vers Canada</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'ie-direction-sel','export')"><input type="radio" name="ie_dir" value="export"><div class="rc-icon">&#11014;</div><div class="rc-text">Export hors Canada</div></div>
+            </div>
+            <div class="form-row three">
+                <div class="form-group"><label>Date du transfert</label><input type="date" id="ie-date"></div>
+                <div class="form-group"><label>Pays d'origine</label>
+                    <select id="ie-origin"><option value="US">États-Unis</option><option value="CA">Canada</option><option value="MX">Mexique</option><option value="OTHER">Autre</option></select>
+                </div>
+                <div class="form-group"><label>Pays de destination</label>
+                    <select id="ie-dest"><option value="CA">Canada</option><option value="US">États-Unis</option><option value="OTHER">Autre</option></select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>No. RIV</label><input type="text" id="ie-riv" placeholder="Registrar of Imported Vehicles"></div>
+                <div class="form-group"><label>No. déclaration douane CBSA</label><input type="text" id="ie-customs" placeholder="Optionnel"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Odomètre à l'import</label><input type="number" id="ie-odo" placeholder="Valeur au moment du transfert" min="0"></div>
+                <div class="form-group"><label>Unité odomètre</label>
+                    <select id="ie-odo-unit"><option value="km">Kilomètres (km)</option><option value="miles">Miles</option></select>
+                </div>
+            </div>
+            <div class="toggle-row">
+                <div class="toggle" id="ie-tc-toggle" onclick="toggleGeneric(this,'ie-tc')"></div>
+                <span class="toggle-label">Conforme Transport Canada</span>
+                <input type="hidden" id="ie-tc" value="false">
+            </div>
+            <div class="toggle-row">
+                <div class="toggle" id="ie-recalls-toggle" onclick="toggleGeneric(this,'ie-recalls')"></div>
+                <span class="toggle-label">Rappels complétés avant import</span>
+                <input type="hidden" id="ie-recalls" value="false">
+            </div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="ie-notes" placeholder="Détails du transfert..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S16: ÉMISSIONS -->
+    <div class="section type-section" id="sec-emissions" data-type="emissions">
+        <div class="section-header" onclick="toggleSection('sec-emissions')">
+            <div class="section-icon green">&#127811;</div>
+            <div class="section-title">Test d'émissions</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row three">
+                <div class="form-group"><label>Date du test</label><input type="date" id="em-date"></div>
+                <div class="form-group"><label>Type de test</label>
+                    <select id="em-type"><option value="obd2">OBD-II</option><option value="visual">Visuel</option><option value="tailpipe">Sonde (tailpipe)</option><option value="exempt">Exempté</option></select>
+                </div>
+                <div class="form-group"><label>Résultat</label>
+                    <select id="em-result"><option value="pass">Réussi</option><option value="fail">Échoué</option><option value="conditional">Conditionnel</option><option value="exempt">Exempté</option></select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Station</label><input type="text" id="em-station" placeholder="Nom de la station"></div>
+                <div class="form-group"><label>No. station</label><input type="text" id="em-station-num" placeholder="Optionnel"></div>
+            </div>
+            <span class="field-label">Lectures émissions</span>
+            <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
+                <div class="form-group"><label>HC (ppm)</label><input type="number" id="em-hc" placeholder="—" min="0" step="0.01"></div>
+                <div class="form-group"><label>CO (%)</label><input type="number" id="em-co" placeholder="—" min="0" step="0.01"></div>
+                <div class="form-group"><label>NOx (ppm)</label><input type="number" id="em-nox" placeholder="—" min="0" step="0.01"></div>
+                <div class="form-group"><label>CO2 (%)</label><input type="number" id="em-co2" placeholder="—" min="0" step="0.01"></div>
+                <div class="form-group"><label>O2 (%)</label><input type="number" id="em-o2" placeholder="—" min="0" step="0.01"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>No. certificat</label><input type="text" id="em-cert" placeholder="Optionnel"></div>
+                <div class="form-group"><label>Expiration certificat</label><input type="date" id="em-cert-exp"></div>
+            </div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="em-notes" placeholder="Observations..."></textarea></div></div>
+        </div>
+    </div>
+
+    <!-- S17: MODIFICATIONS -->
+    <div class="section type-section" id="sec-mod" data-type="modification">
+        <div class="section-header" onclick="toggleSection('sec-mod')">
+            <div class="section-icon orange">&#128295;</div>
+            <div class="section-title">Modification véhiculaire</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <span class="field-label">Type de modification</span>
+            <div class="radio-cards" id="mod-type-sel">
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','performance')"><input type="radio" name="mod_type" value="performance"><div class="rc-icon">&#9889;</div><div class="rc-text">Performance</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','suspension')"><input type="radio" name="mod_type" value="suspension"><div class="rc-icon">&#128663;</div><div class="rc-text">Suspension / Lift</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','exhaust')"><input type="radio" name="mod_type" value="exhaust"><div class="rc-icon">&#128168;</div><div class="rc-text">Échappement</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','turbo')"><input type="radio" name="mod_type" value="turbo"><div class="rc-icon">&#128296;</div><div class="rc-text">Turbo / Super</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','ecu_tune')"><input type="radio" name="mod_type" value="ecu_tune"><div class="rc-icon">&#128187;</div><div class="rc-text">ECU Tune</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','cosmetic')"><input type="radio" name="mod_type" value="cosmetic"><div class="rc-icon">&#127912;</div><div class="rc-text">Cosmétique</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','audio')"><input type="radio" name="mod_type" value="audio"><div class="rc-icon">&#127925;</div><div class="rc-text">Audio / Électronique</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','towing')"><input type="radio" name="mod_type" value="towing"><div class="rc-icon">&#128666;</div><div class="rc-text">Remorquage</div></div>
+                <div class="radio-card" onclick="selectRadio(this,'mod-type-sel','accessibility')"><input type="radio" name="mod_type" value="accessibility"><div class="rc-icon">&#9855;</div><div class="rc-text">Accessibilité</div></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Date de modification</label><input type="date" id="mod-date"></div>
+                <div class="form-group"><label>Installé par</label><input type="text" id="mod-installer" placeholder="Garage ou auto-installé"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Marque / Fabricant pièce</label><input type="text" id="mod-brand" placeholder="Ex: K&N, Borla, APR..."></div>
+                <div class="form-group"><label>No. pièce</label><input type="text" id="mod-part-num" placeholder="Optionnel"></div>
+            </div>
+            <div class="toggle-row">
+                <div class="toggle" id="mod-homolog-toggle" onclick="toggleGeneric(this,'mod-homolog')"></div>
+                <span class="toggle-label">Homologué / Certifié</span>
+                <input type="hidden" id="mod-homolog" value="false">
+            </div>
+            <div class="toggle-row">
+                <div class="toggle" id="mod-saaq-toggle" onclick="toggleGeneric(this,'mod-saaq')"></div>
+                <span class="toggle-label">Approuvé SAAQ</span>
+                <input type="hidden" id="mod-saaq" value="false">
+            </div>
+            <div class="toggle-row">
+                <div class="toggle" id="mod-insurance-toggle" onclick="toggleGeneric(this,'mod-insurance')"></div>
+                <span class="toggle-label">Assurance notifiée</span>
+                <input type="hidden" id="mod-insurance" value="false">
+            </div>
+            <div class="form-row single"><div class="form-group"><label>Description</label><textarea id="mod-desc" placeholder="Détails de la modification..."></textarea></div></div>
+            <div class="form-row single"><div class="form-group"><label>Notes</label><textarea id="mod-notes" placeholder="Impact sur garantie, performance..."></textarea></div></div>
+        </div>
+    </div>
+
     <!-- SUBMIT -->
     <div class="section" id="sec-submit">
         <div class="submit-section">
@@ -844,6 +1137,7 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 // STATE
 let vehicleData = null, selectedTypes = new Set(), selectedSeverity = null, selectedImpacts = new Set();
 let selectedSubmitterType = null, inspectionResult = null, inspectionType = null, brandType = null;
+let fleetUsageType = null, ieDirection = null, modType = null;
 let confirmed = false, drivableState = true;
 let photoFiles = { accident:[], service:[], ownership:[], inspection:[] };
 
@@ -883,6 +1177,9 @@ function selectRadio(el,groupId,value){
     if(groupId==='insp-result')inspectionResult=value;
     if(groupId==='insp-type-sel')inspectionType=value;
     if(groupId==='brand-type-sel')brandType=value;
+    if(groupId==='fleet-usage-sel')fleetUsageType=value;
+    if(groupId==='ie-direction-sel')ieDirection=value;
+    if(groupId==='mod-type-sel')modType=value;
 }
 
 // REPORT TYPE TOGGLE
@@ -965,6 +1262,9 @@ function buildReportData(type){
         d.cost=parseFloat(document.getElementById('svc-cost').value)||null;
         d.parts_type=document.getElementById('svc-parts').value;
         d.description=document.getElementById('svc-desc').value.trim();
+        d.ev_battery_soh=parseFloat(document.getElementById('svc-ev-soh').value)||null;
+        d.ev_battery_kwh=parseFloat(document.getElementById('svc-ev-kwh').value)||null;
+        d.ev_service_type=document.getElementById('svc-ev-type').value;
     }
     else if(type==='ownership'){
         d.date=document.getElementById('own-date').value||null;
@@ -1025,6 +1325,91 @@ function buildReportData(type){
         d.parts_missing=document.getElementById('theft-parts').value.trim();
         d.notes=document.getElementById('theft-notes').value.trim();
     }
+    else if(type==='obd_diagnostic'){
+        d.date=document.getElementById('obd-date').value||null;
+        d.odometer_km=parseInt(document.getElementById('obd-odo').value)||null;
+        d.ecu_odometer_km=parseInt(document.getElementById('obd-ecu-odo').value)||null;
+        d.scan_tool=document.getElementById('obd-tool').value.trim();
+        d.mil_status=document.getElementById('obd-mil').value==='true';
+        d.dtc_active=document.getElementById('obd-dtc-active').value.trim();
+        d.dtc_pending=document.getElementById('obd-dtc-pending').value.trim();
+        d.dtc_permanent=document.getElementById('obd-dtc-permanent').value.trim();
+        const monitors={};document.querySelectorAll('#obd-monitors .check-item').forEach(item=>{const cb=item.querySelector('input');monitors[cb.value]=item.classList.contains('checked');});
+        d.readiness_monitors=monitors;
+        d.notes=document.getElementById('obd-notes').value.trim();
+    }
+    else if(type==='auction'){
+        d.date=document.getElementById('auc-date').value||null;
+        d.auction_house=document.getElementById('auc-house').value;
+        d.auction_location=document.getElementById('auc-location').value.trim();
+        d.lot_number=document.getElementById('auc-lot').value.trim();
+        d.sale_price=parseFloat(document.getElementById('auc-price').value)||null;
+        d.sale_type=document.getElementById('auc-sale-type').value;
+        d.seller_type=document.getElementById('auc-seller').value;
+        d.naaa_grade=parseFloat(document.getElementById('auc-grade').value)||null;
+        d.exterior_grade=document.getElementById('auc-ext').value;
+        d.interior_grade=document.getElementById('auc-int').value;
+        d.mechanical_grade=document.getElementById('auc-mech').value;
+        d.tire_tread_fl=parseFloat(document.getElementById('auc-tire-fl').value)||null;
+        d.tire_tread_fr=parseFloat(document.getElementById('auc-tire-fr').value)||null;
+        d.tire_tread_rl=parseFloat(document.getElementById('auc-tire-rl').value)||null;
+        d.tire_tread_rr=parseFloat(document.getElementById('auc-tire-rr').value)||null;
+        d.odor=document.getElementById('auc-odor').value;
+        d.keys_count=parseInt(document.getElementById('auc-keys').value)||null;
+        d.run_drive=document.getElementById('auc-run').value==='true';
+        d.damage_announcements=document.getElementById('auc-damage').value.trim();
+        d.notes=document.getElementById('auc-notes').value.trim();
+    }
+    else if(type==='fleet_history'){
+        d.usage_type=fleetUsageType||'';
+        d.company_name=document.getElementById('fleet-company').value.trim();
+        d.province=document.getElementById('fleet-province').value;
+        d.date_entered=document.getElementById('fleet-date-in').value||null;
+        d.date_left=document.getElementById('fleet-date-out').value||null;
+        d.mileage_during=parseInt(document.getElementById('fleet-mileage').value)||null;
+        d.estimated_drivers=parseInt(document.getElementById('fleet-drivers').value)||null;
+        d.notes=document.getElementById('fleet-notes').value.trim();
+    }
+    else if(type==='import_export'){
+        d.direction=ieDirection||'import';
+        d.date=document.getElementById('ie-date').value||null;
+        d.country_origin=document.getElementById('ie-origin').value;
+        d.country_destination=document.getElementById('ie-dest').value;
+        d.riv_number=document.getElementById('ie-riv').value.trim();
+        d.customs_declaration=document.getElementById('ie-customs').value.trim();
+        d.odometer_at_import=parseInt(document.getElementById('ie-odo').value)||null;
+        d.odometer_unit=document.getElementById('ie-odo-unit').value;
+        d.tc_compliance=document.getElementById('ie-tc').value==='true';
+        d.recalls_cleared=document.getElementById('ie-recalls').value==='true';
+        d.notes=document.getElementById('ie-notes').value.trim();
+    }
+    else if(type==='emissions'){
+        d.date=document.getElementById('em-date').value||null;
+        d.test_type=document.getElementById('em-type').value;
+        d.result=document.getElementById('em-result').value;
+        d.station_name=document.getElementById('em-station').value.trim();
+        d.station_number=document.getElementById('em-station-num').value.trim();
+        d.hc_ppm=parseFloat(document.getElementById('em-hc').value)||null;
+        d.co_percent=parseFloat(document.getElementById('em-co').value)||null;
+        d.nox_ppm=parseFloat(document.getElementById('em-nox').value)||null;
+        d.co2_percent=parseFloat(document.getElementById('em-co2').value)||null;
+        d.o2_percent=parseFloat(document.getElementById('em-o2').value)||null;
+        d.certificate_number=document.getElementById('em-cert').value.trim();
+        d.certificate_expiry=document.getElementById('em-cert-exp').value||null;
+        d.notes=document.getElementById('em-notes').value.trim();
+    }
+    else if(type==='modification'){
+        d.mod_type=modType||'';
+        d.date=document.getElementById('mod-date').value||null;
+        d.installed_by=document.getElementById('mod-installer').value.trim();
+        d.part_brand=document.getElementById('mod-brand').value.trim();
+        d.part_number=document.getElementById('mod-part-num').value.trim();
+        d.homologated=document.getElementById('mod-homolog').value==='true';
+        d.saaq_approved=document.getElementById('mod-saaq').value==='true';
+        d.insurance_notified=document.getElementById('mod-insurance').value==='true';
+        d.description=document.getElementById('mod-desc').value.trim();
+        d.notes=document.getElementById('mod-notes').value.trim();
+    }
     return d;
 }
 
@@ -1070,6 +1455,7 @@ function resetForm(){
     document.getElementById('vin-input').value='';document.getElementById('vehicle-card').classList.remove('show');
     vehicleData=null;selectedTypes.clear();selectedSeverity=null;selectedImpacts.clear();
     selectedSubmitterType=null;inspectionResult=null;inspectionType=null;brandType=null;
+    fleetUsageType=null;ieDirection=null;modType=null;
     confirmed=false;drivableState=true;
     photoFiles={accident:[],service:[],ownership:[],inspection:[]};
     document.querySelectorAll('.check-item.checked').forEach(el=>el.classList.remove('checked'));

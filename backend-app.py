@@ -319,6 +319,159 @@ def init_db():
         conn.rollback()
         print(f"[Migration v2 new tables] {e}")
 
+    # New tables v3: obd, auction, fleet, import/export, odometer, emissions, modifications
+    try:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS obd_diagnostics (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                scan_date DATE,
+                odometer_km INTEGER,
+                scan_tool VARCHAR(200),
+                mil_status BOOLEAN DEFAULT FALSE,
+                dtc_active TEXT,
+                dtc_pending TEXT,
+                dtc_permanent TEXT,
+                readiness_monitors JSONB,
+                ecu_odometer_km INTEGER,
+                freeze_frame JSONB,
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_obd_sub ON obd_diagnostics(submission_id);
+
+            CREATE TABLE IF NOT EXISTS auction_records (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                auction_date DATE,
+                auction_house VARCHAR(200),
+                auction_location VARCHAR(200),
+                lot_number VARCHAR(50),
+                sale_type VARCHAR(50),
+                seller_type VARCHAR(50),
+                naaa_grade DECIMAL(2,1),
+                exterior_grade VARCHAR(20),
+                interior_grade VARCHAR(20),
+                mechanical_grade VARCHAR(20),
+                tire_tread_fl DECIMAL(3,1),
+                tire_tread_fr DECIMAL(3,1),
+                tire_tread_rl DECIMAL(3,1),
+                tire_tread_rr DECIMAL(3,1),
+                odor VARCHAR(50),
+                keys_count INTEGER,
+                run_drive BOOLEAN DEFAULT TRUE,
+                sale_price DECIMAL(10,2),
+                damage_announcements TEXT,
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_auction_sub ON auction_records(submission_id);
+
+            CREATE TABLE IF NOT EXISTS fleet_history (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                usage_type VARCHAR(50) NOT NULL,
+                company_name VARCHAR(200),
+                date_entered DATE,
+                date_left DATE,
+                mileage_during INTEGER,
+                estimated_drivers INTEGER,
+                province VARCHAR(10),
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_fleet_sub ON fleet_history(submission_id);
+
+            CREATE TABLE IF NOT EXISTS import_export_records (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                direction VARCHAR(10) NOT NULL,
+                country_origin VARCHAR(100),
+                country_destination VARCHAR(100),
+                transfer_date DATE,
+                riv_number VARCHAR(100),
+                customs_declaration VARCHAR(100),
+                odometer_at_import INTEGER,
+                odometer_unit VARCHAR(10) DEFAULT 'km',
+                tc_compliance BOOLEAN DEFAULT FALSE,
+                recalls_cleared BOOLEAN DEFAULT FALSE,
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_import_sub ON import_export_records(submission_id);
+
+            CREATE TABLE IF NOT EXISTS odometer_readings (
+                id SERIAL PRIMARY KEY,
+                vin VARCHAR(17) NOT NULL,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                reading_date DATE NOT NULL,
+                odometer_km INTEGER NOT NULL,
+                odometer_unit VARCHAR(10) DEFAULT 'km',
+                source VARCHAR(50),
+                status VARCHAR(30) DEFAULT 'actual',
+                ecu_reading INTEGER,
+                fraud_flag BOOLEAN DEFAULT FALSE,
+                fraud_reason VARCHAR(200),
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_odo_vin ON odometer_readings(vin);
+            CREATE INDEX IF NOT EXISTS idx_odo_date ON odometer_readings(reading_date);
+
+            CREATE TABLE IF NOT EXISTS emissions_tests (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                test_date DATE,
+                test_type VARCHAR(50),
+                result VARCHAR(20),
+                station_name VARCHAR(200),
+                station_number VARCHAR(100),
+                inspector_id VARCHAR(100),
+                hc_ppm DECIMAL(8,2),
+                co_percent DECIMAL(5,2),
+                nox_ppm DECIMAL(8,2),
+                co2_percent DECIMAL(5,2),
+                o2_percent DECIMAL(5,2),
+                certificate_number VARCHAR(100),
+                certificate_expiry DATE,
+                exemption_reason VARCHAR(200),
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_emissions_sub ON emissions_tests(submission_id);
+
+            CREATE TABLE IF NOT EXISTS vehicle_modifications (
+                id SERIAL PRIMARY KEY,
+                submission_id INTEGER REFERENCES submissions(id) ON DELETE CASCADE,
+                mod_date DATE,
+                mod_type VARCHAR(50) NOT NULL,
+                description TEXT,
+                part_brand VARCHAR(200),
+                part_number VARCHAR(100),
+                installed_by VARCHAR(200),
+                homologated BOOLEAN DEFAULT FALSE,
+                saaq_approved BOOLEAN DEFAULT FALSE,
+                insurance_notified BOOLEAN DEFAULT FALSE,
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE INDEX IF NOT EXISTS idx_mods_sub ON vehicle_modifications(submission_id);
+        """)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v3 new tables] {e}")
+
+    # Migration v3: EV fields on service_records
+    try:
+        cur.execute("ALTER TABLE service_records ADD COLUMN IF NOT EXISTS ev_battery_soh DECIMAL(5,2)")
+        cur.execute("ALTER TABLE service_records ADD COLUMN IF NOT EXISTS ev_battery_kwh DECIMAL(6,2)")
+        cur.execute("ALTER TABLE service_records ADD COLUMN IF NOT EXISTS ev_service_type VARCHAR(50)")
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v3 EV fields] {e}")
+
     conn.commit()
     cur.close()
     conn.close()
@@ -517,6 +670,47 @@ def log_audit(action, target_table, target_id, details=None, ip=None):
         conn.close()
     except Exception as e:
         print(f"[Audit Log Error] {e}")
+
+
+def track_odometer(vin, odometer_km, source, submission_id=None, reading_date=None, unit='km', ecu_reading=None):
+    """Auto-track odometer reading and detect possible fraud (rollback)."""
+    if not odometer_km or odometer_km <= 0:
+        return
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        # Check for rollback: new reading lower than previous?
+        cur.execute("""
+            SELECT odometer_km, reading_date FROM odometer_readings
+            WHERE vin = %s ORDER BY reading_date DESC, id DESC LIMIT 1
+        """, (vin,))
+        prev = cur.fetchone()
+        fraud_flag = False
+        fraud_reason = None
+        if prev and prev[0] and odometer_km < prev[0]:
+            fraud_flag = True
+            fraud_reason = f"Rollback suspect: {odometer_km} km < precedent {prev[0]} km"
+        # ECU mismatch check
+        if ecu_reading and abs(ecu_reading - odometer_km) > 5000:
+            fraud_flag = True
+            fraud_reason = (fraud_reason or '') + f" ECU mismatch: ECU={ecu_reading} vs declared={odometer_km}"
+
+        cur.execute("""
+            INSERT INTO odometer_readings (vin, submission_id, reading_date, odometer_km,
+                odometer_unit, source, ecu_reading, fraud_flag, fraud_reason)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            vin, submission_id, reading_date or datetime.now().date(),
+            odometer_km, unit, source, ecu_reading, fraud_flag, fraud_reason,
+        ))
+        conn.commit()
+        cur.close()
+        conn.close()
+        if fraud_flag:
+            log_audit('odometer_fraud_alert', 'odometer_readings', submission_id,
+                      {'vin': vin, 'reading': odometer_km, 'reason': fraud_reason})
+    except Exception as e:
+        print(f"[Odometer Track Error] {e}")
 
 
 def get_or_create_vehicle(vin, decoded=None):
@@ -771,7 +965,9 @@ def collecte_submit():
         return jsonify({'error': 'VIN invalide.'}), 400
 
     report_type = body.get('report_type', '')
-    valid_types = ['accident', 'service', 'ownership', 'inspection', 'recall_completion', 'title_brand', 'lien', 'theft']
+    valid_types = ['accident', 'service', 'ownership', 'inspection', 'recall_completion',
+                    'title_brand', 'lien', 'theft', 'obd_diagnostic', 'auction',
+                    'fleet_history', 'import_export', 'emissions', 'modification']
     if report_type not in valid_types:
         return jsonify({'error': f'Type invalide. Valides: {", ".join(valid_types)}'}), 400
 
@@ -870,8 +1066,9 @@ def collecte_submit():
         elif report_type == 'service':
             cur.execute("""
                 INSERT INTO service_records (submission_id, service_date, odometer_km,
-                    service_type, facility_name, description, cost, parts_type)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    service_type, facility_name, description, cost, parts_type,
+                    ev_battery_soh, ev_battery_kwh, ev_service_type)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 submission_id,
                 data.get('date'),
@@ -881,6 +1078,9 @@ def collecte_submit():
                 data.get('description', ''),
                 data.get('cost') or None,
                 data.get('parts_type', 'na'),
+                data.get('ev_battery_soh') or None,
+                data.get('ev_battery_kwh') or None,
+                data.get('ev_service_type', '') or None,
             ))
 
         elif report_type == 'ownership':
@@ -993,7 +1193,155 @@ def collecte_submit():
                 data.get('notes', ''),
             ))
 
+        elif report_type == 'obd_diagnostic':
+            cur.execute("""
+                INSERT INTO obd_diagnostics (submission_id, scan_date, odometer_km,
+                    scan_tool, mil_status, dtc_active, dtc_pending, dtc_permanent,
+                    readiness_monitors, ecu_odometer_km, freeze_frame, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                submission_id,
+                data.get('date'),
+                data.get('odometer_km') or None,
+                data.get('scan_tool', '') or None,
+                data.get('mil_status', False),
+                data.get('dtc_active', '') or None,
+                data.get('dtc_pending', '') or None,
+                data.get('dtc_permanent', '') or None,
+                json.dumps(data.get('readiness_monitors', {})) if data.get('readiness_monitors') else None,
+                data.get('ecu_odometer_km') or None,
+                json.dumps(data.get('freeze_frame', {})) if data.get('freeze_frame') else None,
+                data.get('notes', ''),
+            ))
+
+        elif report_type == 'auction':
+            cur.execute("""
+                INSERT INTO auction_records (submission_id, auction_date, auction_house,
+                    auction_location, lot_number, sale_type, seller_type, naaa_grade,
+                    exterior_grade, interior_grade, mechanical_grade,
+                    tire_tread_fl, tire_tread_fr, tire_tread_rl, tire_tread_rr,
+                    odor, keys_count, run_drive, sale_price, damage_announcements, notes)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            """, (
+                submission_id,
+                data.get('date'),
+                data.get('auction_house', '') or None,
+                data.get('auction_location', '') or None,
+                data.get('lot_number', '') or None,
+                data.get('sale_type', '') or None,
+                data.get('seller_type', '') or None,
+                data.get('naaa_grade') or None,
+                data.get('exterior_grade', '') or None,
+                data.get('interior_grade', '') or None,
+                data.get('mechanical_grade', '') or None,
+                data.get('tire_tread_fl') or None,
+                data.get('tire_tread_fr') or None,
+                data.get('tire_tread_rl') or None,
+                data.get('tire_tread_rr') or None,
+                data.get('odor', '') or None,
+                data.get('keys_count') or None,
+                data.get('run_drive', True),
+                data.get('sale_price') or None,
+                data.get('damage_announcements', '') or None,
+                data.get('notes', ''),
+            ))
+
+        elif report_type == 'fleet_history':
+            cur.execute("""
+                INSERT INTO fleet_history (submission_id, usage_type, company_name,
+                    date_entered, date_left, mileage_during, estimated_drivers,
+                    province, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                submission_id,
+                data.get('usage_type', ''),
+                data.get('company_name', '') or None,
+                data.get('date_entered') or None,
+                data.get('date_left') or None,
+                data.get('mileage_during') or None,
+                data.get('estimated_drivers') or None,
+                data.get('province', 'QC'),
+                data.get('notes', ''),
+            ))
+
+        elif report_type == 'import_export':
+            cur.execute("""
+                INSERT INTO import_export_records (submission_id, direction, country_origin,
+                    country_destination, transfer_date, riv_number, customs_declaration,
+                    odometer_at_import, odometer_unit, tc_compliance, recalls_cleared, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                submission_id,
+                data.get('direction', 'import'),
+                data.get('country_origin', '') or None,
+                data.get('country_destination', '') or None,
+                data.get('date') or None,
+                data.get('riv_number', '') or None,
+                data.get('customs_declaration', '') or None,
+                data.get('odometer_at_import') or None,
+                data.get('odometer_unit', 'km'),
+                data.get('tc_compliance', False),
+                data.get('recalls_cleared', False),
+                data.get('notes', ''),
+            ))
+
+        elif report_type == 'emissions':
+            cur.execute("""
+                INSERT INTO emissions_tests (submission_id, test_date, test_type, result,
+                    station_name, station_number, inspector_id,
+                    hc_ppm, co_percent, nox_ppm, co2_percent, o2_percent,
+                    certificate_number, certificate_expiry, exemption_reason, notes)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            """, (
+                submission_id,
+                data.get('date'),
+                data.get('test_type', '') or None,
+                data.get('result', 'pass'),
+                data.get('station_name', '') or None,
+                data.get('station_number', '') or None,
+                data.get('inspector_id', '') or None,
+                data.get('hc_ppm') or None,
+                data.get('co_percent') or None,
+                data.get('nox_ppm') or None,
+                data.get('co2_percent') or None,
+                data.get('o2_percent') or None,
+                data.get('certificate_number', '') or None,
+                data.get('certificate_expiry') or None,
+                data.get('exemption_reason', '') or None,
+                data.get('notes', ''),
+            ))
+
+        elif report_type == 'modification':
+            cur.execute("""
+                INSERT INTO vehicle_modifications (submission_id, mod_date, mod_type,
+                    description, part_brand, part_number, installed_by,
+                    homologated, saaq_approved, insurance_notified, notes)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                submission_id,
+                data.get('date'),
+                data.get('mod_type', ''),
+                data.get('description', ''),
+                data.get('part_brand', '') or None,
+                data.get('part_number', '') or None,
+                data.get('installed_by', '') or None,
+                data.get('homologated', False),
+                data.get('saaq_approved', False),
+                data.get('insurance_notified', False),
+                data.get('notes', ''),
+            ))
+
         conn.commit()
+
+        # Auto-track odometer from any submission that has it
+        odo_val = data.get('odometer_km') or data.get('odometer_at_import')
+        if odo_val:
+            track_odometer(
+                vin, int(odo_val), f'submission_{report_type}',
+                submission_id=submission_id,
+                reading_date=data.get('date'),
+                ecu_reading=data.get('ecu_odometer_km'),
+            )
         cur.close()
         conn.close()
 
