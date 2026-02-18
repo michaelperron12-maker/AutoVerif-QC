@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoVerif QC — Importer des données CSV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #080e1a;
+            --primary-light: #111b2e;
+            --accent: #00b4d8;
+            --accent-dark: #0096b7;
+            --gold: #f4a61c;
+            --gold-dark: #d4910a;
+            --red: #e63946;
+            --green: #2a9d8f;
+            --purple: #8b5cf6;
+            --bg: #0b1120;
+            --bg-light: #0f1729;
+            --card: rgba(255,255,255,0.04);
+            --text: #e8ecf2;
+            --text-light: #8892a4;
+            --border: rgba(255,255,255,0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg); color: var(--text);
+            line-height: 1.6; overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(15, 43, 70, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0 40px; display: flex; align-items: center;
+            justify-content: space-between; height: 64px;
+        }
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem; font-weight: 700; color: white;
+            letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 10px; text-decoration: none;
+        }
+        .nav-logo .logo-icon { width: 38px; height: 38px; flex-shrink: 0; }
+        .nav-logo .nav-auto { color: white; font-weight: 800; }
+        .nav-logo .nav-verif { color: var(--accent); font-weight: 800; }
+        .nav-logo .nav-qc { color: var(--gold); font-size: 0.7em; font-weight: 600; margin-left: 4px; }
+        .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-right a {
+            color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; transition: color 0.2s;
+        }
+        .nav-right a:hover { color: white; }
+        .nav-right a.active { color: var(--accent); }
+
+        /* HERO MINI */
+        .hero-mini {
+            padding: 100px 40px 40px; text-align: center;
+            background: linear-gradient(180deg, rgba(0,180,216,0.06) 0%, transparent 100%);
+        }
+        .hero-mini h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem; font-weight: 800; margin-bottom: 8px;
+        }
+        .hero-mini h1 .accent { color: var(--accent); }
+        .hero-mini h1 .gold { color: var(--gold); }
+        .hero-mini p { color: var(--text-light); font-size: 1.05rem; max-width: 650px; margin: 0 auto 20px; }
+        .stats-row { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
+        .stat-item .stat-num {
+            font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 700; color: var(--accent);
+        }
+        .stat-item .stat-label {
+            font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* CONTAINER */
+        .form-container { max-width: 960px; margin: 0 auto; padding: 0 20px 60px; }
+
+        /* SECTION */
+        .section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s;
+        }
+        .section:hover { border-color: rgba(0,180,216,0.15); }
+        .section-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+        }
+        .section-icon {
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+        .section-icon.cyan { background: rgba(0,180,216,0.15); }
+        .section-icon.gold { background: rgba(244,166,28,0.15); }
+        .section-icon.green { background: rgba(42,157,143,0.15); }
+        .section-icon.purple { background: rgba(139,92,246,0.15); }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem; font-weight: 700; flex: 1;
+        }
+
+        /* TEMPLATES */
+        .templates-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 12px;
+        }
+        .tmpl-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .tmpl-card:hover {
+            border-color: var(--accent);
+            background: rgba(0,180,216,0.05);
+            transform: translateY(-2px);
+        }
+        .tmpl-card .tmpl-icon { font-size: 1.8rem; margin-bottom: 6px; }
+        .tmpl-card .tmpl-name {
+            font-weight: 600; font-size: 0.85rem; margin-bottom: 2px;
+        }
+        .tmpl-card .tmpl-hint {
+            font-size: 0.7rem; color: var(--text-light);
+        }
+
+        /* FORM */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .form-row.single { grid-template-columns: 1fr; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label {
+            font-size: 0.8rem; font-weight: 600; color: var(--text-light);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        input, select, textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
+        }
+
+        /* RADIO CARDS (submitter) */
+        .radio-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .radio-card {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .radio-card:hover { border-color: rgba(0,180,216,0.3); }
+        .radio-card.selected { border-color: var(--accent); background: rgba(0,180,216,0.08); }
+        .radio-card .rc-icon { font-size: 1.4rem; margin-bottom: 4px; }
+        .radio-card .rc-label { font-size: 0.8rem; font-weight: 600; }
+
+        /* DROP ZONE */
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .drop-zone:hover { border-color: var(--accent); background: rgba(0,180,216,0.03); }
+        .drop-zone.drag-over { border-color: var(--accent); background: rgba(0,180,216,0.06); }
+        .drop-zone.has-file { border-color: var(--green); border-style: solid; background: rgba(42,157,143,0.05); }
+        .drop-zone input { display: none; }
+        .dz-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .dz-text { font-size: 1rem; color: var(--text-light); margin-bottom: 4px; }
+        .dz-hint { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+        .dz-filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: var(--green); margin-top: 8px;
+        }
+
+        /* PREVIEW TABLE */
+        .preview-wrap {
+            overflow-x: auto; margin-top: 16px;
+            border: 1px solid var(--border); border-radius: 12px;
+        }
+        .preview-table {
+            width: 100%; border-collapse: collapse;
+            font-size: 0.8rem; font-family: 'JetBrains Mono', monospace;
+        }
+        .preview-table th {
+            background: rgba(0,180,216,0.1);
+            padding: 10px 12px; text-align: left;
+            font-weight: 600; color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .preview-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            max-width: 200px; overflow: hidden; text-overflow: ellipsis;
+        }
+        .preview-table tr:hover td { background: rgba(255,255,255,0.02); }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; }
+        .badge-ok { background: rgba(42,157,143,0.15); color: var(--green); }
+        .badge-err { background: rgba(230,57,70,0.15); color: var(--red); }
+        .badge-type { background: rgba(139,92,246,0.15); color: var(--purple); }
+
+        /* PROGRESS */
+        .progress-bar {
+            width: 100%; height: 8px; border-radius: 4px;
+            background: rgba(255,255,255,0.06); overflow: hidden;
+            margin: 16px 0;
+        }
+        .progress-fill {
+            height: 100%; border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            transition: width 0.3s;
+            width: 0;
+        }
+
+        /* RESULTS */
+        .result-summary {
+            display: flex; gap: 20px; justify-content: center;
+            flex-wrap: wrap; margin: 16px 0;
+        }
+        .result-box {
+            text-align: center; padding: 16px 24px;
+            border-radius: 14px; min-width: 120px;
+        }
+        .result-box.success { background: rgba(42,157,143,0.1); border: 1px solid rgba(42,157,143,0.2); }
+        .result-box.error { background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.2); }
+        .result-box .rb-num {
+            font-family: 'Orbitron', monospace; font-size: 1.8rem; font-weight: 700;
+        }
+        .result-box.success .rb-num { color: var(--green); }
+        .result-box.error .rb-num { color: var(--red); }
+        .result-box .rb-label { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; }
+
+        .error-list {
+            max-height: 200px; overflow-y: auto;
+            background: rgba(230,57,70,0.05);
+            border: 1px solid rgba(230,57,70,0.15);
+            border-radius: 10px;
+            padding: 12px; margin-top: 12px;
+            font-size: 0.8rem; font-family: 'JetBrains Mono', monospace;
+        }
+        .error-item { padding: 4px 0; color: var(--red); }
+
+        /* SUBMIT */
+        .submit-section { text-align: center; }
+        .submit-confirm {
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px; margin-bottom: 20px; cursor: pointer;
+        }
+        .check-box {
+            width: 22px; height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px; flex-shrink: 0;
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; color: white;
+        }
+        .submit-confirm.checked .check-box {
+            background: var(--accent); border-color: var(--accent);
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white; border: none;
+            padding: 16px 48px; border-radius: 14px;
+            font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 4px 24px rgba(0,180,216,0.25);
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,180,216,0.35); }
+        .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+        #submit-status { font-size: 0.9rem; margin: 12px 0; min-height: 20px; }
+
+        /* LOOKUP */
+        .lookup-section { margin-top: 8px; }
+        .lookup-row { display: flex; gap: 12px; align-items: flex-end; }
+        .lookup-row input { flex: 1; }
+        .btn-lookup {
+            background: var(--gold); color: #000; border: none;
+            padding: 12px 24px; border-radius: 10px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .btn-lookup:hover { transform: translateY(-1px); }
+        .lookup-results { margin-top: 20px; }
+        .lookup-vehicle {
+            display: flex; align-items: center; gap: 20px;
+            background: rgba(0,180,216,0.06);
+            border: 1px solid rgba(0,180,216,0.15);
+            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+        }
+        .lookup-vehicle img { width: 180px; border-radius: 12px; }
+        .lv-info h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; color: var(--accent); }
+        .lv-info .lv-vin { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-light); }
+        .record-group { margin-bottom: 16px; }
+        .record-group-title {
+            font-family: 'Space Grotesk', sans-serif; font-size: 1rem;
+            font-weight: 700; margin-bottom: 8px; padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+        .record-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px; padding: 12px 16px; margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+        .record-card .rc-field { display: inline-block; margin-right: 16px; margin-bottom: 4px; }
+        .rc-field .rc-key { color: var(--text-light); font-size: 0.75rem; text-transform: uppercase; }
+        .rc-field .rc-val { font-weight: 600; }
+        .odo-timeline {
+            display: flex; flex-direction: column; gap: 6px;
+            padding: 12px; background: rgba(255,255,255,0.02);
+            border-radius: 10px; border: 1px solid var(--border);
+        }
+        .odo-entry { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; }
+        .odo-entry .odo-date { font-family: 'JetBrains Mono', monospace; color: var(--text-light); min-width: 100px; }
+        .odo-entry .odo-km { font-family: 'Orbitron', monospace; font-weight: 600; color: var(--accent); min-width: 80px; }
+        .odo-entry .odo-src { color: var(--text-light); font-size: 0.75rem; }
+        .odo-entry.fraud { background: rgba(230,57,70,0.1); border-radius: 6px; padding: 4px 8px; }
+        .odo-entry.fraud .odo-km { color: var(--red); }
+
+        /* API DOCS */
+        .api-doc { display: none; }
+        .api-doc.show { display: block; }
+        .api-toggle {
+            background: none; border: 1px solid var(--border);
+            color: var(--text-light); padding: 8px 16px;
+            border-radius: 8px; cursor: pointer; font-size: 0.85rem;
+            transition: all 0.2s; margin-top: 8px;
+        }
+        .api-toggle:hover { border-color: var(--accent); color: var(--accent); }
+        pre.code-block {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 10px; padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem; overflow-x: auto;
+            line-height: 1.5; color: var(--text-light);
+            margin: 12px 0;
+        }
+        pre.code-block .hl { color: var(--accent); }
+        pre.code-block .str { color: var(--green); }
+        pre.code-block .num { color: var(--gold); }
+
+        /* SPINNER */
+        .spinner {
+            display: inline-block; width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px; vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* FOOTER */
+        footer {
+            text-align: center; padding: 40px 20px 30px;
+            border-top: 1px solid var(--border);
+        }
+        footer .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem; color: var(--text-light);
+        }
+        footer .footer-brand strong { color: var(--accent); }
+        footer .footer-legal {
+            font-size: 0.72rem; color: rgba(255,255,255,0.3);
+            margin-top: 8px; max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            nav { padding: 0 16px; }
+            .nav-right a:not(.active) { display: none; }
+            .hero-mini { padding: 90px 20px 30px; }
+            .hero-mini h1 { font-size: 1.6rem; }
+            .section { padding: 20px 18px; border-radius: 16px; }
+            .form-row { grid-template-columns: 1fr; }
+            .radio-cards { grid-template-columns: 1fr 1fr; }
+            .templates-grid { grid-template-columns: 1fr 1fr; }
+            .lookup-vehicle { flex-direction: column; text-align: center; }
+            .lookup-vehicle img { width: 160px; }
+            .lookup-row { flex-direction: column; }
+        }
+        @media (max-width: 480px) {
+            .radio-cards { grid-template-columns: 1fr; }
+            .templates-grid { grid-template-columns: 1fr; }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a class="nav-logo" href="https://seoparai.com/autoverif/rapport-vps.html">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+            <rect width="40" height="40" rx="10" fill="rgba(0,180,216,0.15)"/>
+            <path d="M12 28V16l8-6 8 6v12H12z" stroke="#00b4d8" stroke-width="2" fill="none"/>
+            <circle cx="20" cy="22" r="3" fill="#00b4d8"/>
+            <path d="M20 19v-3" stroke="#f4a61c" stroke-width="1.5"/>
+        </svg>
+        <span><span class="nav-auto">Auto</span><span class="nav-verif">Verif</span><span class="nav-qc">QC</span></span>
+    </a>
+    <div class="nav-right">
+        <a href="https://seoparai.com/autoverif/rapport-vps.html">Scanner VIN</a>
+        <a href="https://seoparai.com/autoverif/collecte.html">Contribuer</a>
+        <a href="https://seoparai.com/autoverif/import.html" class="active">Importer CSV</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero-mini">
+    <h1><span class="accent">Importer</span> des données <span class="gold">véhiculaires</span></h1>
+    <p>Téléchargez un fichier CSV depuis votre système de gestion ou consultez l'historique d'un véhicule par VIN.</p>
+    <div class="stats-row">
+        <div class="stat-item">
+            <div class="stat-num" id="stat-subs">--</div>
+            <div class="stat-label">Soumissions</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="stat-vehs">--</div>
+            <div class="stat-label">Véhicules</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="stat-contribs">--</div>
+            <div class="stat-label">Contributeurs</div>
+        </div>
+    </div>
+</div>
+
+<div class="form-container">
+
+    <!-- SECTION: Consulter un VIN -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon gold">&#128270;</div>
+            <div class="section-title">Consulter l'historique d'un véhicule</div>
+        </div>
+        <div class="lookup-section">
+            <div class="lookup-row">
+                <div class="form-group" style="flex:1">
+                    <label>Numéro VIN</label>
+                    <input type="text" id="lookup-vin" placeholder="Ex: 2HGFC2F59MH528491" maxlength="17"
+                           style="font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:1px;">
+                </div>
+                <button class="btn-lookup" onclick="lookupVin()">&#128269; Consulter</button>
+            </div>
+            <div id="lookup-status" style="font-size:0.85rem; margin-top:8px; min-height:20px;"></div>
+            <div id="lookup-results" class="lookup-results hidden"></div>
+        </div>
+    </div>
+
+    <!-- SECTION: Templates -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon cyan">&#128196;</div>
+            <div class="section-title">Modèles CSV</div>
+        </div>
+        <p style="color:var(--text-light); font-size:0.85rem; margin-bottom:14px;">
+            Téléchargez un modèle CSV pré-rempli, remplissez-le avec vos données, puis importez-le ci-dessous.
+        </p>
+        <div class="templates-grid">
+            <a class="tmpl-card" onclick="downloadTemplate('service')">
+                <div class="tmpl-icon">&#128295;</div>
+                <div class="tmpl-name">Entretiens</div>
+                <div class="tmpl-hint">Huile, freins, pneus...</div>
+            </a>
+            <a class="tmpl-card" onclick="downloadTemplate('accident')">
+                <div class="tmpl-icon">&#128680;</div>
+                <div class="tmpl-name">Accidents</div>
+                <div class="tmpl-hint">Collision, sévérité...</div>
+            </a>
+            <a class="tmpl-card" onclick="downloadTemplate('inspection')">
+                <div class="tmpl-icon">&#128203;</div>
+                <div class="tmpl-name">Inspections</div>
+                <div class="tmpl-hint">SAAQ, mécanique...</div>
+            </a>
+            <a class="tmpl-card" onclick="downloadTemplate('ownership')">
+                <div class="tmpl-icon">&#128100;</div>
+                <div class="tmpl-name">Propriétaires</div>
+                <div class="tmpl-hint">Vente, transfert...</div>
+            </a>
+            <a class="tmpl-card" onclick="downloadTemplate('general')">
+                <div class="tmpl-icon">&#128221;</div>
+                <div class="tmpl-name">Général</div>
+                <div class="tmpl-hint">Tous types mélangés</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- SECTION: Identification -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon green">&#128100;</div>
+            <div class="section-title">Qui êtes-vous?</div>
+        </div>
+        <div class="radio-cards" id="submitter-cards">
+            <div class="radio-card" onclick="selectSubmitter(this,'garage')">
+                <div class="rc-icon">&#128295;</div>
+                <div class="rc-label">Garage</div>
+            </div>
+            <div class="radio-card" onclick="selectSubmitter(this,'concessionnaire')">
+                <div class="rc-icon">&#127970;</div>
+                <div class="rc-label">Concession</div>
+            </div>
+            <div class="radio-card" onclick="selectSubmitter(this,'assurance')">
+                <div class="rc-icon">&#128220;</div>
+                <div class="rc-label">Assurance</div>
+            </div>
+            <div class="radio-card" onclick="selectSubmitter(this,'particulier')">
+                <div class="rc-icon">&#128587;</div>
+                <div class="rc-label">Particulier</div>
+            </div>
+        </div>
+        <div class="form-row" style="margin-top:16px;">
+            <div class="form-group">
+                <label>Nom / Entreprise</label>
+                <input type="text" id="sub-name" placeholder="Garage Laval Inc.">
+            </div>
+            <div class="form-group">
+                <label>Courriel</label>
+                <input type="email" id="sub-email" placeholder="info@garagelaval.ca">
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: Upload CSV -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon purple">&#128190;</div>
+            <div class="section-title">Télécharger votre fichier CSV</div>
+        </div>
+        <div class="drop-zone" id="drop-zone"
+             onclick="document.getElementById('csv-input').click()"
+             ondragover="event.preventDefault();this.classList.add('drag-over')"
+             ondragleave="this.classList.remove('drag-over')"
+             ondrop="handleDrop(event)">
+            <input type="file" id="csv-input" accept=".csv,.txt" onchange="handleFileSelect(this.files[0])">
+            <div class="dz-icon" id="dz-icon">&#128196;</div>
+            <div class="dz-text" id="dz-text">Glissez votre fichier CSV ici ou cliquez</div>
+            <div class="dz-hint">CSV ou TXT — max 500 lignes, 2 Mo</div>
+            <div class="dz-filename hidden" id="dz-filename"></div>
+        </div>
+
+        <!-- Preview -->
+        <div id="preview-section" class="hidden">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+                <span style="font-weight:600; font-size:0.9rem;">Aperçu (<span id="preview-count">0</span> lignes)</span>
+                <button onclick="clearFile()" style="background:none; border:1px solid var(--red); color:var(--red); padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.8rem;">Retirer le fichier</button>
+            </div>
+            <div class="preview-wrap">
+                <table class="preview-table" id="preview-table"></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: Submit -->
+    <div class="section" id="sec-submit">
+        <div class="submit-section">
+            <div class="submit-confirm" onclick="toggleConfirm()">
+                <div class="check-box" id="confirm-box"></div>
+                <span>Je confirme que les données soumises sont exactes et complètes.</span>
+            </div>
+            <div id="submit-status"></div>
+            <button id="btn-submit" class="btn-submit" onclick="importCSV()" disabled>
+                Importer les données
+            </button>
+
+            <!-- Progress -->
+            <div id="progress-section" class="hidden" style="margin-top:20px;">
+                <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+                <div id="progress-text" style="font-size:0.85rem; color:var(--text-light);"></div>
+            </div>
+
+            <!-- Results -->
+            <div id="results-section" class="hidden" style="margin-top:20px;">
+                <div class="result-summary" id="result-summary"></div>
+                <div id="result-errors"></div>
+                <div id="result-ref" style="font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--accent); margin-top:12px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: API Documentation -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon cyan">&#128187;</div>
+            <div class="section-title">API Batch (pour développeurs)</div>
+        </div>
+        <p style="color:var(--text-light); font-size:0.85rem; margin-bottom:8px;">
+            Intégrez votre système directement via notre API JSON.
+        </p>
+        <button class="api-toggle" onclick="toggleApiDoc()">Voir la documentation API</button>
+        <div class="api-doc" id="api-doc">
+            <h4 style="margin:16px 0 8px; font-family:'Space Grotesk',sans-serif; font-size:0.95rem;">POST /api/collecte/batch</h4>
+            <pre class="code-block"><span class="hl">curl</span> -X POST <span class="str">"https://seoparai.com/autoverif/api/collecte/batch"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d '{
+  <span class="hl">"submitter"</span>: {
+    "name": <span class="str">"Garage Laval"</span>,
+    "email": <span class="str">"info@garagelaval.ca"</span>,
+    "type": <span class="str">"garage"</span>
+  },
+  <span class="hl">"records"</span>: [
+    {
+      "vin": <span class="str">"2HGFC2F59MH528491"</span>,
+      "report_type": <span class="str">"service"</span>,
+      "data": {
+        "date": <span class="str">"2025-06-15"</span>,
+        "odometer_km": <span class="num">45000</span>,
+        "service_type": <span class="str">"oil_change"</span>,
+        "facility_name": <span class="str">"Garage Laval"</span>,
+        "description": <span class="str">"Changement huile 5W-30"</span>,
+        "cost": <span class="num">89.99</span>
+      }
+    },
+    {
+      "vin": <span class="str">"1FTFW1ET5EKE12345"</span>,
+      "report_type": <span class="str">"accident"</span>,
+      "data": {
+        "date": <span class="str">"2025-01-05"</span>,
+        "severity": <span class="str">"minor"</span>,
+        "impact_point": <span class="str">"rear"</span>,
+        "estimated_cost": <span class="num">1200</span>
+      }
+    }
+  ]
+}'</pre>
+            <h4 style="margin:16px 0 8px; font-family:'Space Grotesk',sans-serif; font-size:0.95rem;">Réponse</h4>
+            <pre class="code-block">{
+  "success": <span class="hl">true</span>,
+  "batch_ref": <span class="str">"API-A1B2C3D4"</span>,
+  "total_records": <span class="num">2</span>,
+  "success_count": <span class="num">2</span>,
+  "error_count": <span class="num">0</span>,
+  "results": [
+    {"index": <span class="num">0</span>, "vin": <span class="str">"2HGFC2F59MH528491"</span>, "submission_id": <span class="num">16</span>, "integrity_hash": <span class="str">"a1b2..."</span>},
+    {"index": <span class="num">1</span>, "vin": <span class="str">"1FTFW1ET5EKE12345"</span>, "submission_id": <span class="num">17</span>, "integrity_hash": <span class="str">"c3d4..."</span>}
+  ]
+}</pre>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="footer-brand">Powered by <strong>AutoVerif QC</strong></div>
+    <div class="footer-legal">Les données soumises sont protégées par un système d'intégrité cryptographique SHA-256.</div>
+</footer>
+
+<script>
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8930' : 'https://seoparai.com/autoverif';
+
+let csvFile = null;
+let csvRows = [];
+let csvHeaders = [];
+let submitterType = null;
+let confirmed = false;
+
+// ─── Stats ───
+async function loadStats() {
+    try {
+        const r = await fetch(`${API_BASE}/api/collecte/stats`);
+        const d = await r.json();
+        document.getElementById('stat-subs').textContent = d.total_submissions || 0;
+        document.getElementById('stat-vehs').textContent = d.total_vehicles || 0;
+        document.getElementById('stat-contribs').textContent = d.total_contributors || 0;
+    } catch(e) {}
+}
+loadStats();
+
+// ─── Submitter ───
+function selectSubmitter(el, type) {
+    document.querySelectorAll('#submitter-cards .radio-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    submitterType = type;
+}
+
+// ─── Templates ───
+function downloadTemplate(name) {
+    window.open(`${API_BASE}/api/collecte/templates/${name}`, '_blank');
+}
+
+// ─── File handling ───
+function handleDrop(e) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files[0]);
+}
+
+function handleFileSelect(file) {
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+        showStatus('Fichier trop volumineux (max 2 Mo).', 'red');
+        return;
+    }
+    csvFile = file;
+    const dz = document.getElementById('drop-zone');
+    dz.classList.add('has-file');
+    document.getElementById('dz-icon').textContent = '\u2705';
+    document.getElementById('dz-text').textContent = 'Fichier chargé';
+    document.getElementById('dz-filename').textContent = file.name;
+    document.getElementById('dz-filename').classList.remove('hidden');
+
+    // Parse preview
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        parseCSV(e.target.result);
+    };
+    reader.readAsText(file);
+}
+
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) {
+        showStatus('Le fichier doit contenir au moins un en-tête et une ligne de données.', 'red');
+        return;
+    }
+
+    // Auto-detect delimiter
+    const delim = lines[0].split(';').length > lines[0].split(',').length ? ';' : ',';
+    csvHeaders = lines[0].split(delim).map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+    csvRows = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const vals = lines[i].split(delim).map(v => v.trim().replace(/^"|"$/g, ''));
+        const row = {};
+        csvHeaders.forEach((h, j) => { row[h] = vals[j] || ''; });
+        csvRows.push(row);
+    }
+
+    // Check VIN column
+    if (!csvHeaders.includes('vin')) {
+        showStatus('Colonne "vin" requise dans le CSV.', 'red');
+        return;
+    }
+
+    renderPreview();
+}
+
+function renderPreview() {
+    const section = document.getElementById('preview-section');
+    section.classList.remove('hidden');
+    document.getElementById('preview-count').textContent = csvRows.length;
+
+    const table = document.getElementById('preview-table');
+    let html = '<thead><tr>';
+    html += '<th>#</th>';
+    csvHeaders.forEach(h => { html += `<th>${h}</th>`; });
+    html += '<th>Type</th><th>VIN</th>';
+    html += '</tr></thead><tbody>';
+
+    const showRows = csvRows.slice(0, 10);
+    showRows.forEach((row, i) => {
+        const vin = (row.vin || '').toUpperCase();
+        const vinOk = /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
+        const rtype = autoDetectType(row);
+        html += `<tr>`;
+        html += `<td>${i + 1}</td>`;
+        csvHeaders.forEach(h => { html += `<td>${row[h] || ''}</td>`; });
+        html += `<td><span class="badge badge-type">${rtype}</span></td>`;
+        html += `<td><span class="badge ${vinOk ? 'badge-ok' : 'badge-err'}">${vinOk ? '\u2713' : '\u2717'} ${vin.substring(0,8)}...</span></td>`;
+        html += `</tr>`;
+    });
+
+    if (csvRows.length > 10) {
+        html += `<tr><td colspan="${csvHeaders.length + 3}" style="text-align:center; color:var(--text-light);">... et ${csvRows.length - 10} autres lignes</td></tr>`;
+    }
+    html += '</tbody>';
+    table.innerHTML = html;
+}
+
+function autoDetectType(row) {
+    if (row.report_type) return row.report_type;
+    if (row.severity || row.impact_point) return 'accident';
+    if (row.service_type || (row.facility_name && row.cost)) return 'service';
+    if (row.previous_owner_type || row.new_owner_type || row.sale_price) return 'ownership';
+    if (row.result && (row.result === 'pass' || row.result === 'fail')) return 'inspection';
+    if (row.recall_number) return 'recall_completion';
+    return 'service';
+}
+
+function clearFile() {
+    csvFile = null; csvRows = []; csvHeaders = [];
+    const dz = document.getElementById('drop-zone');
+    dz.classList.remove('has-file');
+    document.getElementById('dz-icon').textContent = '\uD83D\uDCC4';
+    document.getElementById('dz-text').textContent = 'Glissez votre fichier CSV ici ou cliquez';
+    document.getElementById('dz-filename').classList.add('hidden');
+    document.getElementById('preview-section').classList.add('hidden');
+    document.getElementById('csv-input').value = '';
+}
+
+// ─── Confirm + Submit ───
+function toggleConfirm() {
+    confirmed = !confirmed;
+    const box = document.getElementById('confirm-box');
+    const wrap = box.parentElement;
+    if (confirmed) {
+        box.innerHTML = '\u2713';
+        wrap.classList.add('checked');
+    } else {
+        box.innerHTML = '';
+        wrap.classList.remove('checked');
+    }
+    document.getElementById('btn-submit').disabled = !confirmed || !csvFile;
+}
+
+function showStatus(msg, color) {
+    const el = document.getElementById('submit-status');
+    el.innerHTML = `<span style="color:var(--${color})">${msg}</span>`;
+    if (color !== 'accent') setTimeout(() => el.innerHTML = '', 6000);
+}
+
+async function importCSV() {
+    if (!csvFile) { showStatus('Aucun fichier sélectionné.', 'red'); return; }
+    if (!submitterType) { showStatus('Veuillez sélectionner votre type.', 'red'); return; }
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Importation en cours...';
+
+    // Show progress
+    const prog = document.getElementById('progress-section');
+    prog.classList.remove('hidden');
+    document.getElementById('progress-fill').style.width = '10%';
+    document.getElementById('progress-text').textContent = 'Envoi du fichier...';
+
+    const formData = new FormData();
+    formData.append('file', csvFile);
+    formData.append('submitter_name', document.getElementById('sub-name').value);
+    formData.append('submitter_email', document.getElementById('sub-email').value);
+    formData.append('submitter_type', submitterType);
+    formData.append('submitter_company', document.getElementById('sub-name').value);
+
+    try {
+        document.getElementById('progress-fill').style.width = '40%';
+        document.getElementById('progress-text').textContent = 'Traitement des lignes...';
+
+        const r = await fetch(`${API_BASE}/api/collecte/import-csv`, {
+            method: 'POST', body: formData
+        });
+        const result = await r.json();
+
+        document.getElementById('progress-fill').style.width = '100%';
+        document.getElementById('progress-text').textContent = 'Terminé!';
+
+        if (result.error) {
+            showStatus(`Erreur: ${result.error}`, 'red');
+            btn.disabled = false;
+            btn.textContent = 'Importer les données';
+            return;
+        }
+
+        // Show results
+        const res = document.getElementById('results-section');
+        res.classList.remove('hidden');
+
+        document.getElementById('result-summary').innerHTML = `
+            <div class="result-box success">
+                <div class="rb-num">${result.success_count}</div>
+                <div class="rb-label">Succès</div>
+            </div>
+            <div class="result-box error">
+                <div class="rb-num">${result.error_count}</div>
+                <div class="rb-label">Erreurs</div>
+            </div>
+        `;
+
+        if (result.errors && result.errors.length > 0) {
+            let errHtml = '<div class="error-list">';
+            result.errors.forEach(e => {
+                errHtml += `<div class="error-item">Ligne ${e.row}: ${e.error} ${e.vin ? '('+e.vin+')' : ''}</div>`;
+            });
+            errHtml += '</div>';
+            document.getElementById('result-errors').innerHTML = errHtml;
+        }
+
+        document.getElementById('result-ref').textContent = `Réf: ${result.batch_ref}`;
+        btn.textContent = 'Importer les données';
+        btn.disabled = true;
+        loadStats();
+
+    } catch(e) {
+        showStatus('Erreur de connexion au serveur.', 'red');
+        btn.disabled = false;
+        btn.textContent = 'Importer les données';
+    }
+}
+
+// ─── Lookup ───
+async function lookupVin() {
+    const vin = document.getElementById('lookup-vin').value.trim().toUpperCase();
+    if (!vin || vin.length !== 17) {
+        document.getElementById('lookup-status').innerHTML = '<span style="color:var(--red)">VIN invalide (17 caractères requis).</span>';
+        return;
+    }
+
+    document.getElementById('lookup-status').innerHTML = '<span class="spinner"></span> Recherche en cours...';
+    document.getElementById('lookup-results').classList.add('hidden');
+
+    try {
+        const r = await fetch(`${API_BASE}/api/collecte/lookup/${vin}`);
+        const d = await r.json();
+
+        if (d.error) {
+            document.getElementById('lookup-status').innerHTML = `<span style="color:var(--red)">${d.error}</span>`;
+            return;
+        }
+
+        document.getElementById('lookup-status').innerHTML = `<span style="color:var(--green)">\u2713 ${d.total_records} enregistrement(s) trouvé(s)</span>`;
+        renderLookup(d);
+
+    } catch(e) {
+        document.getElementById('lookup-status').innerHTML = '<span style="color:var(--red)">Erreur de connexion.</span>';
+    }
+}
+
+function renderLookup(d) {
+    const container = document.getElementById('lookup-results');
+    container.classList.remove('hidden');
+
+    let html = '';
+
+    // Vehicle card
+    html += `<div class="lookup-vehicle">
+        <img src="${d.image_url}" alt="${d.vehicle.make} ${d.vehicle.model}" onerror="this.style.display='none'">
+        <div class="lv-info">
+            <h3>${d.vehicle.year || ''} ${d.vehicle.make || ''} ${d.vehicle.model || ''}</h3>
+            <div class="lv-vin">${d.vin}</div>
+            <div style="margin-top:8px; font-size:0.85rem; color:var(--text-light);">
+                ${d.vehicle.body_class || ''} ${d.vehicle.engine ? '• '+d.vehicle.engine+'L' : ''} ${d.vehicle.fuel_type || ''}
+            </div>
+            <div style="margin-top:4px;">
+                <span class="badge badge-ok">${d.total_records} enregistrement(s)</span>
+            </div>
+        </div>
+    </div>`;
+
+    // Record groups
+    const groupLabels = {
+        accidents: {label: 'Accidents', icon: '\uD83D\uDEA8', color: 'var(--red)'},
+        services: {label: 'Entretiens', icon: '\uD83D\uDD27', color: 'var(--accent)'},
+        ownership: {label: 'Propriétaires', icon: '\uD83D\uDC64', color: 'var(--gold)'},
+        inspections: {label: 'Inspections', icon: '\uD83D\uDCCB', color: 'var(--green)'},
+        recalls: {label: 'Rappels', icon: '\u26A0\uFE0F', color: 'var(--gold)'},
+        title_brands: {label: 'Titre/Branding', icon: '\uD83C\uDFF7\uFE0F', color: 'var(--purple)'},
+        liens: {label: 'Privilèges/Liens', icon: '\uD83D\uDD12', color: 'var(--red)'},
+        thefts: {label: 'Vols', icon: '\uD83D\uDEA8', color: 'var(--red)'},
+        obd: {label: 'Diagnostics OBD-II', icon: '\uD83D\uDCBB', color: 'var(--accent)'},
+        auctions: {label: 'Enchères', icon: '\uD83D\uDD28', color: 'var(--gold)'},
+        fleet: {label: 'Flotte', icon: '\uD83D\uDE9A', color: 'var(--purple)'},
+        import_export: {label: 'Import/Export', icon: '\u2708\uFE0F', color: 'var(--accent)'},
+        emissions: {label: 'Émissions', icon: '\uD83C\uDF3F', color: 'var(--green)'},
+        modifications: {label: 'Modifications', icon: '\u2699\uFE0F', color: 'var(--gold)'},
+    };
+
+    for (const [key, items] of Object.entries(d.records)) {
+        if (!items || items.length === 0) continue;
+        const grp = groupLabels[key] || {label: key, icon: '\uD83D\uDCC4', color: 'var(--text-light)'};
+
+        html += `<div class="record-group">`;
+        html += `<div class="record-group-title" style="color:${grp.color}">${grp.icon} ${grp.label} (${items.length})</div>`;
+
+        items.forEach(item => {
+            html += `<div class="record-card">`;
+            for (const [k, v] of Object.entries(item)) {
+                if (v === null || v === '' || k === 'submission_id' || k === 'status') continue;
+                const displayKey = k.replace(/_/g, ' ');
+                let displayVal = v;
+                if (v === true) displayVal = '\u2705 Oui';
+                else if (v === false) displayVal = '\u274C Non';
+                html += `<span class="rc-field"><span class="rc-key">${displayKey}:</span> <span class="rc-val">${displayVal}</span></span>`;
+            }
+            html += `</div>`;
+        });
+        html += `</div>`;
+    }
+
+    // Odometer timeline
+    if (d.odometer_history && d.odometer_history.length > 0) {
+        html += `<div class="record-group">`;
+        html += `<div class="record-group-title" style="color:var(--accent)">\uD83D\uDCCF Historique kilométrage (${d.odometer_history.length})</div>`;
+        html += `<div class="odo-timeline">`;
+        d.odometer_history.forEach(o => {
+            const cls = o.fraud_flag ? 'odo-entry fraud' : 'odo-entry';
+            html += `<div class="${cls}">
+                <span class="odo-date">${o.date || '?'}</span>
+                <span class="odo-km">${o.km ? o.km.toLocaleString() : '?'} km</span>
+                <span class="odo-src">${o.source || ''}</span>
+                ${o.fraud_flag ? `<span class="badge badge-err">\u26A0 ${o.fraud_reason || 'Fraude détectée'}</span>` : ''}
+            </div>`;
+        });
+        html += `</div></div>`;
+    }
+
+    container.innerHTML = html;
+}
+
+// ─── API Doc toggle ───
+function toggleApiDoc() {
+    document.getElementById('api-doc').classList.toggle('show');
+}
+
+// ─── Auto-lookup on 17 chars ───
+document.getElementById('lookup-vin').addEventListener('input', function() {
+    this.value = this.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, '');
+    if (this.value.length === 17) lookupVin();
+});
+</script>
+
+</body>
+</html>

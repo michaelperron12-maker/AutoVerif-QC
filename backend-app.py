@@ -6,6 +6,8 @@ Port: 8930
 
 import os
 import re
+import io
+import csv
 import json
 import time
 import uuid
@@ -14,7 +16,7 @@ import requests
 import psycopg2
 from datetime import datetime
 from decimal import Decimal
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response
 from flask_cors import CORS
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
@@ -461,6 +463,34 @@ def init_db():
     except Exception as e:
         conn.rollback()
         print(f"[Migration v3 new tables] {e}")
+
+    # New table v4: import_batches for CSV/batch imports
+    try:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS import_batches (
+                id SERIAL PRIMARY KEY,
+                batch_ref VARCHAR(20) UNIQUE NOT NULL,
+                submitter_name VARCHAR(200),
+                submitter_email VARCHAR(200),
+                submitter_type VARCHAR(50),
+                submitter_company VARCHAR(200),
+                filename VARCHAR(300),
+                total_rows INTEGER DEFAULT 0,
+                processed INTEGER DEFAULT 0,
+                success_count INTEGER DEFAULT 0,
+                error_count INTEGER DEFAULT 0,
+                status VARCHAR(20) DEFAULT 'processing',
+                errors JSONB,
+                submission_ids JSONB,
+                created_at TIMESTAMP DEFAULT NOW(),
+                completed_at TIMESTAMP
+            );
+            CREATE INDEX IF NOT EXISTS idx_batch_ref ON import_batches(batch_ref);
+        """)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"[Migration v4 import_batches] {e}")
 
     # Migration v3: EV fields on service_records
     try:
@@ -1540,6 +1570,784 @@ def collecte_upload():
         })
 
     return jsonify({'files': uploaded})
+
+
+# ─── Internal submit helper (reused by single, batch, CSV) ───
+def _process_single_submission(vin, report_type, submitter, data, ip_address='batch'):
+    """Process one submission record. Returns dict with success/error info."""
+    valid_types = ['accident', 'service', 'ownership', 'inspection', 'recall_completion',
+                    'title_brand', 'lien', 'theft', 'obd_diagnostic', 'auction',
+                    'fleet_history', 'import_export', 'emissions', 'modification']
+
+    vin = (vin or '').strip().upper()
+    if not validate_vin(vin):
+        return {'success': False, 'error': f'VIN invalide: {vin}'}
+
+    if report_type not in valid_types:
+        return {'success': False, 'error': f'Type invalide: {report_type}'}
+
+    vehicle = get_or_create_vehicle(vin)
+    if not vehicle:
+        return {'success': False, 'error': f'Impossible de décoder VIN: {vin}'}
+
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+
+        cur.execute("SELECT integrity_hash FROM submissions WHERE integrity_hash IS NOT NULL ORDER BY id DESC LIMIT 1")
+        prev_row = cur.fetchone()
+        previous_hash = prev_row[0] if prev_row else None
+
+        now = datetime.now().isoformat()
+        data_snapshot = {
+            'vin': vin, 'report_type': report_type,
+            'submitter': submitter, 'data': data,
+            'submitted_at': now, 'ip': ip_address,
+        }
+
+        cur.execute("""
+            INSERT INTO submissions (vehicle_id, vin, report_type, submitted_by_name,
+                submitted_by_email, submitted_by_type, submitted_by_company, ip_address,
+                data_snapshot, previous_hash)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id
+        """, (
+            vehicle['id'], vin, report_type,
+            submitter.get('name', ''), submitter.get('email', ''),
+            submitter.get('type', ''), submitter.get('company', ''),
+            ip_address,
+            json.dumps(data_snapshot, sort_keys=True, ensure_ascii=False),
+            previous_hash,
+        ))
+        submission_id = cur.fetchone()[0]
+
+        integrity_hash = compute_integrity_hash(
+            submission_id, vin, report_type, data_snapshot, previous_hash, now
+        )
+        cur.execute("UPDATE submissions SET integrity_hash = %s WHERE id = %s", (integrity_hash, submission_id))
+
+        # Insert type-specific detail (same logic as collecte_submit)
+        _insert_detail(cur, submission_id, report_type, data)
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        # Auto-track odometer
+        odo_val = data.get('odometer_km') or data.get('odometer_at_import')
+        if odo_val:
+            track_odometer(vin, int(odo_val), f'submission_{report_type}',
+                           submission_id=submission_id, reading_date=data.get('date'),
+                           ecu_reading=data.get('ecu_odometer_km'))
+
+        log_audit('submission_created', 'submissions', submission_id,
+                  {'report_type': report_type, 'vin': vin, 'hash': integrity_hash}, ip_address)
+
+        return {'success': True, 'submission_id': submission_id, 'integrity_hash': integrity_hash}
+
+    except Exception as e:
+        print(f"[Submit Helper Error] {e}")
+        return {'success': False, 'error': str(e)}
+
+
+def _insert_detail(cur, submission_id, report_type, data):
+    """Insert type-specific detail record."""
+    if report_type == 'accident':
+        cur.execute("""
+            INSERT INTO accident_reports (submission_id, accident_date, severity,
+                impact_point, airbag_deployed, structural_damage, estimated_cost, description,
+                odometer_km, flood_damage, fire_damage, theft_vandalism, towing_required,
+                drivable, total_loss, police_report_number, insurance_claim_number,
+                insurance_company, rollover, hail_damage, accident_location)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('severity', 'minor'),
+            data.get('impact_point', 'front'), data.get('airbag_deployed', False),
+            data.get('structural_damage', False), data.get('estimated_cost') or None,
+            data.get('description', ''), data.get('odometer_km') or None,
+            data.get('flood_damage', False), data.get('fire_damage', False),
+            data.get('theft_vandalism', False), data.get('towing_required', False),
+            data.get('drivable', True), data.get('total_loss', False),
+            data.get('police_report_number', '') or None, data.get('insurance_claim_number', '') or None,
+            data.get('insurance_company', '') or None, data.get('rollover', False),
+            data.get('hail_damage', False), data.get('accident_location', '') or None,
+        ))
+    elif report_type == 'service':
+        cur.execute("""
+            INSERT INTO service_records (submission_id, service_date, odometer_km,
+                service_type, facility_name, description, cost, parts_type,
+                ev_battery_soh, ev_battery_kwh, ev_service_type)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('odometer_km') or None,
+            data.get('service_type', 'other'), data.get('facility_name', ''),
+            data.get('description', ''), data.get('cost') or None,
+            data.get('parts_type', 'na'), data.get('ev_battery_soh') or None,
+            data.get('ev_battery_kwh') or None, data.get('ev_service_type', '') or None,
+        ))
+    elif report_type == 'ownership':
+        cur.execute("""
+            INSERT INTO ownership_changes (submission_id, change_date,
+                previous_owner_type, new_owner_type, province, sale_price,
+                odometer_km, title_brand, usage_type)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('previous_owner_type', 'unknown'),
+            data.get('new_owner_type', 'unknown'), data.get('province', 'QC'),
+            data.get('sale_price') or None, data.get('odometer_km') or None,
+            data.get('title_brand', '') or None, data.get('usage_type', '') or None,
+        ))
+    elif report_type == 'inspection':
+        cur.execute("""
+            INSERT INTO inspections (submission_id, inspection_date, result,
+                odometer_km, notes, inspection_type, inspector_name,
+                facility_name, facility_permit)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('result', 'pass'),
+            data.get('odometer_km') or None, data.get('notes', ''),
+            data.get('inspection_type', 'saaq_mecanique'), data.get('inspector_name', '') or None,
+            data.get('facility_name', '') or None, data.get('facility_permit', '') or None,
+        ))
+    elif report_type == 'recall_completion':
+        cur.execute("""
+            INSERT INTO recall_completions (submission_id, recall_number,
+                completion_date, facility_name, recall_description,
+                component, remedy_type, odometer_km)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('recall_number', ''), data.get('date'),
+            data.get('facility_name', ''), data.get('recall_description', '') or None,
+            data.get('component', '') or None, data.get('remedy_type', '') or None,
+            data.get('odometer_km') or None,
+        ))
+    elif report_type == 'title_brand':
+        cur.execute("""
+            INSERT INTO title_brands (submission_id, brand_date, brand_type,
+                province, previous_brand, insurance_company, total_loss_amount,
+                source, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('brand_type', 'clean'),
+            data.get('province', 'QC'), data.get('previous_brand', '') or None,
+            data.get('insurance_company', '') or None, data.get('total_loss_amount') or None,
+            data.get('source', '') or None, data.get('notes', ''),
+        ))
+    elif report_type == 'lien':
+        cur.execute("""
+            INSERT INTO liens (submission_id, lien_holder, lien_type,
+                lien_amount, registration_date, discharge_date, lien_status,
+                province, registration_number, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('lien_holder', ''), data.get('lien_type', '') or None,
+            data.get('lien_amount') or None, data.get('registration_date') or None,
+            data.get('discharge_date') or None, data.get('lien_status', 'active'),
+            data.get('province', 'QC'), data.get('registration_number', '') or None,
+            data.get('notes', ''),
+        ))
+    elif report_type == 'theft':
+        cur.execute("""
+            INSERT INTO theft_records (submission_id, date_stolen,
+                police_report_number, police_jurisdiction, date_recovered,
+                recovery_location, condition_at_recovery, parts_missing,
+                insurance_claim, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date_stolen'), data.get('police_report_number', '') or None,
+            data.get('police_jurisdiction', '') or None, data.get('date_recovered') or None,
+            data.get('recovery_location', '') or None, data.get('condition_at_recovery', '') or None,
+            data.get('parts_missing', '') or None, data.get('insurance_claim', False),
+            data.get('notes', ''),
+        ))
+    elif report_type == 'obd_diagnostic':
+        cur.execute("""
+            INSERT INTO obd_diagnostics (submission_id, scan_date, odometer_km,
+                scan_tool, mil_status, dtc_active, dtc_pending, dtc_permanent,
+                readiness_monitors, ecu_odometer_km, freeze_frame, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('odometer_km') or None,
+            data.get('scan_tool', '') or None, data.get('mil_status', False),
+            data.get('dtc_active', '') or None, data.get('dtc_pending', '') or None,
+            data.get('dtc_permanent', '') or None,
+            json.dumps(data.get('readiness_monitors', {})) if data.get('readiness_monitors') else None,
+            data.get('ecu_odometer_km') or None,
+            json.dumps(data.get('freeze_frame', {})) if data.get('freeze_frame') else None,
+            data.get('notes', ''),
+        ))
+    elif report_type == 'auction':
+        cur.execute("""
+            INSERT INTO auction_records (submission_id, auction_date, auction_house,
+                auction_location, lot_number, sale_type, seller_type, naaa_grade,
+                exterior_grade, interior_grade, mechanical_grade,
+                tire_tread_fl, tire_tread_fr, tire_tread_rl, tire_tread_rr,
+                odor, keys_count, run_drive, sale_price, damage_announcements, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('auction_house', '') or None,
+            data.get('auction_location', '') or None, data.get('lot_number', '') or None,
+            data.get('sale_type', '') or None, data.get('seller_type', '') or None,
+            data.get('naaa_grade') or None, data.get('exterior_grade', '') or None,
+            data.get('interior_grade', '') or None, data.get('mechanical_grade', '') or None,
+            data.get('tire_tread_fl') or None, data.get('tire_tread_fr') or None,
+            data.get('tire_tread_rl') or None, data.get('tire_tread_rr') or None,
+            data.get('odor', '') or None, data.get('keys_count') or None,
+            data.get('run_drive', True), data.get('sale_price') or None,
+            data.get('damage_announcements', '') or None, data.get('notes', ''),
+        ))
+    elif report_type == 'fleet_history':
+        cur.execute("""
+            INSERT INTO fleet_history (submission_id, usage_type, company_name,
+                date_entered, date_left, mileage_during, estimated_drivers,
+                province, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('usage_type', ''), data.get('company_name', '') or None,
+            data.get('date_entered') or None, data.get('date_left') or None,
+            data.get('mileage_during') or None, data.get('estimated_drivers') or None,
+            data.get('province', 'QC'), data.get('notes', ''),
+        ))
+    elif report_type == 'import_export':
+        cur.execute("""
+            INSERT INTO import_export_records (submission_id, direction, country_origin,
+                country_destination, transfer_date, riv_number, customs_declaration,
+                odometer_at_import, odometer_unit, tc_compliance, recalls_cleared, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('direction', 'import'), data.get('country_origin', '') or None,
+            data.get('country_destination', '') or None, data.get('date') or None,
+            data.get('riv_number', '') or None, data.get('customs_declaration', '') or None,
+            data.get('odometer_at_import') or None, data.get('odometer_unit', 'km'),
+            data.get('tc_compliance', False), data.get('recalls_cleared', False),
+            data.get('notes', ''),
+        ))
+    elif report_type == 'emissions':
+        cur.execute("""
+            INSERT INTO emissions_tests (submission_id, test_date, test_type, result,
+                station_name, station_number, inspector_id,
+                hc_ppm, co_percent, nox_ppm, co2_percent, o2_percent,
+                certificate_number, certificate_expiry, exemption_reason, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('test_type', '') or None,
+            data.get('result', 'pass'), data.get('station_name', '') or None,
+            data.get('station_number', '') or None, data.get('inspector_id', '') or None,
+            data.get('hc_ppm') or None, data.get('co_percent') or None,
+            data.get('nox_ppm') or None, data.get('co2_percent') or None,
+            data.get('o2_percent') or None, data.get('certificate_number', '') or None,
+            data.get('certificate_expiry') or None, data.get('exemption_reason', '') or None,
+            data.get('notes', ''),
+        ))
+    elif report_type == 'modification':
+        cur.execute("""
+            INSERT INTO vehicle_modifications (submission_id, mod_date, mod_type,
+                description, part_brand, part_number, installed_by,
+                homologated, saaq_approved, insurance_notified, notes)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (
+            submission_id, data.get('date'), data.get('mod_type', ''),
+            data.get('description', ''), data.get('part_brand', '') or None,
+            data.get('part_number', '') or None, data.get('installed_by', '') or None,
+            data.get('homologated', False), data.get('saaq_approved', False),
+            data.get('insurance_notified', False), data.get('notes', ''),
+        ))
+
+
+# ─── CSV Import ───
+CSV_TEMPLATES = {
+    'service': {
+        'headers': ['vin','date','odometer_km','service_type','facility_name','description','cost','parts_type'],
+        'examples': [
+            ['2HGFC2F59MH528491','2025-06-15','45000','oil_change','Garage Laval','Changement huile synthétique 5W-30 + filtre','89.99','oem'],
+            ['1FTFW1ET5EKE12345','2025-03-20','82000','brakes','Monsieur Muffler Longueuil','Plaquettes avant + disques','650.00','aftermarket'],
+        ],
+    },
+    'accident': {
+        'headers': ['vin','date','severity','impact_point','description','estimated_cost','odometer_km','airbag_deployed','structural_damage'],
+        'examples': [
+            ['2HGFC2F59MH528491','2024-12-10','moderate','front_left','Collision intersection, feu rouge','8500','42000','false','true'],
+            ['1FTFW1ET5EKE12345','2025-01-05','minor','rear','Accrochage stationnement','1200','80000','false','false'],
+        ],
+    },
+    'inspection': {
+        'headers': ['vin','date','result','odometer_km','inspection_type','facility_name','inspector_name','notes'],
+        'examples': [
+            ['2HGFC2F59MH528491','2025-08-01','pass','47000','saaq_mecanique','SAAQ Laval','Jean Tremblay','RAS'],
+            ['1FTFW1ET5EKE12345','2025-02-15','fail','83000','saaq_mecanique','Centre Auto Brossard','Marc Gagné','Freins arrière usés'],
+        ],
+    },
+    'ownership': {
+        'headers': ['vin','date','previous_owner_type','new_owner_type','province','sale_price','odometer_km','usage_type'],
+        'examples': [
+            ['2HGFC2F59MH528491','2024-05-10','dealer','individual','QC','28500','35000','personal'],
+            ['1FTFW1ET5EKE12345','2023-08-22','individual','individual','QC','22000','75000','personal'],
+        ],
+    },
+    'general': {
+        'headers': ['vin','report_type','date','odometer_km','description','facility_name','cost','severity','impact_point','service_type'],
+        'examples': [
+            ['2HGFC2F59MH528491','service','2025-06-15','45000','Changement huile','Garage Laval','89.99','','','oil_change'],
+            ['1FTFW1ET5EKE12345','accident','2025-01-05','80000','Accrochage arrière','','1200','minor','rear',''],
+        ],
+    },
+}
+
+
+def _auto_detect_report_type(row):
+    """Auto-detect report_type from CSV column values."""
+    if row.get('report_type'):
+        return row['report_type'].strip().lower()
+    # Heuristic based on which columns have data
+    if row.get('severity') or row.get('impact_point') or row.get('airbag_deployed'):
+        return 'accident'
+    if row.get('service_type') or (row.get('facility_name') and row.get('cost')):
+        return 'service'
+    if row.get('previous_owner_type') or row.get('new_owner_type') or row.get('sale_price'):
+        return 'ownership'
+    if row.get('result') and row.get('result') in ('pass', 'fail'):
+        return 'inspection'
+    if row.get('recall_number'):
+        return 'recall_completion'
+    # Default to service if has date + odometer
+    if row.get('date') and row.get('odometer_km'):
+        return 'service'
+    return 'service'
+
+
+def _csv_row_to_data(row, report_type):
+    """Map CSV columns to the data dict expected by _process_single_submission."""
+    data = {}
+    # Common fields
+    for key in ('date', 'description', 'notes', 'facility_name', 'odometer_km', 'cost'):
+        if row.get(key):
+            val = row[key].strip()
+            if key in ('odometer_km', 'cost'):
+                try:
+                    data[key] = float(val) if '.' in val else int(val)
+                except ValueError:
+                    pass
+            else:
+                data[key] = val
+
+    if report_type == 'accident':
+        for k in ('severity', 'impact_point', 'police_report_number', 'insurance_company',
+                   'insurance_claim_number', 'accident_location'):
+            if row.get(k):
+                data[k] = row[k].strip()
+        for k in ('airbag_deployed', 'structural_damage', 'flood_damage', 'fire_damage',
+                   'towing_required', 'drivable', 'total_loss', 'rollover', 'hail_damage'):
+            if row.get(k):
+                data[k] = row[k].strip().lower() in ('true', '1', 'oui', 'yes')
+        if row.get('estimated_cost'):
+            try:
+                data['estimated_cost'] = float(row['estimated_cost'])
+            except ValueError:
+                pass
+
+    elif report_type == 'service':
+        for k in ('service_type', 'parts_type'):
+            if row.get(k):
+                data[k] = row[k].strip()
+
+    elif report_type == 'ownership':
+        for k in ('previous_owner_type', 'new_owner_type', 'province', 'usage_type', 'title_brand'):
+            if row.get(k):
+                data[k] = row[k].strip()
+        if row.get('sale_price'):
+            try:
+                data['sale_price'] = float(row['sale_price'])
+            except ValueError:
+                pass
+
+    elif report_type == 'inspection':
+        for k in ('result', 'inspection_type', 'inspector_name', 'facility_permit'):
+            if row.get(k):
+                data[k] = row[k].strip()
+
+    elif report_type == 'recall_completion':
+        for k in ('recall_number', 'recall_description', 'component', 'remedy_type'):
+            if row.get(k):
+                data[k] = row[k].strip()
+
+    return data
+
+
+@app.route('/api/collecte/import-csv', methods=['POST'])
+def collecte_import_csv():
+    """Import data from a CSV file."""
+    csv_file = request.files.get('file')
+    if not csv_file:
+        return jsonify({'error': 'Aucun fichier CSV envoyé.'}), 400
+
+    # Read file content
+    try:
+        raw = csv_file.read()
+        if len(raw) > 2 * 1024 * 1024:
+            return jsonify({'error': 'Fichier trop volumineux (max 2 Mo).'}), 400
+        content = raw.decode('utf-8-sig')  # Handle BOM
+    except UnicodeDecodeError:
+        try:
+            content = raw.decode('latin-1')
+        except:
+            return jsonify({'error': 'Encodage du fichier non reconnu.'}), 400
+
+    # Auto-detect delimiter
+    delimiter = ',' if content.count(',') >= content.count(';') else ';'
+
+    reader = csv.DictReader(io.StringIO(content), delimiter=delimiter)
+    rows = list(reader)
+
+    if not rows:
+        return jsonify({'error': 'Fichier CSV vide.'}), 400
+    if len(rows) > 500:
+        return jsonify({'error': f'Maximum 500 lignes ({len(rows)} détectées).'}), 400
+
+    # Check VIN column exists
+    headers_lower = [h.lower().strip() for h in (reader.fieldnames or [])]
+    if 'vin' not in headers_lower:
+        return jsonify({'error': 'Colonne "vin" requise dans le CSV.'}), 400
+
+    # Submitter info from form fields
+    submitter = {
+        'name': request.form.get('submitter_name', ''),
+        'email': request.form.get('submitter_email', ''),
+        'type': request.form.get('submitter_type', ''),
+        'company': request.form.get('submitter_company', ''),
+    }
+
+    batch_ref = f"CSV-{uuid.uuid4().hex[:8].upper()}"
+    ip = request.remote_addr
+
+    # Create batch record
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO import_batches (batch_ref, submitter_name, submitter_email,
+                submitter_type, submitter_company, filename, total_rows)
+            VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id
+        """, (batch_ref, submitter['name'], submitter['email'], submitter['type'],
+              submitter['company'], secure_filename(csv_file.filename), len(rows)))
+        batch_id = cur.fetchone()[0]
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        return jsonify({'error': f'Erreur DB: {e}'}), 500
+
+    # Process each row
+    results = []
+    errors = []
+    submission_ids = []
+
+    for i, row in enumerate(rows):
+        # Normalize keys to lowercase
+        row = {k.lower().strip(): v.strip() if v else '' for k, v in row.items()}
+        vin = row.get('vin', '').upper()
+        if not vin:
+            errors.append({'row': i + 2, 'error': 'VIN manquant'})
+            continue
+
+        report_type = _auto_detect_report_type(row)
+        data = _csv_row_to_data(row, report_type)
+
+        result = _process_single_submission(vin, report_type, submitter, data, ip)
+        if result['success']:
+            results.append({'row': i + 2, 'vin': vin, 'type': report_type,
+                            'submission_id': result['submission_id']})
+            submission_ids.append(result['submission_id'])
+        else:
+            errors.append({'row': i + 2, 'vin': vin, 'error': result['error']})
+
+    # Update batch record
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE import_batches SET processed = %s, success_count = %s,
+                error_count = %s, status = 'completed', errors = %s,
+                submission_ids = %s, completed_at = NOW()
+            WHERE id = %s
+        """, (len(rows), len(results), len(errors),
+              json.dumps(errors) if errors else None,
+              json.dumps(submission_ids) if submission_ids else None,
+              batch_id))
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"[Batch Update Error] {e}")
+
+    log_audit('csv_import', 'import_batches', batch_id,
+              {'batch_ref': batch_ref, 'total': len(rows), 'success': len(results),
+               'errors': len(errors)}, ip)
+
+    return jsonify({
+        'success': True,
+        'batch_ref': batch_ref,
+        'total_rows': len(rows),
+        'success_count': len(results),
+        'error_count': len(errors),
+        'results': results,
+        'errors': errors,
+    })
+
+
+@app.route('/api/collecte/batch', methods=['POST'])
+def collecte_batch():
+    """Batch submit multiple records via JSON API."""
+    body = request.get_json()
+    if not body:
+        return jsonify({'error': 'Corps JSON requis.'}), 400
+
+    submitter = body.get('submitter', {})
+    records = body.get('records', [])
+
+    if not records:
+        return jsonify({'error': 'Aucun record fourni.'}), 400
+    if len(records) > 100:
+        return jsonify({'error': f'Maximum 100 records par requête ({len(records)} reçus).'}), 400
+
+    batch_ref = f"API-{uuid.uuid4().hex[:8].upper()}"
+    ip = request.remote_addr
+
+    # Create batch record
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO import_batches (batch_ref, submitter_name, submitter_email,
+                submitter_type, submitter_company, filename, total_rows)
+            VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id
+        """, (batch_ref, submitter.get('name', ''), submitter.get('email', ''),
+              submitter.get('type', ''), submitter.get('company', ''),
+              'batch_api', len(records)))
+        batch_id = cur.fetchone()[0]
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        return jsonify({'error': f'Erreur DB: {e}'}), 500
+
+    results = []
+    errors = []
+    submission_ids = []
+
+    for i, rec in enumerate(records):
+        vin = (rec.get('vin') or '').strip().upper()
+        report_type = rec.get('report_type', 'service')
+        data = rec.get('data', {})
+
+        result = _process_single_submission(vin, report_type, submitter, data, ip)
+        if result['success']:
+            results.append({'index': i, 'vin': vin, 'type': report_type,
+                            'submission_id': result['submission_id'],
+                            'integrity_hash': result['integrity_hash']})
+            submission_ids.append(result['submission_id'])
+        else:
+            errors.append({'index': i, 'vin': vin, 'error': result['error']})
+
+    # Update batch
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE import_batches SET processed = %s, success_count = %s,
+                error_count = %s, status = 'completed', errors = %s,
+                submission_ids = %s, completed_at = NOW()
+            WHERE id = %s
+        """, (len(records), len(results), len(errors),
+              json.dumps(errors) if errors else None,
+              json.dumps(submission_ids) if submission_ids else None,
+              batch_id))
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"[Batch Update Error] {e}")
+
+    log_audit('batch_import', 'import_batches', batch_id,
+              {'batch_ref': batch_ref, 'total': len(records), 'success': len(results)}, ip)
+
+    return jsonify({
+        'success': True,
+        'batch_ref': batch_ref,
+        'total_records': len(records),
+        'success_count': len(results),
+        'error_count': len(errors),
+        'results': results,
+        'errors': errors,
+    })
+
+
+@app.route('/api/collecte/templates/<template_name>', methods=['GET'])
+def collecte_template(template_name):
+    """Download a CSV template."""
+    template_name = template_name.replace('.csv', '')
+    if template_name not in CSV_TEMPLATES:
+        return jsonify({'error': f'Template inconnu. Disponibles: {", ".join(CSV_TEMPLATES.keys())}'}), 404
+
+    tmpl = CSV_TEMPLATES[template_name]
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(tmpl['headers'])
+    for ex in tmpl['examples']:
+        writer.writerow(ex)
+
+    return Response(
+        output.getvalue(),
+        mimetype='text/csv',
+        headers={'Content-Disposition': f'attachment; filename=autoverif-{template_name}.csv'}
+    )
+
+
+@app.route('/api/collecte/templates', methods=['GET'])
+def collecte_templates_list():
+    """List available CSV templates."""
+    return jsonify({
+        'templates': [
+            {'name': k, 'columns': v['headers'], 'example_rows': len(v['examples'])}
+            for k, v in CSV_TEMPLATES.items()
+        ]
+    })
+
+
+# ─── Consultation / Lookup API ───
+@app.route('/api/collecte/lookup/<vin>', methods=['GET'])
+def collecte_lookup(vin):
+    """Lookup all data collected for a VIN."""
+    vin = vin.strip().upper()
+    if not validate_vin(vin):
+        return jsonify({'error': 'VIN invalide.'}), 400
+
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+
+        # Vehicle info
+        cur.execute("SELECT id, make, model, year, body_class, engine, fuel_type FROM vehicles WHERE vin = %s", (vin,))
+        veh = cur.fetchone()
+        if not veh:
+            cur.close()
+            conn.close()
+            return jsonify({'error': 'Aucun véhicule trouvé pour ce VIN.', 'vin': vin}), 404
+
+        vehicle = {
+            'id': veh[0], 'make': veh[1], 'model': veh[2], 'year': veh[3],
+            'body_class': veh[4], 'engine': veh[5], 'fuel_type': veh[6],
+        }
+
+        # All submissions
+        cur.execute("""
+            SELECT id, report_type, submitted_by_name, submitted_by_type,
+                submitted_by_company, status, submitted_at, integrity_hash
+            FROM submissions WHERE vin = %s ORDER BY submitted_at ASC
+        """, (vin,))
+        subs = cur.fetchall()
+
+        records = {
+            'accidents': [], 'services': [], 'ownership': [], 'inspections': [],
+            'recalls': [], 'title_brands': [], 'liens': [], 'thefts': [],
+            'obd': [], 'auctions': [], 'fleet': [], 'import_export': [],
+            'emissions': [], 'modifications': [],
+        }
+
+        type_to_key = {
+            'accident': 'accidents', 'service': 'services', 'ownership': 'ownership',
+            'inspection': 'inspections', 'recall_completion': 'recalls',
+            'title_brand': 'title_brands', 'lien': 'liens', 'theft': 'thefts',
+            'obd_diagnostic': 'obd', 'auction': 'auctions', 'fleet_history': 'fleet',
+            'import_export': 'import_export', 'emissions': 'emissions',
+            'modification': 'modifications',
+        }
+
+        type_queries = {
+            'accident': ("SELECT accident_date, severity, impact_point, estimated_cost, description, odometer_km, structural_damage, total_loss FROM accident_reports WHERE submission_id = %s",
+                         ['date', 'severity', 'impact_point', 'estimated_cost', 'description', 'odometer_km', 'structural_damage', 'total_loss']),
+            'service': ("SELECT service_date, odometer_km, service_type, facility_name, description, cost, parts_type FROM service_records WHERE submission_id = %s",
+                        ['date', 'odometer_km', 'service_type', 'facility', 'description', 'cost', 'parts_type']),
+            'ownership': ("SELECT change_date, previous_owner_type, new_owner_type, province, sale_price, odometer_km, title_brand, usage_type FROM ownership_changes WHERE submission_id = %s",
+                          ['date', 'previous_owner', 'new_owner', 'province', 'sale_price', 'odometer_km', 'title_brand', 'usage_type']),
+            'inspection': ("SELECT inspection_date, result, odometer_km, notes, inspection_type, facility_name FROM inspections WHERE submission_id = %s",
+                           ['date', 'result', 'odometer_km', 'notes', 'type', 'facility']),
+            'recall_completion': ("SELECT recall_number, completion_date, facility_name, recall_description, component FROM recall_completions WHERE submission_id = %s",
+                                  ['recall_number', 'date', 'facility', 'description', 'component']),
+            'title_brand': ("SELECT brand_date, brand_type, province, source, notes FROM title_brands WHERE submission_id = %s",
+                            ['date', 'brand_type', 'province', 'source', 'notes']),
+            'lien': ("SELECT lien_holder, lien_type, lien_amount, registration_date, lien_status, province FROM liens WHERE submission_id = %s",
+                     ['holder', 'type', 'amount', 'date', 'status', 'province']),
+            'theft': ("SELECT date_stolen, police_report_number, date_recovered, condition_at_recovery FROM theft_records WHERE submission_id = %s",
+                      ['date_stolen', 'police_report', 'date_recovered', 'condition']),
+            'obd_diagnostic': ("SELECT scan_date, odometer_km, mil_status, dtc_active, dtc_pending, scan_tool FROM obd_diagnostics WHERE submission_id = %s",
+                               ['date', 'odometer_km', 'mil_status', 'dtc_active', 'dtc_pending', 'scan_tool']),
+            'auction': ("SELECT auction_date, auction_house, naaa_grade, sale_price, sale_type FROM auction_records WHERE submission_id = %s",
+                        ['date', 'auction_house', 'naaa_grade', 'sale_price', 'sale_type']),
+            'fleet_history': ("SELECT usage_type, company_name, date_entered, date_left, mileage_during, province FROM fleet_history WHERE submission_id = %s",
+                              ['usage_type', 'company', 'date_entered', 'date_left', 'mileage', 'province']),
+            'import_export': ("SELECT direction, country_origin, country_destination, transfer_date, odometer_at_import FROM import_export_records WHERE submission_id = %s",
+                              ['direction', 'origin', 'destination', 'date', 'odometer']),
+            'emissions': ("SELECT test_date, result, station_name, hc_ppm, co_percent, nox_ppm FROM emissions_tests WHERE submission_id = %s",
+                          ['date', 'result', 'station', 'hc_ppm', 'co_percent', 'nox_ppm']),
+            'modification': ("SELECT mod_date, mod_type, description, installed_by, homologated, saaq_approved FROM vehicle_modifications WHERE submission_id = %s",
+                             ['date', 'type', 'description', 'installed_by', 'homologated', 'saaq_approved']),
+        }
+
+        for sub in subs:
+            sid, rtype, by_name, by_type, by_company, status, sub_at, ihash = sub
+            key = type_to_key.get(rtype)
+            if not key or rtype not in type_queries:
+                continue
+
+            query, fields = type_queries[rtype]
+            cur.execute(query, (sid,))
+            detail_row = cur.fetchone()
+            if detail_row:
+                detail = {}
+                for j, field in enumerate(fields):
+                    val = detail_row[j]
+                    if hasattr(val, 'isoformat'):
+                        val = val.isoformat()
+                    elif isinstance(val, Decimal):
+                        val = float(val)
+                    detail[field] = val
+                detail['submitted_by'] = by_name or by_company or by_type
+                detail['submission_id'] = sid
+                detail['status'] = status
+                records[key].append(detail)
+
+        # Odometer history
+        cur.execute("""
+            SELECT reading_date, odometer_km, source, fraud_flag, fraud_reason
+            FROM odometer_readings WHERE vin = %s ORDER BY reading_date ASC, id ASC
+        """, (vin,))
+        odo_rows = cur.fetchall()
+        odometer_history = []
+        for orow in odo_rows:
+            odometer_history.append({
+                'date': orow[0].isoformat() if orow[0] else None,
+                'km': orow[1], 'source': orow[2],
+                'fraud_flag': orow[3], 'fraud_reason': orow[4],
+            })
+
+        cur.close()
+        conn.close()
+
+        # Count total records
+        total = sum(len(v) for v in records.values())
+
+        return jsonify({
+            'vin': vin,
+            'vehicle': vehicle,
+            'total_records': total,
+            'records': records,
+            'odometer_history': odometer_history,
+            'image_url': f"https://cdn.imagin.studio/getimage?customer=img&make={vehicle['make']}&modelFamily={vehicle['model']}&modelYear={vehicle['year']}&angle=01&width=800",
+        })
+
+    except Exception as e:
+        print(f"[Lookup Error] {e}")
+        return jsonify({'error': f'Erreur: {str(e)}'}), 500
 
 
 # ─── Serve frontend ───
