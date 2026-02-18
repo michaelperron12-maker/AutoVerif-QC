@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoVerif QC — Contribuer à l'historique véhiculaire</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #080e1a;
@@ -46,1421 +45,1437 @@
             display: flex; align-items: center; gap: 10px; text-decoration: none;
         }
         .nav-logo .logo-icon { width: 38px; height: 38px; flex-shrink: 0; }
-        .nav-logo .nav-auto { color: white; font-weight: 800; letter-spacing: -0.5px; }
-        .nav-logo .nav-verif {
-            background: linear-gradient(135deg, #00b4d8, #2a9d8f);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-weight: 800;
+        .nav-logo .nav-auto { color: white; font-weight: 800; }
+        .nav-logo .nav-verif { color: var(--accent); font-weight: 800; }
+        .nav-logo .nav-qc { color: var(--gold); font-size: 0.7em; font-weight: 600; margin-left: 4px; }
+        .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-right a {
+            color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; transition: color 0.2s;
         }
-        .nav-logo .nav-qc {
-            font-size: 0.5rem; font-weight: 800;
-            background: linear-gradient(135deg, #f4a61c, #e63946);
-            color: white; -webkit-text-fill-color: white;
-            padding: 2px 6px; border-radius: 4px;
-            margin-left: 5px; vertical-align: middle; letter-spacing: 1px;
-        }
-        .nav-right { display: flex; gap: 12px; align-items: center; }
-        .nav-link {
-            color: rgba(255,255,255,0.6); text-decoration: none;
-            font-size: 0.85rem; font-weight: 500; padding: 6px 14px;
-            border-radius: 8px; transition: all 0.3s;
-        }
-        .nav-link:hover { color: white; background: rgba(255,255,255,0.08); }
-        .nav-link.active { color: var(--accent); background: rgba(0,180,216,0.1); }
-        .nav-badge {
-            background: var(--gold); color: var(--primary);
-            padding: 6px 16px; border-radius: 20px;
-            font-size: 0.8rem; font-weight: 700; text-decoration: none;
+        .nav-right a:hover { color: white; }
+        .nav-right a.active { color: var(--accent); }
+        .nav-cta {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white !important; padding: 8px 20px; border-radius: 8px;
+            font-weight: 600; font-size: 0.85rem;
         }
 
-        /* PARTICLES */
-        #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
-        /* HERO */
-        .hero {
-            min-height: 50vh; position: relative; z-index: 1;
-            background: linear-gradient(160deg, #060e1a 0%, var(--primary) 40%, #0d2137 100%);
-            display: flex; align-items: center; justify-content: center;
-            padding: 110px 20px 50px; overflow: hidden; text-align: center;
+        /* HERO MINI */
+        .hero-mini {
+            padding: 100px 40px 40px; text-align: center;
+            background: linear-gradient(180deg, rgba(0,180,216,0.06) 0%, transparent 100%);
         }
-        .hero::before {
-            content: ''; position: absolute; inset: 0;
-            background:
-                radial-gradient(ellipse at 20% 50%, rgba(0,180,216,0.12) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(244,166,28,0.08) 0%, transparent 40%),
-                radial-gradient(ellipse at 50% 80%, rgba(42,157,143,0.06) 0%, transparent 40%);
-        }
-        .glow-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; pointer-events: none; }
-        .glow-orb.blue { width: 400px; height: 400px; background: var(--accent); top: 10%; left: 5%; }
-        .glow-orb.gold { width: 300px; height: 300px; background: var(--gold); bottom: 10%; right: 10%; }
-        .hero-content { position: relative; z-index: 2; max-width: 700px; }
-        .hero .badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(42,157,143,0.12); border: 1px solid rgba(42,157,143,0.25);
-            padding: 6px 18px; border-radius: 30px; font-size: 0.8rem;
-            color: var(--green); font-weight: 600; margin-bottom: 20px;
-        }
-        .badge .live-dot {
-            width: 7px; height: 7px; border-radius: 50%; background: var(--green);
-            animation: blink 2s infinite;
-        }
-        @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
-        .hero h1 {
+        .hero-mini h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(1.8rem,4.5vw,2.6rem); font-weight: 900;
-            color: white; line-height: 1.15; margin-bottom: 14px; letter-spacing: -1px;
+            font-size: 2.4rem; font-weight: 800; margin-bottom: 8px;
         }
-        .hero h1 .grad {
-            background: linear-gradient(135deg, var(--accent), var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .hero-mini h1 .accent { color: var(--accent); }
+        .hero-mini h1 .gold { color: var(--gold); }
+        .hero-mini p { color: var(--text-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 20px; }
+        .stats-row {
+            display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
         }
-        .hero p { color: rgba(255,255,255,0.5); font-size: 0.95rem; max-width: 520px; margin: 0 auto 28px; }
-        .hero-stats {
-            display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
-        }
-        .hero-stat {
+        .stat-item {
             text-align: center;
         }
-        .hero-stat .number {
+        .stat-item .stat-num {
+            font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-item .stat-label {
+            font-size: 0.75rem; color: var(--text-light); text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* FORM CONTAINER */
+        .form-container {
+            max-width: 920px; margin: 0 auto; padding: 0 20px 60px;
+        }
+
+        /* GLASS SECTION */
+        .section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s;
+        }
+        .section:hover { border-color: rgba(0,180,216,0.15); }
+        .section-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+            cursor: pointer; user-select: none;
+        }
+        .section-icon {
+            width: 42px; height: 42px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .section-icon.cyan { background: rgba(0,180,216,0.15); }
+        .section-icon.gold { background: rgba(244,166,28,0.15); }
+        .section-icon.red { background: rgba(230,57,70,0.15); }
+        .section-icon.green { background: rgba(42,157,143,0.15); }
+        .section-icon.purple { background: rgba(139,92,246,0.15); }
+        .section-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.8rem; font-weight: 800; color: var(--accent);
+            font-size: 1.15rem; font-weight: 700; flex: 1;
         }
-        .hero-stat .label {
-            font-size: 0.72rem; color: var(--text-light); text-transform: uppercase;
-            letter-spacing: 1px; font-weight: 600;
+        .section-badge {
+            font-size: 0.7rem; padding: 3px 10px; border-radius: 20px;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
         }
-
-        /* WIZARD SECTION */
-        .wizard-section {
-            position: relative; z-index: 1;
-            padding: 0 20px 80px; margin-top: -30px;
-        }
-        .wizard-container { max-width: 680px; margin: 0 auto; }
-
-        /* GLASS CARD */
-        .glass-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px; padding: 36px;
-            backdrop-filter: blur(24px);
-            box-shadow: 0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
-        }
-
-        /* PROGRESS STEPS */
-        .wizard-progress {
+        .badge-required { background: rgba(230,57,70,0.15); color: var(--red); }
+        .badge-optional { background: rgba(42,157,143,0.15); color: var(--green); }
+        .section-toggle {
+            width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border);
+            background: transparent; color: var(--text-light); cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            gap: 0; margin-bottom: 36px;
+            font-size: 0.8rem; transition: all 0.3s;
         }
-        .wp-step {
-            display: flex; align-items: center; gap: 0;
+        .section-toggle:hover { border-color: var(--accent); color: var(--accent); }
+        .section-body { overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s; }
+        .section.collapsed .section-body { max-height: 0 !important; opacity: 0; padding: 0; }
+        .section.collapsed .section-toggle { transform: rotate(-90deg); }
+
+        /* FORM ELEMENTS */
+        .form-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+            margin-bottom: 16px;
         }
-        .wp-dot {
-            width: 36px; height: 36px; border-radius: 50%;
-            background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem; color: rgba(255,255,255,0.3);
-            font-weight: 700; transition: all 0.5s; flex-shrink: 0;
-        }
-        .wp-dot.active {
-            background: var(--accent); border-color: var(--accent); color: white;
-            box-shadow: 0 0 20px rgba(0,180,216,0.4);
-            animation: pulse-dot 1.2s infinite;
-        }
-        .wp-dot.done {
-            background: var(--green); border-color: var(--green); color: white;
-        }
-        @keyframes pulse-dot {
-            0%,100%{box-shadow:0 0 0 0 rgba(0,180,216,0.4)}
-            50%{box-shadow:0 0 0 10px rgba(0,180,216,0)}
-        }
-        .wp-line {
-            width: 60px; height: 2px; background: rgba(255,255,255,0.08);
-            transition: background 0.5s;
-        }
-        .wp-line.done { background: var(--green); }
-        .wp-label {
-            display: block; font-size: 0.65rem; color: rgba(255,255,255,0.3);
-            text-align: center; margin-top: 6px; font-weight: 600;
+        .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+        .form-row.single { grid-template-columns: 1fr; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label {
+            font-size: 0.8rem; font-weight: 600; color: var(--text-light);
             text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .wp-step.active .wp-label { color: var(--accent); }
-        .wp-step.done .wp-label { color: var(--green); }
-
-        /* STEP PANELS */
-        .step-panel { display: none; }
-        .step-panel.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)} }
-
-        .step-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.25rem; font-weight: 800; color: white;
-            margin-bottom: 6px;
+        input, select, textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px; padding: 12px 16px;
+            color: var(--text); font-family: 'Inter', sans-serif;
+            font-size: 0.95rem; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .step-subtitle {
-            font-size: 0.85rem; color: var(--text-light); margin-bottom: 28px;
-        }
-
-        /* FORM INPUTS */
-        .form-group { margin-bottom: 20px; }
-        .form-label {
-            display: block; color: rgba(255,255,255,0.5); font-size: 0.72rem;
-            font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 8px;
-        }
-        .form-input {
-            width: 100%; padding: 14px 18px;
-            background: rgba(255,255,255,0.06);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px; color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem; font-weight: 500;
-            outline: none; transition: all 0.4s;
-        }
-        .form-input:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: var(--accent);
-            background: rgba(0,180,216,0.06);
-            box-shadow: 0 0 20px rgba(0,180,216,0.08);
+            box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
         }
-        .form-input::placeholder { color: rgba(255,255,255,0.25); }
-
-        .form-select {
-            width: 100%; padding: 14px 18px;
-            background: rgba(255,255,255,0.06);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px; color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem; font-weight: 500;
-            outline: none; transition: all 0.4s;
-            appearance: none; cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='rgba(255,255,255,0.4)' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6.5 6.5 6.5-6.5'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
+        select { cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892a4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 14px center;
+            padding-right: 36px;
         }
-        .form-select:focus {
-            border-color: var(--accent);
-            background-color: rgba(0,180,216,0.06);
-        }
-        .form-select option { background: #111b2e; color: white; }
-
-        .form-textarea {
-            width: 100%; padding: 14px 18px;
-            background: rgba(255,255,255,0.06);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px; color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem; font-weight: 500;
-            outline: none; transition: all 0.4s;
-            min-height: 90px; resize: vertical;
-        }
-        .form-textarea:focus {
-            border-color: var(--accent);
-            background: rgba(0,180,216,0.06);
-        }
-        .form-textarea::placeholder { color: rgba(255,255,255,0.25); }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-        /* VIN INPUT */
+        select option { background: #1a2332; color: var(--text); }
+        textarea { resize: vertical; min-height: 80px; }
         .vin-input {
-            width: 100%; padding: 18px 20px;
-            background: rgba(255,255,255,0.06);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 14px; color: white;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 1.35rem; font-weight: 700;
-            letter-spacing: 4px; text-transform: uppercase;
-            text-align: center; outline: none; transition: all 0.4s;
+            font-family: 'JetBrains Mono', monospace; font-size: 1.3rem;
+            text-transform: uppercase; letter-spacing: 2px; text-align: center;
+            padding: 16px; font-weight: 600;
         }
-        .vin-input::placeholder {
-            color: rgba(255,255,255,0.18); letter-spacing: 2px; font-size: 0.95rem;
-        }
-        .vin-input:focus {
-            border-color: var(--accent);
-            background: rgba(0,180,216,0.06);
-            box-shadow: 0 0 40px rgba(0,180,216,0.12), 0 0 0 4px rgba(0,180,216,0.08);
-        }
-        .vin-status {
-            text-align: center; font-size: 0.82rem; margin-top: 8px;
-            font-weight: 600; min-height: 20px;
-        }
-        .vin-status.loading { color: var(--accent); }
-        .vin-status.success { color: var(--green); }
-        .vin-status.error { color: var(--red); }
 
         /* VEHICLE CARD */
         .vehicle-card {
-            display: none; margin-top: 20px;
-            background: rgba(42,157,143,0.06); border: 1px solid rgba(42,157,143,0.2);
-            border-radius: 16px; padding: 20px; animation: fadeIn 0.5s ease;
+            display: none; background: rgba(0,180,216,0.06);
+            border: 1px solid rgba(0,180,216,0.2); border-radius: 16px;
+            padding: 20px; margin-top: 16px;
+            display: none; align-items: center; gap: 20px;
         }
-        .vehicle-card.visible { display: block; }
-        .vc-header {
-            display: flex; align-items: center; gap: 16px; margin-bottom: 16px;
+        .vehicle-card.show { display: flex; }
+        .vehicle-card img {
+            width: 200px; height: auto; border-radius: 12px;
+            object-fit: cover; flex-shrink: 0;
         }
-        .vc-img {
-            width: 140px; height: 90px; border-radius: 10px; object-fit: cover;
-            background: rgba(255,255,255,0.05);
-        }
-        .vc-info h3 {
+        .vehicle-info h3 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.15rem; font-weight: 800; color: white;
+            font-size: 1.3rem; font-weight: 700; margin-bottom: 4px;
         }
-        .vc-info .vc-vin {
-            font-family: monospace; font-size: 0.78rem; color: var(--accent);
-            letter-spacing: 2px; margin-top: 2px;
+        .vehicle-info .vin-display {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            color: var(--accent); margin-bottom: 8px;
         }
-        .vc-info .vc-badge {
-            display: inline-block; margin-top: 6px;
-            font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-            padding: 3px 10px; border-radius: 8px; letter-spacing: 0.5px;
+        .vehicle-specs {
+            display: flex; flex-wrap: wrap; gap: 8px;
         }
-        .vc-badge.known { background: rgba(42,157,143,0.15); color: var(--green); }
-        .vc-badge.new { background: rgba(0,180,216,0.15); color: var(--accent); }
-        .vc-details {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+        .spec-tag {
+            font-size: 0.75rem; padding: 4px 10px; border-radius: 6px;
+            background: rgba(255,255,255,0.06); color: var(--text-light);
         }
-        .vc-detail {
-            font-size: 0.78rem;
+
+        /* CHECKBOX GRID */
+        .check-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px; margin-bottom: 16px;
         }
-        .vc-detail .dl { color: var(--text-light); text-transform: uppercase; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; }
-        .vc-detail .dv { color: white; font-weight: 600; }
+        .check-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            cursor: pointer; transition: all 0.2s;
+            user-select: none;
+        }
+        .check-item:hover { border-color: rgba(0,180,216,0.3); background: rgba(0,180,216,0.04); }
+        .check-item.checked {
+            border-color: var(--accent); background: rgba(0,180,216,0.08);
+        }
+        .check-item input[type="checkbox"] {
+            display: none;
+        }
+        .check-box {
+            width: 20px; height: 20px; border-radius: 6px;
+            border: 2px solid var(--border); flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .check-item.checked .check-box {
+            border-color: var(--accent); background: var(--accent);
+        }
+        .check-box::after {
+            content: ''; display: block; width: 6px; height: 10px;
+            border: solid white; border-width: 0 2px 2px 0;
+            transform: rotate(45deg) scale(0); transition: transform 0.15s;
+        }
+        .check-item.checked .check-box::after { transform: rotate(45deg) scale(1); }
+        .check-label { font-size: 0.88rem; font-weight: 500; }
 
         /* RADIO CARDS */
-        .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .radio-cards {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 10px; margin-bottom: 16px;
+        }
         .radio-card {
-            background: rgba(255,255,255,0.04);
-            border: 2px solid rgba(255,255,255,0.08);
-            border-radius: 14px; padding: 16px; text-align: center;
-            cursor: pointer; transition: all 0.3s; position: relative;
+            padding: 14px; border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            cursor: pointer; text-align: center;
+            transition: all 0.2s; user-select: none;
         }
-        .radio-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
-        .radio-card.selected {
-            border-color: var(--accent); background: rgba(0,180,216,0.08);
-            box-shadow: 0 0 20px rgba(0,180,216,0.1);
-        }
-        .radio-card .rc-icon { font-size: 1.5rem; margin-bottom: 6px; }
-        .radio-card .rc-label { font-size: 0.82rem; font-weight: 700; color: white; }
-        .radio-card .rc-desc { font-size: 0.72rem; color: var(--text-light); margin-top: 2px; }
-        .radio-card input[type="radio"] { display: none; }
+        .radio-card:hover { border-color: rgba(0,180,216,0.3); }
+        .radio-card.selected { border-color: var(--accent); background: rgba(0,180,216,0.08); box-shadow: 0 0 20px rgba(0,180,216,0.1); }
+        .radio-card input { display: none; }
+        .radio-card .rc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+        .radio-card .rc-text { font-size: 0.85rem; font-weight: 600; }
 
-        /* TYPE CARDS (step 2) */
-        .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .type-card {
-            background: rgba(255,255,255,0.04);
-            border: 2px solid rgba(255,255,255,0.08);
-            border-radius: 16px; padding: 24px 16px; text-align: center;
-            cursor: pointer; transition: all 0.3s;
+        /* SEVERITY SELECTOR */
+        .severity-row {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+            margin-bottom: 16px;
         }
-        .type-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
-        .type-card.selected {
-            border-color: var(--accent); background: rgba(0,180,216,0.08);
-            box-shadow: 0 0 25px rgba(0,180,216,0.12);
+        .severity-btn {
+            padding: 14px; border-radius: 12px; text-align: center;
+            cursor: pointer; border: 2px solid var(--border);
+            background: rgba(255,255,255,0.03); transition: all 0.2s;
+            user-select: none;
         }
-        .type-card .tc-icon { font-size: 2rem; margin-bottom: 10px; }
-        .type-card .tc-title { font-size: 0.9rem; font-weight: 800; color: white; margin-bottom: 4px; }
-        .type-card .tc-desc { font-size: 0.75rem; color: var(--text-light); line-height: 1.4; }
-        .type-card:nth-child(5) { grid-column: 1 / -1; max-width: 300px; margin: 0 auto; }
+        .severity-btn:hover { opacity: 0.9; }
+        .severity-btn.sel-minor { border-color: var(--green); background: rgba(42,157,143,0.12); }
+        .severity-btn.sel-moderate { border-color: var(--gold); background: rgba(244,166,28,0.12); }
+        .severity-btn.sel-major { border-color: var(--red); background: rgba(230,57,70,0.12); }
+        .severity-btn .sv-icon { font-size: 1.5rem; margin-bottom: 4px; }
+        .severity-btn .sv-label { font-size: 0.85rem; font-weight: 700; }
+        .severity-btn .sv-desc { font-size: 0.72rem; color: var(--text-light); margin-top: 2px; }
 
-        /* SEVERITY CARDS */
-        .severity-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .severity-card {
-            border: 2px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 14px 10px; text-align: center;
-            cursor: pointer; transition: all 0.3s;
+        /* IMPACT DIAGRAM */
+        .impact-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 60px);
+            gap: 6px; max-width: 300px; margin: 0 auto 16px;
         }
-        .severity-card:hover { transform: translateY(-2px); }
-        .severity-card.minor { background: rgba(42,157,143,0.06); }
-        .severity-card.minor.selected { border-color: var(--green); background: rgba(42,157,143,0.12); box-shadow: 0 0 15px rgba(42,157,143,0.2); }
-        .severity-card.moderate { background: rgba(244,166,28,0.06); }
-        .severity-card.moderate.selected { border-color: var(--gold); background: rgba(244,166,28,0.12); box-shadow: 0 0 15px rgba(244,166,28,0.2); }
-        .severity-card.major { background: rgba(230,57,70,0.06); }
-        .severity-card.major.selected { border-color: var(--red); background: rgba(230,57,70,0.12); box-shadow: 0 0 15px rgba(230,57,70,0.2); }
-        .severity-card .sc-icon { font-size: 1.3rem; }
-        .severity-card .sc-label { font-size: 0.78rem; font-weight: 700; margin-top: 4px; }
-        .severity-card.minor .sc-label { color: var(--green); }
-        .severity-card.moderate .sc-label { color: var(--gold); }
-        .severity-card.major .sc-label { color: var(--red); }
-
-        /* IMPACT CARDS */
-        .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .impact-card {
-            background: rgba(255,255,255,0.04);
-            border: 2px solid rgba(255,255,255,0.08);
-            border-radius: 12px; padding: 12px 8px; text-align: center;
-            cursor: pointer; transition: all 0.3s; font-size: 0.78rem; font-weight: 600;
+        .impact-zone {
+            border-radius: 8px; border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 600; color: var(--text-light);
+            transition: all 0.2s; user-select: none;
         }
-        .impact-card:hover { border-color: rgba(255,255,255,0.15); }
-        .impact-card.selected { border-color: var(--accent); background: rgba(0,180,216,0.08); color: var(--accent); }
-        .impact-card .ic-icon { font-size: 1.2rem; margin-bottom: 3px; }
+        .impact-zone:hover { border-color: rgba(230,57,70,0.4); }
+        .impact-zone.hit { border-color: var(--red); background: rgba(230,57,70,0.2); color: var(--red); }
+        .impact-center { grid-column: 2; grid-row: 2; border: 1px dashed var(--border);
+            background: rgba(255,255,255,0.02); font-size: 1.4rem; cursor: default; }
 
         /* TOGGLE */
-        .toggle-group { display: flex; gap: 10px; }
-        .toggle-btn {
-            flex: 1; padding: 12px; border: 2px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.04); border-radius: 12px;
-            cursor: pointer; font-weight: 700; font-size: 0.85rem;
-            transition: all 0.3s; color: var(--text-light); text-align: center;
-            font-family: 'Inter', sans-serif;
+        .toggle-row {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
         }
-        .toggle-btn:hover { border-color: rgba(255,255,255,0.15); }
-        .toggle-btn.active-yes { border-color: var(--green); color: var(--green); background: rgba(42,157,143,0.08); }
-        .toggle-btn.active-no { border-color: var(--red); color: var(--red); background: rgba(230,57,70,0.08); }
-        .toggle-btn.active-pass { border-color: var(--green); color: var(--green); background: rgba(42,157,143,0.1); }
-        .toggle-btn.active-fail { border-color: var(--red); color: var(--red); background: rgba(230,57,70,0.1); }
+        .toggle {
+            width: 44px; height: 24px; border-radius: 12px;
+            background: rgba(255,255,255,0.1); cursor: pointer;
+            position: relative; transition: background 0.3s; flex-shrink: 0;
+        }
+        .toggle::after {
+            content: ''; position: absolute; left: 3px; top: 3px;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: white; transition: transform 0.3s;
+        }
+        .toggle.on { background: var(--accent); }
+        .toggle.on::after { transform: translateX(20px); }
+        .toggle-label { font-size: 0.9rem; font-weight: 500; }
 
-        /* PHOTO ZONE */
+        /* PHOTO UPLOAD */
         .photo-zone {
-            border: 2px dashed rgba(255,255,255,0.1);
-            border-radius: 14px; padding: 24px; text-align: center;
-            cursor: pointer; transition: all 0.3s;
+            border: 2px dashed var(--border); border-radius: 16px;
+            padding: 30px; text-align: center; cursor: pointer;
+            transition: all 0.3s; margin-bottom: 16px;
+            position: relative; overflow: hidden;
         }
-        .photo-zone:hover { border-color: var(--accent); background: rgba(0,180,216,0.04); }
-        .photo-zone .pz-icon { font-size: 2rem; margin-bottom: 6px; }
-        .photo-zone p { color: rgba(255,255,255,0.35); font-size: 0.82rem; }
-        .photo-zone .pz-small { font-size: 0.7rem; margin-top: 4px; }
-        .photo-thumbs { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .photo-zone:hover { border-color: var(--accent); background: rgba(0,180,216,0.03); }
+        .photo-zone.drag-over { border-color: var(--accent); background: rgba(0,180,216,0.06); }
+        .photo-zone input { display: none; }
+        .photo-zone .pz-icon { font-size: 2.2rem; margin-bottom: 8px; }
+        .photo-zone .pz-text { font-size: 0.9rem; color: var(--text-light); }
+        .photo-zone .pz-hint { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 4px; }
+        .photo-preview {
+            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
+        }
         .photo-thumb {
-            width: 70px; height: 70px; border-radius: 10px; object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.1);
+            width: 80px; height: 80px; border-radius: 10px;
+            object-fit: cover; border: 2px solid var(--border);
+            position: relative;
+        }
+        .photo-thumb-wrap {
+            position: relative; width: 80px; height: 80px;
+        }
+        .photo-thumb-wrap .photo-remove {
+            position: absolute; top: -6px; right: -6px;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: var(--red); color: white; border: none;
+            font-size: 0.7rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            z-index: 2;
         }
 
-        /* REVIEW TABLE */
-        .review-section { margin-bottom: 24px; }
-        .review-section .rs-title {
-            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 1.5px; color: var(--accent); margin-bottom: 12px;
-            padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.06);
+        /* SUBMIT */
+        .submit-section {
+            text-align: center; padding: 32px;
         }
-        .review-row {
-            display: flex; justify-content: space-between; padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-        }
-        .review-row .rr-label { color: var(--text-light); font-size: 0.82rem; font-weight: 500; }
-        .review-row .rr-value { color: white; font-size: 0.85rem; font-weight: 600; text-align: right; }
-
-        /* CHECKBOX */
-        .confirm-check {
-            display: flex; align-items: flex-start; gap: 12px;
-            margin: 24px 0 20px; cursor: pointer;
-        }
-        .confirm-check input { display: none; }
-        .check-box {
-            width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0;
-            border: 2px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.04);
+        .submit-confirm {
             display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; font-size: 0.75rem; color: transparent;
+            gap: 10px; margin-bottom: 20px; cursor: pointer; user-select: none;
         }
-        .confirm-check input:checked + .check-box {
-            border-color: var(--green); background: rgba(42,157,143,0.15);
-            color: var(--green);
+        .submit-confirm .check-box { width: 22px; height: 22px; }
+        .submit-confirm span { font-size: 0.95rem; color: var(--text-light); }
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white; border: none; padding: 16px 48px;
+            border-radius: 14px; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 24px rgba(0,180,216,0.25);
         }
-        .confirm-check .check-text {
-            font-size: 0.82rem; color: var(--text-light); line-height: 1.5;
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,180,216,0.35); }
+        .btn-submit:disabled {
+            opacity: 0.4; cursor: not-allowed; transform: none;
+            box-shadow: none;
         }
 
-        /* BUTTONS */
-        .btn {
-            padding: 16px 32px; border: none; border-radius: 14px;
-            font-family: 'Inter'; font-size: 1rem; font-weight: 800;
-            cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;
+        /* SUCCESS */
+        .success-overlay {
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(11,17,32,0.95); backdrop-filter: blur(20px);
+            align-items: center; justify-content: center;
         }
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #0096b7);
-            color: white; width: 100%;
+        .success-overlay.show { display: flex; }
+        .success-card {
+            background: var(--card); border: 1px solid rgba(42,157,143,0.3);
+            border-radius: 24px; padding: 48px; text-align: center;
+            max-width: 500px; width: 90%;
         }
-        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,180,216,0.35); }
-        .btn-secondary {
-            background: transparent; border: 2px solid rgba(255,255,255,0.15);
-            color: rgba(255,255,255,0.6); width: 100%;
-        }
-        .btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: white; }
-        .btn-green {
-            background: linear-gradient(135deg, var(--green), #1a8a7e);
-            color: white; width: 100%;
-        }
-        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
-        .btn-full { margin-top: 28px; }
-        .btn .shimmer {
-            position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            animation: shimmer 3s infinite;
-        }
-        @keyframes shimmer { 100%{left:100%} }
-
-        /* SUCCESS SCREEN */
-        .success-screen { display: none; text-align: center; padding: 40px 20px; animation: fadeIn 0.6s ease; }
-        .success-screen.visible { display: block; }
         .success-check {
             width: 80px; height: 80px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--green), #1a8a7e);
+            background: rgba(42,157,143,0.15); margin: 0 auto 20px;
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 20px; font-size: 2.2rem;
-            box-shadow: 0 0 40px rgba(42,157,143,0.3);
+            font-size: 2.5rem;
         }
-        .success-screen h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem; font-weight: 800; color: white; margin-bottom: 8px;
+        .success-card h2 {
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem;
+            color: var(--green); margin-bottom: 8px;
         }
-        .success-screen .ss-ref {
-            font-family: monospace; color: var(--accent); font-size: 0.9rem;
-            font-weight: 700; margin-bottom: 8px;
+        .success-card .ref-number {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: var(--accent); margin-bottom: 8px;
         }
-        .success-screen .ss-note {
-            color: var(--text-light); font-size: 0.85rem; margin-bottom: 28px;
+        .success-card .hash-display {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+            color: var(--text-light); word-break: break-all;
+            background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;
+            margin: 12px 0;
         }
-        .success-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-        .success-btns .btn { width: auto; padding: 14px 28px; }
+        .hash-label { font-size: 0.7rem; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
+        .btn-new {
+            margin-top: 20px; background: rgba(255,255,255,0.08);
+            color: var(--text); border: 1px solid var(--border);
+            padding: 12px 32px; border-radius: 10px; font-size: 0.95rem;
+            font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-new:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* LOADING */
+        .spinner {
+            display: inline-block; width: 20px; height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white; border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px; vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* TYPE SECTIONS HIDDEN BY DEFAULT */
+        .type-section { display: none; }
+        .type-section.active { display: block; }
 
         /* FOOTER */
         footer {
-            position: relative; z-index: 1;
-            text-align: center; padding: 40px 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-light); font-size: 0.78rem;
+            text-align: center; padding: 40px 20px 30px;
+            border-top: 1px solid var(--border);
         }
-        footer a { color: var(--accent); text-decoration: none; }
+        footer .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem; color: var(--text-light);
+        }
+        footer .footer-brand strong { color: var(--accent); }
+        footer .footer-legal {
+            font-size: 0.72rem; color: rgba(255,255,255,0.3);
+            margin-top: 8px; max-width: 600px; margin-left: auto; margin-right: auto;
+        }
 
-        /* MOBILE */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            nav { padding: 0 16px; height: 56px; }
-            .nav-logo { font-size: 1.3rem; }
-            .nav-link { display: none; }
-            .hero { padding: 90px 16px 40px; min-height: auto; }
-            .hero h1 { font-size: 1.6rem; }
-            .hero-stats { gap: 20px; }
-            .hero-stat .number { font-size: 1.4rem; }
-            .wizard-section { padding: 0 12px 60px; }
-            .glass-card { padding: 24px 18px; border-radius: 18px; }
-            .vin-input { font-size: 1rem; letter-spacing: 2px; padding: 14px 12px; }
-            .form-row { grid-template-columns: 1fr; }
-            .radio-grid { grid-template-columns: 1fr 1fr; }
-            .type-grid { grid-template-columns: 1fr; }
-            .type-card:nth-child(5) { max-width: 100%; }
-            .severity-grid { grid-template-columns: 1fr; }
-            .impact-grid { grid-template-columns: repeat(3, 1fr); }
-            .btn-row { grid-template-columns: 1fr; }
-            .wp-line { width: 30px; }
-            .vc-header { flex-direction: column; text-align: center; }
-            .vc-details { grid-template-columns: 1fr; }
-            .review-row { flex-direction: column; gap: 2px; }
-            .review-row .rr-value { text-align: left; }
+            nav { padding: 0 16px; }
+            .nav-right a:not(.nav-cta) { display: none; }
+            .hero-mini { padding: 90px 20px 30px; }
+            .hero-mini h1 { font-size: 1.6rem; }
+            .stats-row { gap: 20px; }
+            .section { padding: 20px 18px; border-radius: 16px; }
+            .form-row, .form-row.three { grid-template-columns: 1fr; }
+            .check-grid { grid-template-columns: 1fr; }
+            .radio-cards { grid-template-columns: 1fr 1fr; }
+            .severity-row { grid-template-columns: 1fr; }
+            .impact-grid { max-width: 240px; }
+            .vehicle-card { flex-direction: column; text-align: center; }
+            .vehicle-card img { width: 160px; }
         }
+        @media (max-width: 480px) {
+            .radio-cards { grid-template-columns: 1fr; }
+        }
+
+        /* HIDDEN FIELD SECTIONS */
+        .detail-fields { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .divider { height: 1px; background: var(--border); margin: 16px 0; }
     </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-    <a href="index.html" class="nav-logo">
+    <a class="nav-logo" href="index.html">
         <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="46" stroke="url(#navGrad)" stroke-width="4" fill="none" opacity="0.3"/>
-            <circle cx="50" cy="50" r="36" stroke="url(#navGrad)" stroke-width="3" fill="none" opacity="0.5"/>
-            <circle cx="50" cy="50" r="26" stroke="url(#navGrad)" stroke-width="2.5" fill="none" opacity="0.7"/>
-            <circle cx="50" cy="50" r="8" fill="url(#navGrad)"/>
-            <line x1="50" y1="10" x2="50" y2="24" stroke="#00b4d8" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="50" y1="76" x2="50" y2="90" stroke="#2a9d8f" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="10" y1="50" x2="24" y2="50" stroke="#f4a61c" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="76" y1="50" x2="90" y2="50" stroke="#e63946" stroke-width="2.5" stroke-linecap="round"/>
-            <defs><linearGradient id="navGrad" x1="0" y1="0" x2="100" y2="100"><stop stop-color="#00b4d8"/><stop offset="1" stop-color="#2a9d8f"/></linearGradient></defs>
+            <rect width="100" height="100" rx="22" fill="url(#g1)"/>
+            <path d="M50 18L26 78h12l4-12h16l4 12h12L50 18zm-4 38l4-14 4 14H46z" fill="white"/>
+            <path d="M68 68l8 12" stroke="#00b4d8" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="62" cy="58" r="16" stroke="#00b4d8" stroke-width="3" fill="none"/>
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="100" y2="100"><stop stop-color="#0f2b46"/><stop offset="1" stop-color="#081828"/></linearGradient></defs>
         </svg>
-        <span class="nav-auto">Auto</span><span class="nav-verif">Verif</span><span class="nav-qc">QC</span>
+        <span><span class="nav-auto">Auto</span><span class="nav-verif">Verif</span><span class="nav-qc">QC</span></span>
     </a>
     <div class="nav-right">
-        <a href="rapport-vps.html" class="nav-link">Scanner</a>
-        <a href="collecte.html" class="nav-link active">Contribuer</a>
-        <a href="index.html" class="nav-link">Plan d'affaires</a>
-        <a href="rapport-vps.html" class="nav-badge">Scanner un VIN</a>
+        <a href="index.html">Accueil</a>
+        <a href="rapport-vps.html">Scanner VIN</a>
+        <a href="collecte.html" class="active">Contribuer</a>
     </div>
 </nav>
 
-<!-- PARTICLES -->
-<canvas id="particles"></canvas>
-
-<!-- HERO -->
-<section class="hero">
-    <div class="glow-orb blue"></div>
-    <div class="glow-orb gold"></div>
-    <div class="hero-content">
-        <div class="badge"><span class="live-dot"></span> Base de données communautaire</div>
-        <h1>Contribuez à l'<span class="grad">historique véhiculaire</span> du Québec</h1>
-        <p>Garages, concessionnaires, assureurs et particuliers — soumettez vos données pour bâtir la plus grande base de données véhiculaire québécoise.</p>
-        <div class="hero-stats">
-            <div class="hero-stat"><div class="number" id="statSubmissions">0</div><div class="label">Contributions</div></div>
-            <div class="hero-stat"><div class="number" id="statVehicles">0</div><div class="label">Véhicules</div></div>
-            <div class="hero-stat"><div class="number" id="statContributors">0</div><div class="label">Contributeurs</div></div>
+<!-- HERO MINI -->
+<div class="hero-mini">
+    <h1><span class="accent">Contribuer</span> à l'historique <span class="gold">véhiculaire</span></h1>
+    <p>Aidez-nous à bâtir la plus grande base de données véhiculaire du Québec. Chaque contribution compte.</p>
+    <div class="stats-row">
+        <div class="stat-item">
+            <div class="stat-num" id="stat-submissions">--</div>
+            <div class="stat-label">Soumissions</div>
         </div>
-        <div id="chainBadge" style="margin-top:20px;display:inline-flex;align-items:center;gap:8px;background:rgba(42,157,143,0.1);border:1px solid rgba(42,157,143,0.25);padding:8px 18px;border-radius:30px;font-size:0.75rem;color:var(--green);font-weight:600;">
-            🔒 Chaîne cryptographique intègre — <span id="chainLength">0</span> blocs vérifiés
+        <div class="stat-item">
+            <div class="stat-num" id="stat-vehicles">--</div>
+            <div class="stat-label">Véhicules</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="stat-contributors">--</div>
+            <div class="stat-label">Contributeurs</div>
         </div>
     </div>
-</section>
+</div>
 
-<!-- WIZARD -->
-<section class="wizard-section">
-    <div class="wizard-container">
-        <div class="glass-card">
+<!-- FORM -->
+<div class="form-container">
 
-            <!-- PROGRESS -->
-            <div class="wizard-progress">
-                <div class="wp-step active" data-step="1">
-                    <div class="wp-dot active">1</div>
-                    <div class="wp-label">VIN</div>
-                </div>
-                <div class="wp-line" data-line="1"></div>
-                <div class="wp-step" data-step="2">
-                    <div class="wp-dot">2</div>
-                    <div class="wp-label">Type</div>
-                </div>
-                <div class="wp-line" data-line="2"></div>
-                <div class="wp-step" data-step="3">
-                    <div class="wp-dot">3</div>
-                    <div class="wp-label">Détails</div>
-                </div>
-                <div class="wp-line" data-line="3"></div>
-                <div class="wp-step" data-step="4">
-                    <div class="wp-dot">4</div>
-                    <div class="wp-label">Confirmer</div>
-                </div>
-            </div>
-
-            <!-- STEP 1: VIN + Identity -->
-            <div class="step-panel active" id="step1">
-                <div class="step-title">Identification du véhicule</div>
-                <div class="step-subtitle">Entrez le VIN (numéro d'identification du véhicule) à 17 caractères.</div>
-
+    <!-- SECTION 1: VIN -->
+    <div class="section" id="sec-vin">
+        <div class="section-header" onclick="toggleSection('sec-vin')">
+            <div class="section-icon cyan">&#128270;</div>
+            <div class="section-title">Identification du véhicule</div>
+            <span class="section-badge badge-required">Requis</span>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row single">
                 <div class="form-group">
-                    <label class="form-label">Numéro VIN</label>
-                    <input type="text" class="vin-input" id="vinInput" maxlength="17" placeholder="Ex: 2HGFC2F59MH528491" autocomplete="off" spellcheck="false">
-                    <div class="vin-status" id="vinStatus"></div>
-                </div>
-
-                <div class="vehicle-card" id="vehicleCard">
-                    <div class="vc-header">
-                        <img class="vc-img" id="vcImg" src="" alt="Véhicule">
-                        <div class="vc-info">
-                            <h3 id="vcTitle"></h3>
-                            <div class="vc-vin" id="vcVin"></div>
-                            <div class="vc-badge" id="vcBadge"></div>
-                        </div>
-                    </div>
-                    <div class="vc-details" id="vcDetails"></div>
-                </div>
-
-                <div style="margin-top: 28px;">
-                    <div class="step-title" style="font-size: 1rem;">Qui êtes-vous ?</div>
-                    <div class="step-subtitle">Sélectionnez votre type de profil.</div>
-                    <div class="radio-grid" id="submitterTypeGrid">
-                        <div class="radio-card" data-value="garage" onclick="selectSubmitterType(this)">
-                            <div class="rc-icon">🔧</div>
-                            <div class="rc-label">Garage</div>
-                        </div>
-                        <div class="radio-card" data-value="dealer" onclick="selectSubmitterType(this)">
-                            <div class="rc-icon">🏢</div>
-                            <div class="rc-label">Concessionnaire</div>
-                        </div>
-                        <div class="radio-card" data-value="insurance" onclick="selectSubmitterType(this)">
-                            <div class="rc-icon">🛡️</div>
-                            <div class="rc-label">Assurance</div>
-                        </div>
-                        <div class="radio-card" data-value="individual" onclick="selectSubmitterType(this)">
-                            <div class="rc-icon">👤</div>
-                            <div class="rc-label">Particulier</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-row" style="margin-top: 20px;">
-                    <div class="form-group">
-                        <label class="form-label">Nom complet</label>
-                        <input type="text" class="form-input" id="subName" placeholder="Jean Tremblay">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Courriel</label>
-                        <input type="email" class="form-input" id="subEmail" placeholder="jean@example.com">
-                    </div>
-                </div>
-                <div class="form-group" id="companyGroup">
-                    <label class="form-label">Entreprise</label>
-                    <input type="text" class="form-input" id="subCompany" placeholder="Nom de votre entreprise">
-                </div>
-
-                <div class="btn-full">
-                    <button class="btn btn-primary" id="btnStep1" onclick="goToStep(2)" disabled>
-                        Suivant <span class="shimmer"></span>
-                    </button>
+                    <label>Numéro VIN (17 caractères)</label>
+                    <input type="text" class="vin-input" id="vin-input" maxlength="17"
+                           placeholder="Ex: 2HGFC2F59MH528491"
+                           oninput="handleVinInput(this)">
+                    <div id="vin-status" style="font-size:0.8rem;margin-top:4px;"></div>
                 </div>
             </div>
-
-            <!-- STEP 2: Report Type -->
-            <div class="step-panel" id="step2">
-                <div class="step-title">Type de rapport</div>
-                <div class="step-subtitle">Quel type de données voulez-vous soumettre ?</div>
-
-                <div class="type-grid" id="typeGrid">
-                    <div class="type-card" data-type="accident" onclick="selectReportType(this)">
-                        <div class="tc-icon">💥</div>
-                        <div class="tc-title">Accident</div>
-                        <div class="tc-desc">Déclarer un accident ou une collision</div>
-                    </div>
-                    <div class="type-card" data-type="service" onclick="selectReportType(this)">
-                        <div class="tc-icon">🔧</div>
-                        <div class="tc-title">Entretien / Réparation</div>
-                        <div class="tc-desc">Ajouter un service ou une réparation</div>
-                    </div>
-                    <div class="type-card" data-type="ownership" onclick="selectReportType(this)">
-                        <div class="tc-icon">🔑</div>
-                        <div class="tc-title">Changement de propriétaire</div>
-                        <div class="tc-desc">Enregistrer un transfert de propriété</div>
-                    </div>
-                    <div class="type-card" data-type="inspection" onclick="selectReportType(this)">
-                        <div class="tc-icon">📋</div>
-                        <div class="tc-title">Inspection SAAQ</div>
-                        <div class="tc-desc">Résultat d'inspection mécanique</div>
-                    </div>
-                    <div class="type-card" data-type="recall_completion" onclick="selectReportType(this)">
-                        <div class="tc-icon">🛡️</div>
-                        <div class="tc-title">Rappel complété</div>
-                        <div class="tc-desc">Confirmer la complétion d'un rappel</div>
-                    </div>
-                </div>
-
-                <div class="btn-row">
-                    <button class="btn btn-secondary" onclick="goToStep(1)">Retour</button>
-                    <button class="btn btn-primary" id="btnStep2" onclick="goToStep(3)" disabled>Suivant <span class="shimmer"></span></button>
+            <div class="vehicle-card" id="vehicle-card">
+                <img id="vehicle-img" src="" alt="Véhicule" onerror="this.style.display='none'">
+                <div class="vehicle-info">
+                    <h3 id="vehicle-name">--</h3>
+                    <div class="vin-display" id="vehicle-vin">--</div>
+                    <div class="vehicle-specs" id="vehicle-specs"></div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- STEP 3: Details -->
-            <div class="step-panel" id="step3">
-                <div class="step-title" id="step3Title">Détails</div>
-                <div class="step-subtitle" id="step3Subtitle">Remplissez les informations ci-dessous.</div>
-                <div id="step3Fields"></div>
-                <div class="btn-row">
-                    <button class="btn btn-secondary" onclick="goToStep(2)">Retour</button>
-                    <button class="btn btn-primary" id="btnStep3" onclick="goToStep(4)">Vérifier <span class="shimmer"></span></button>
+    <!-- SECTION 2: QUI ÊTES-VOUS -->
+    <div class="section" id="sec-submitter">
+        <div class="section-header" onclick="toggleSection('sec-submitter')">
+            <div class="section-icon gold">&#128100;</div>
+            <div class="section-title">Qui êtes-vous?</div>
+            <span class="section-badge badge-required">Requis</span>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="radio-cards" id="submitter-type">
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','garage')">
+                    <input type="radio" name="sub_type" value="garage">
+                    <div class="rc-icon">&#128295;</div>
+                    <div class="rc-text">Garage</div>
+                </div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','concessionnaire')">
+                    <input type="radio" name="sub_type" value="concessionnaire">
+                    <div class="rc-icon">&#127970;</div>
+                    <div class="rc-text">Concessionnaire</div>
+                </div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','assurance')">
+                    <input type="radio" name="sub_type" value="assurance">
+                    <div class="rc-icon">&#128203;</div>
+                    <div class="rc-text">Assurance</div>
+                </div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','particulier')">
+                    <input type="radio" name="sub_type" value="particulier">
+                    <div class="rc-icon">&#128587;</div>
+                    <div class="rc-text">Particulier</div>
+                </div>
+                <div class="radio-card" onclick="selectRadio(this,'submitter-type','saaq')">
+                    <input type="radio" name="sub_type" value="saaq">
+                    <div class="rc-icon">&#127963;</div>
+                    <div class="rc-text">SAAQ / Gouv</div>
                 </div>
             </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" id="sub-name" placeholder="Jean Tremblay">
+                </div>
+                <div class="form-group">
+                    <label>Courriel</label>
+                    <input type="email" id="sub-email" placeholder="jean@garage.ca">
+                </div>
+            </div>
+            <div class="form-row single" id="company-row">
+                <div class="form-group">
+                    <label>Entreprise / Établissement</label>
+                    <input type="text" id="sub-company" placeholder="Garage Tremblay Inc.">
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <!-- STEP 4: Review -->
-            <div class="step-panel" id="step4">
-                <div class="step-title">Vérification</div>
-                <div class="step-subtitle">Vérifiez vos informations avant de soumettre.</div>
-                <div id="reviewContent"></div>
-                <label class="confirm-check" id="confirmLabel">
-                    <input type="checkbox" id="confirmCheck" onchange="toggleSubmit()">
-                    <div class="check-box">✓</div>
-                    <div class="check-text">Je confirme que ces informations sont exactes et que je suis autorisé(e) à les soumettre.</div>
+    <!-- SECTION 3: TYPE DE RAPPORT (multi-select) -->
+    <div class="section" id="sec-type">
+        <div class="section-header" onclick="toggleSection('sec-type')">
+            <div class="section-icon green">&#128221;</div>
+            <div class="section-title">Type(s) de rapport</div>
+            <span class="section-badge badge-required">Requis</span>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:14px;">Sélectionnez un ou plusieurs types de rapport à soumettre.</p>
+            <div class="check-grid" id="report-types">
+                <label class="check-item" onclick="toggleCheck(this,'accident')">
+                    <input type="checkbox" value="accident">
+                    <div class="check-box"></div>
+                    <span class="check-label">&#128165; Accident</span>
                 </label>
-                <div class="btn-row">
-                    <button class="btn btn-secondary" onclick="goToStep(3)">Modifier</button>
-                    <button class="btn btn-green" id="btnSubmit" onclick="submitForm()" disabled>Soumettre <span class="shimmer"></span></button>
-                </div>
+                <label class="check-item" onclick="toggleCheck(this,'service')">
+                    <input type="checkbox" value="service">
+                    <div class="check-box"></div>
+                    <span class="check-label">&#128736; Entretien / Réparation</span>
+                </label>
+                <label class="check-item" onclick="toggleCheck(this,'ownership')">
+                    <input type="checkbox" value="ownership">
+                    <div class="check-box"></div>
+                    <span class="check-label">&#128100; Changement propriétaire</span>
+                </label>
+                <label class="check-item" onclick="toggleCheck(this,'inspection')">
+                    <input type="checkbox" value="inspection">
+                    <div class="check-box"></div>
+                    <span class="check-label">&#9989; Inspection SAAQ</span>
+                </label>
+                <label class="check-item" onclick="toggleCheck(this,'recall_completion')">
+                    <input type="checkbox" value="recall_completion">
+                    <div class="check-box"></div>
+                    <span class="check-label">&#128276; Rappel complété</span>
+                </label>
             </div>
-
-            <!-- SUCCESS -->
-            <div class="success-screen" id="successScreen">
-                <div class="success-check">✓</div>
-                <h2>Contribution enregistrée !</h2>
-                <div class="ss-ref" id="ssRef"></div>
-                <div class="ss-hash" id="ssHash" style="margin:12px 0;padding:14px 18px;background:rgba(42,157,143,0.08);border:1px solid rgba(42,157,143,0.2);border-radius:12px;text-align:left;">
-                    <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:6px;">🔒 Empreinte d'intégrité SHA-256</div>
-                    <div id="ssHashValue" style="font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.72rem;color:var(--accent);word-break:break-all;letter-spacing:0.5px;line-height:1.6;"></div>
-                    <div style="font-size:0.68rem;color:var(--text-light);margin-top:8px;">Cette empreinte cryptographique garantit que vos données ne peuvent pas être altérées. Chaque soumission est chaînée à la précédente.</div>
-                </div>
-                <div class="ss-note">Votre soumission sera vérifiée sous 24-48h. Merci pour votre contribution !</div>
-                <div class="success-btns">
-                    <button class="btn btn-primary" onclick="resetWizard()">Soumettre une autre</button>
-                    <a href="rapport-vps.html" class="btn btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Scanner un VIN</a>
-                </div>
-            </div>
-
         </div>
     </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-    <p>AutoVerif QC — Propulsé par <a href="https://seoparai.com" target="_blank">SeoAI</a></p>
-    <p style="margin-top: 6px; font-size: 0.7rem; color: rgba(255,255,255,0.25);">Les données soumises sont vérifiées avant publication. Aucune information personnelle n'est partagée.</p>
-</footer>
-
-<script>
-// ─── State ───
-let currentStep = 1;
-let vehicleData = null;
-let selectedSubmitterType = null;
-let selectedReportType = null;
-let formData = {};
-
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8930'
-    : '/autoverif';
-
-// ─── Particles ───
-(function() {
-    const c = document.getElementById('particles');
-    const ctx = c.getContext('2d');
-    let w, h, dots = [];
-    function resize() { w = c.width = innerWidth; h = c.height = innerHeight; }
-    resize(); addEventListener('resize', resize);
-    for (let i = 0; i < 50; i++) dots.push({
-        x: Math.random() * w, y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
-        r: Math.random() * 1.5 + 0.5
-    });
-    function draw() {
-        ctx.clearRect(0, 0, w, h);
-        dots.forEach(d => {
-            d.x += d.vx; d.y += d.vy;
-            if (d.x < 0 || d.x > w) d.vx *= -1;
-            if (d.y < 0 || d.y > h) d.vy *= -1;
-            ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(0,180,216,0.15)'; ctx.fill();
-        });
-        for (let i = 0; i < dots.length; i++) {
-            for (let j = i + 1; j < dots.length; j++) {
-                const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 120) {
-                    ctx.beginPath();
-                    ctx.moveTo(dots[i].x, dots[i].y);
-                    ctx.lineTo(dots[j].x, dots[j].y);
-                    ctx.strokeStyle = `rgba(0,180,216,${0.04 * (1 - dist / 120)})`;
-                    ctx.stroke();
-                }
-            }
-        }
-        requestAnimationFrame(draw);
-    }
-    draw();
-})();
-
-// ─── Load stats + chain verification ───
-(async function() {
-    try {
-        const r = await fetch(API_BASE + '/api/collecte/stats');
-        const d = await r.json();
-        animateNumber('statSubmissions', d.total_submissions || 0);
-        animateNumber('statVehicles', d.total_vehicles || 0);
-        animateNumber('statContributors', d.total_contributors || 0);
-    } catch(e) { console.log('Stats unavailable'); }
-    // Verify chain integrity
-    try {
-        const r2 = await fetch(API_BASE + '/api/collecte/verify');
-        const v = await r2.json();
-        const badge = document.getElementById('chainBadge');
-        document.getElementById('chainLength').textContent = v.chain_length || 0;
-        if (v.valid) {
-            badge.style.borderColor = 'rgba(42,157,143,0.25)';
-            badge.style.color = 'var(--green)';
-        } else {
-            badge.innerHTML = '⚠️ Alerte: anomalie détectée dans la chaîne';
-            badge.style.borderColor = 'rgba(230,57,70,0.25)';
-            badge.style.color = 'var(--red)';
-            badge.style.background = 'rgba(230,57,70,0.1)';
-        }
-    } catch(e) { console.log('Chain verify unavailable'); }
-})();
-
-function animateNumber(id, target) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    let current = 0;
-    const step = Math.max(1, Math.floor(target / 30));
-    const interval = setInterval(() => {
-        current += step;
-        if (current >= target) { current = target; clearInterval(interval); }
-        el.textContent = current.toLocaleString('fr-CA');
-    }, 30);
-}
-
-// ─── VIN Input ───
-const vinInput = document.getElementById('vinInput');
-let vinTimeout = null;
-
-vinInput.addEventListener('input', function() {
-    this.value = this.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, '');
-    document.getElementById('vehicleCard').classList.remove('visible');
-    vehicleData = null;
-    validateStep1();
-    if (this.value.length === 17) {
-        clearTimeout(vinTimeout);
-        vinTimeout = setTimeout(() => decodeVIN(this.value), 300);
-    } else {
-        document.getElementById('vinStatus').textContent = '';
-        document.getElementById('vinStatus').className = 'vin-status';
-    }
-});
-
-async function decodeVIN(vin) {
-    const status = document.getElementById('vinStatus');
-    status.textContent = 'Décodage en cours...';
-    status.className = 'vin-status loading';
-
-    try {
-        const r = await fetch(API_BASE + '/api/collecte/vin-check/' + vin);
-        const d = await r.json();
-        if (d.error) {
-            status.textContent = d.error;
-            status.className = 'vin-status error';
-            return;
-        }
-        vehicleData = d;
-        status.textContent = 'Véhicule identifié !';
-        status.className = 'vin-status success';
-        showVehicleCard(d);
-        validateStep1();
-    } catch(e) {
-        status.textContent = 'Erreur de connexion au serveur.';
-        status.className = 'vin-status error';
-    }
-}
-
-function showVehicleCard(d) {
-    const card = document.getElementById('vehicleCard');
-    const v = d.vehicle;
-    document.getElementById('vcImg').src = d.image_url || '';
-    document.getElementById('vcTitle').textContent = `${v.year} ${v.make} ${v.model}`;
-    document.getElementById('vcVin').textContent = vinInput.value;
-    const badge = document.getElementById('vcBadge');
-    if (d.found) {
-        badge.textContent = `Véhicule connu — ${d.existing_records} rapport(s)`;
-        badge.className = 'vc-badge known';
-    } else {
-        badge.textContent = 'Nouveau véhicule';
-        badge.className = 'vc-badge new';
-    }
-    const details = document.getElementById('vcDetails');
-    const fields = [
-        ['Carrosserie', v.body], ['Moteur', v.engine ? v.engine + 'L' : ''],
-        ['Carburant', v.fuel], ['Transmission', v.transmission],
-        ['Traction', v.drive], ['Assemblé', v.plant_country]
-    ];
-    details.innerHTML = fields.filter(f => f[1]).map(f =>
-        `<div class="vc-detail"><div class="dl">${f[0]}</div><div class="dv">${f[1]}</div></div>`
-    ).join('');
-    card.classList.add('visible');
-}
-
-// ─── Submitter type ───
-function selectSubmitterType(el) {
-    document.querySelectorAll('#submitterTypeGrid .radio-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedSubmitterType = el.dataset.value;
-    // Show/hide company field
-    document.getElementById('companyGroup').style.display = selectedSubmitterType === 'individual' ? 'none' : 'block';
-    validateStep1();
-}
-
-function validateStep1() {
-    const valid = vehicleData && selectedSubmitterType &&
-        document.getElementById('subName').value.trim() &&
-        document.getElementById('subEmail').value.trim();
-    document.getElementById('btnStep1').disabled = !valid;
-}
-
-document.getElementById('subName').addEventListener('input', validateStep1);
-document.getElementById('subEmail').addEventListener('input', validateStep1);
-
-// ─── Report type ───
-function selectReportType(el) {
-    document.querySelectorAll('#typeGrid .type-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedReportType = el.dataset.type;
-    document.getElementById('btnStep2').disabled = false;
-}
-
-// ─── Step navigation ───
-function goToStep(n) {
-    if (n === 2 && !vehicleData) return;
-    if (n === 3 && !selectedReportType) return;
-    if (n === 3) renderStep3();
-    if (n === 4) buildReview();
-
-    // Hide all panels
-    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('step' + n).classList.add('active');
-
-    // Update progress dots
-    document.querySelectorAll('.wp-step').forEach(s => {
-        const sn = parseInt(s.dataset.step);
-        s.classList.remove('active', 'done');
-        s.querySelector('.wp-dot').classList.remove('active', 'done');
-        if (sn < n) { s.classList.add('done'); s.querySelector('.wp-dot').classList.add('done'); }
-        else if (sn === n) { s.classList.add('active'); s.querySelector('.wp-dot').classList.add('active'); }
-    });
-    document.querySelectorAll('.wp-line').forEach(l => {
-        const ln = parseInt(l.dataset.line);
-        l.classList.toggle('done', ln < n);
-    });
-
-    currentStep = n;
-    window.scrollTo({ top: document.querySelector('.wizard-section').offsetTop - 80, behavior: 'smooth' });
-}
-
-// ─── Step 3: Render fields ───
-function renderStep3() {
-    const container = document.getElementById('step3Fields');
-    const titles = {
-        accident: ['Détails de l\'accident', 'Décrivez l\'accident survenu.'],
-        service: ['Détails de l\'entretien', 'Décrivez le service ou la réparation effectuée.'],
-        ownership: ['Changement de propriétaire', 'Détails du transfert de propriété.'],
-        inspection: ['Inspection SAAQ', 'Résultat de l\'inspection mécanique.'],
-        recall_completion: ['Rappel complété', 'Confirmation de la complétion du rappel.'],
-    };
-    document.getElementById('step3Title').textContent = titles[selectedReportType][0];
-    document.getElementById('step3Subtitle').textContent = titles[selectedReportType][1];
-
-    let html = '';
-
-    if (selectedReportType === 'accident') {
-        html = `
-            <div class="form-group">
-                <label class="form-label">Date de l'accident</label>
-                <input type="date" class="form-input" id="fDate">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Sévérité</label>
-                <div class="severity-grid">
-                    <div class="severity-card minor" onclick="selectSeverity(this, 'minor')">
-                        <div class="sc-icon">🟢</div><div class="sc-label">Mineur</div>
-                    </div>
-                    <div class="severity-card moderate" onclick="selectSeverity(this, 'moderate')">
-                        <div class="sc-icon">🟡</div><div class="sc-label">Modéré</div>
-                    </div>
-                    <div class="severity-card major" onclick="selectSeverity(this, 'major')">
-                        <div class="sc-icon">🔴</div><div class="sc-label">Majeur</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Point d'impact</label>
-                <div class="impact-grid">
-                    <div class="impact-card" onclick="selectImpact(this, 'front')"><div class="ic-icon">⬆️</div>Avant</div>
-                    <div class="impact-card" onclick="selectImpact(this, 'rear')"><div class="ic-icon">⬇️</div>Arrière</div>
-                    <div class="impact-card" onclick="selectImpact(this, 'left')"><div class="ic-icon">⬅️</div>Gauche</div>
-                    <div class="impact-card" onclick="selectImpact(this, 'right')"><div class="ic-icon">➡️</div>Droite</div>
-                    <div class="impact-card" onclick="selectImpact(this, 'rollover')"><div class="ic-icon">🔄</div>Tonneau</div>
-                    <div class="impact-card" onclick="selectImpact(this, 'multiple')"><div class="ic-icon">💥</div>Multiple</div>
-                </div>
-            </div>
+    <!-- SECTION 4: ACCIDENT DETAILS (shown when checked) -->
+    <div class="section type-section" id="sec-accident" data-type="accident">
+        <div class="section-header" onclick="toggleSection('sec-accident')">
+            <div class="section-icon red">&#128165;</div>
+            <div class="section-title">Détails de l'accident</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Coussins gonflables déployés ?</label>
-                    <div class="toggle-group">
-                        <div class="toggle-btn" onclick="setToggle('airbag', true, this)">Oui</div>
-                        <div class="toggle-btn" onclick="setToggle('airbag', false, this)">Non</div>
-                    </div>
+                    <label>Date de l'accident</label>
+                    <input type="date" id="acc-date">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Dommages structurels ?</label>
-                    <div class="toggle-group">
-                        <div class="toggle-btn" onclick="setToggle('structural', true, this)">Oui</div>
-                        <div class="toggle-btn" onclick="setToggle('structural', false, this)">Non</div>
-                    </div>
+                    <label>Coût estimé des dommages ($)</label>
+                    <input type="number" id="acc-cost" placeholder="Ex: 5000" min="0">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Coût estimé des réparations ($)</label>
-                <input type="number" class="form-input" id="fCost" placeholder="Ex: 5000" min="0">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-textarea" id="fDesc" placeholder="Décrivez les circonstances de l'accident..." maxlength="500"></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Photos (optionnel)</label>
-                <div class="photo-zone" onclick="document.getElementById('photoInput').click()">
-                    <div class="pz-icon">📷</div>
-                    <p>Cliquez ou déposez des photos ici</p>
-                    <p class="pz-small">Max 5 photos, 5 Mo chacune (JPG, PNG, WebP)</p>
+
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Sévérité</label>
+            <div class="severity-row" id="severity-sel">
+                <div class="severity-btn" onclick="selectSeverity(this,'minor')">
+                    <div class="sv-icon">&#9898;</div>
+                    <div class="sv-label" style="color:var(--green)">Mineur</div>
+                    <div class="sv-desc">Cosmétique, bosses, égratignures</div>
                 </div>
-                <input type="file" id="photoInput" multiple accept="image/*" style="display:none" onchange="handlePhotos(this.files)">
-                <div class="photo-thumbs" id="photoThumbs"></div>
-            </div>`;
-    } else if (selectedReportType === 'service') {
-        html = `
+                <div class="severity-btn" onclick="selectSeverity(this,'moderate')">
+                    <div class="sv-icon">&#128992;</div>
+                    <div class="sv-label" style="color:var(--gold)">Modéré</div>
+                    <div class="sv-desc">Panneaux remplacés, mécanique touchée</div>
+                </div>
+                <div class="severity-btn" onclick="selectSeverity(this,'major')">
+                    <div class="sv-icon">&#128308;</div>
+                    <div class="sv-label" style="color:var(--red)">Majeur</div>
+                    <div class="sv-desc">Dommages structurels, perte totale</div>
+                </div>
+            </div>
+
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Point(s) d'impact</label>
+            <div class="impact-grid" id="impact-grid">
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="front-left">AV-G</div>
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="front">AVANT</div>
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="front-right">AV-D</div>
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="left">GAUCHE</div>
+                <div class="impact-center">&#128663;</div>
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="right">DROITE</div>
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="rear-left">AR-G</div>
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="rear">ARRIÈRE</div>
+                <div class="impact-zone" onclick="toggleImpact(this)" data-zone="rear-right">AR-D</div>
+            </div>
+
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Détails supplémentaires</label>
+            <div class="check-grid" style="margin-bottom:16px;">
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" id="acc-airbag">
+                    <div class="check-box"></div>
+                    <span class="check-label">Coussins gonflables déployés</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" id="acc-structural">
+                    <div class="check-box"></div>
+                    <span class="check-label">Dommages structurels</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" id="acc-flood">
+                    <div class="check-box"></div>
+                    <span class="check-label">Dommages par eau / inondation</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" id="acc-fire">
+                    <div class="check-box"></div>
+                    <span class="check-label">Dommages par feu</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" id="acc-theft">
+                    <div class="check-box"></div>
+                    <span class="check-label">Vol / vandalisme</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" id="acc-towing">
+                    <div class="check-box"></div>
+                    <span class="check-label">Remorquage requis</span>
+                </label>
+            </div>
+
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="acc-desc" placeholder="Décrivez les circonstances de l'accident..."></textarea>
+                </div>
+            </div>
+
+            <!-- PHOTOS ACCIDENT -->
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos de l'accident</label>
+            <div class="photo-zone" id="photo-accident" onclick="document.getElementById('file-accident').click()"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="handleDrop(event,'accident')">
+                <input type="file" id="file-accident" multiple accept="image/*" onchange="handleFiles(this.files,'accident')">
+                <div class="pz-icon">&#128247;</div>
+                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
+                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
+            </div>
+            <div class="photo-preview" id="preview-accident"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: SERVICE/ENTRETIEN -->
+    <div class="section type-section" id="sec-service" data-type="service">
+        <div class="section-header" onclick="toggleSection('sec-service')">
+            <div class="section-icon gold">&#128736;</div>
+            <div class="section-title">Détails de l'entretien / réparation</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Date du service</label>
-                    <input type="date" class="form-input" id="fDate">
+                    <label>Date du service</label>
+                    <input type="date" id="svc-date">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Lecture odomètre (km)</label>
-                    <input type="number" class="form-input" id="fOdometer" placeholder="Ex: 85000" min="0">
+                    <label>Odomètre (km)</label>
+                    <input type="number" id="svc-odo" placeholder="Ex: 85000" min="0">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Type de service</label>
-                <select class="form-select" id="fServiceType">
-                    <option value="">— Sélectionnez —</option>
-                    <option value="oil_change">Changement d'huile</option>
-                    <option value="brakes">Freins</option>
-                    <option value="transmission">Transmission</option>
-                    <option value="engine">Moteur</option>
-                    <option value="tires">Pneus</option>
-                    <option value="general_maintenance">Entretien général</option>
-                    <option value="electrical">Électrique</option>
-                    <option value="suspension">Suspension</option>
-                    <option value="other">Autre</option>
-                </select>
+
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Type(s) de service effectué</label>
+            <div class="check-grid" id="svc-types">
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="oil_change">
+                    <div class="check-box"></div>
+                    <span class="check-label">Changement d'huile</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="brakes">
+                    <div class="check-box"></div>
+                    <span class="check-label">Freins</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="tires">
+                    <div class="check-box"></div>
+                    <span class="check-label">Pneus</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="transmission">
+                    <div class="check-box"></div>
+                    <span class="check-label">Transmission</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="engine">
+                    <div class="check-box"></div>
+                    <span class="check-label">Moteur</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="suspension">
+                    <div class="check-box"></div>
+                    <span class="check-label">Suspension</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="exhaust">
+                    <div class="check-box"></div>
+                    <span class="check-label">Échappement</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="electrical">
+                    <div class="check-box"></div>
+                    <span class="check-label">Électrique</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="ac_heating">
+                    <div class="check-box"></div>
+                    <span class="check-label">A/C / Chauffage</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="body_paint">
+                    <div class="check-box"></div>
+                    <span class="check-label">Carrosserie / Peinture</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="battery">
+                    <div class="check-box"></div>
+                    <span class="check-label">Batterie</span>
+                </label>
+                <label class="check-item" onclick="toggleCheckSimple(this)">
+                    <input type="checkbox" value="other">
+                    <div class="check-box"></div>
+                    <span class="check-label">Autre</span>
+                </label>
             </div>
-            <div class="form-group">
-                <label class="form-label">Nom de l'atelier</label>
-                <input type="text" class="form-input" id="fFacility" placeholder="Ex: Garage Tremblay">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description des travaux</label>
-                <textarea class="form-textarea" id="fDesc" placeholder="Décrivez les travaux effectués..." maxlength="500"></textarea>
-            </div>
+
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Coût ($)</label>
-                    <input type="number" class="form-input" id="fCost" placeholder="Optionnel" min="0">
+                    <label>Établissement / Garage</label>
+                    <input type="text" id="svc-facility" placeholder="Nom du garage">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Pièces utilisées</label>
-                    <div class="toggle-group">
-                        <div class="toggle-btn" onclick="setParts('oem', this)" style="font-size:0.75rem">OEM</div>
-                        <div class="toggle-btn" onclick="setParts('aftermarket', this)" style="font-size:0.75rem">Après-marché</div>
-                        <div class="toggle-btn" onclick="setParts('used', this)" style="font-size:0.75rem">Usagées</div>
-                    </div>
+                    <label>Coût total ($)</label>
+                    <input type="number" id="svc-cost" placeholder="Ex: 850" min="0">
                 </div>
-            </div>`;
-    } else if (selectedReportType === 'ownership') {
-        html = `
-            <div class="form-group">
-                <label class="form-label">Date du changement</label>
-                <input type="date" class="form-input" id="fDate">
             </div>
+
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Type ancien propriétaire</label>
-                    <select class="form-select" id="fPrevOwner">
-                        <option value="personal">Personnel</option>
-                        <option value="commercial">Commercial</option>
-                        <option value="fleet">Flotte</option>
-                        <option value="rental">Location</option>
-                        <option value="government">Gouvernement</option>
-                        <option value="unknown">Inconnu</option>
+                    <label>Pièces utilisées</label>
+                    <select id="svc-parts">
+                        <option value="na">— Non spécifié —</option>
+                        <option value="oem">OEM (Manufacturier)</option>
+                        <option value="aftermarket">Aftermarket</option>
+                        <option value="used">Usagées</option>
+                        <option value="mixed">Mélange</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Type nouveau propriétaire</label>
-                    <select class="form-select" id="fNewOwner">
-                        <option value="personal">Personnel</option>
-                        <option value="commercial">Commercial</option>
-                        <option value="fleet">Flotte</option>
-                        <option value="rental">Location</option>
-                        <option value="government">Gouvernement</option>
-                        <option value="unknown">Inconnu</option>
+                    <label>&nbsp;</label>
+                </div>
+            </div>
+
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Description des travaux</label>
+                    <textarea id="svc-desc" placeholder="Détails des travaux effectués..."></textarea>
+                </div>
+            </div>
+
+            <!-- PHOTOS SERVICE -->
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos / Factures</label>
+            <div class="photo-zone" id="photo-service" onclick="document.getElementById('file-service').click()"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="handleDrop(event,'service')">
+                <input type="file" id="file-service" multiple accept="image/*" onchange="handleFiles(this.files,'service')">
+                <div class="pz-icon">&#128247;</div>
+                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
+                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
+            </div>
+            <div class="photo-preview" id="preview-service"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 6: CHANGEMENT PROPRIÉTAIRE -->
+    <div class="section type-section" id="sec-ownership" data-type="ownership">
+        <div class="section-header" onclick="toggleSection('sec-ownership')">
+            <div class="section-icon purple">&#128100;</div>
+            <div class="section-title">Changement de propriétaire</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date du transfert</label>
+                    <input type="date" id="own-date">
+                </div>
+                <div class="form-group">
+                    <label>Prix de vente ($)</label>
+                    <input type="number" id="own-price" placeholder="Ex: 15000" min="0">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Ancien propriétaire</label>
+                    <select id="own-prev">
+                        <option value="unknown">— Non spécifié —</option>
+                        <option value="particulier">Particulier</option>
+                        <option value="concessionnaire">Concessionnaire</option>
+                        <option value="location">Compagnie de location</option>
+                        <option value="flotte">Flotte commerciale</option>
+                        <option value="gouvernement">Gouvernement</option>
+                        <option value="assurance">Assurance (reconstruction)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nouveau propriétaire</label>
+                    <select id="own-new">
+                        <option value="unknown">— Non spécifié —</option>
+                        <option value="particulier">Particulier</option>
+                        <option value="concessionnaire">Concessionnaire</option>
+                        <option value="location">Compagnie de location</option>
+                        <option value="flotte">Flotte commerciale</option>
+                        <option value="gouvernement">Gouvernement</option>
                     </select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Province d'immatriculation</label>
-                    <select class="form-select" id="fProvince">
+                    <label>Province</label>
+                    <select id="own-province">
                         <option value="QC">Québec</option>
                         <option value="ON">Ontario</option>
-                        <option value="AB">Alberta</option>
-                        <option value="BC">Colombie-Britannique</option>
-                        <option value="MB">Manitoba</option>
-                        <option value="SK">Saskatchewan</option>
                         <option value="NB">Nouveau-Brunswick</option>
                         <option value="NS">Nouvelle-Écosse</option>
                         <option value="PE">Île-du-Prince-Édouard</option>
                         <option value="NL">Terre-Neuve</option>
+                        <option value="MB">Manitoba</option>
+                        <option value="SK">Saskatchewan</option>
+                        <option value="AB">Alberta</option>
+                        <option value="BC">Colombie-Britannique</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Prix de vente ($)</label>
-                    <input type="number" class="form-input" id="fSalePrice" placeholder="Optionnel" min="0">
+                    <label>Odomètre au transfert (km)</label>
+                    <input type="number" id="own-odo" placeholder="Ex: 120000" min="0">
                 </div>
-            </div>`;
-    } else if (selectedReportType === 'inspection') {
-        html = `
+            </div>
+
+            <!-- PHOTOS OWNERSHIP -->
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos / Documents</label>
+            <div class="photo-zone" id="photo-ownership" onclick="document.getElementById('file-ownership').click()"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="handleDrop(event,'ownership')">
+                <input type="file" id="file-ownership" multiple accept="image/*" onchange="handleFiles(this.files,'ownership')">
+                <div class="pz-icon">&#128247;</div>
+                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
+                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
+            </div>
+            <div class="photo-preview" id="preview-ownership"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 7: INSPECTION SAAQ -->
+    <div class="section type-section" id="sec-inspection" data-type="inspection">
+        <div class="section-header" onclick="toggleSection('sec-inspection')">
+            <div class="section-icon green">&#9989;</div>
+            <div class="section-title">Inspection SAAQ / Mécanique</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Date de l'inspection</label>
-                    <input type="date" class="form-input" id="fDate">
+                    <label>Date de l'inspection</label>
+                    <input type="date" id="insp-date">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Lecture odomètre (km)</label>
-                    <input type="number" class="form-input" id="fOdometer" placeholder="Ex: 85000" min="0">
+                    <label>Odomètre (km)</label>
+                    <input type="number" id="insp-odo" placeholder="Ex: 95000" min="0">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Résultat</label>
-                <div class="toggle-group">
-                    <div class="toggle-btn" onclick="setInspectionResult('pass', this)" style="font-size:1rem;padding:20px;">✅ Réussi</div>
-                    <div class="toggle-btn" onclick="setInspectionResult('fail', this)" style="font-size:1rem;padding:20px;">❌ Échoué</div>
+
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Résultat</label>
+            <div class="radio-cards" id="insp-result" style="max-width:400px;">
+                <div class="radio-card" onclick="selectRadio(this,'insp-result','pass')" style="border-color:rgba(42,157,143,0.3);">
+                    <input type="radio" name="insp_result" value="pass">
+                    <div class="rc-icon" style="color:var(--green)">&#9989;</div>
+                    <div class="rc-text" style="color:var(--green)">Réussi</div>
+                </div>
+                <div class="radio-card" onclick="selectRadio(this,'insp-result','fail')" style="border-color:rgba(230,57,70,0.3);">
+                    <input type="radio" name="insp_result" value="fail">
+                    <div class="rc-icon" style="color:var(--red)">&#10060;</div>
+                    <div class="rc-text" style="color:var(--red)">Échoué</div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Notes</label>
-                <textarea class="form-textarea" id="fNotes" placeholder="Notes de l'inspecteur (optionnel)..." maxlength="500"></textarea>
-            </div>`;
-    } else if (selectedReportType === 'recall_completion') {
-        html = `
-            <div class="form-group">
-                <label class="form-label">Numéro du rappel</label>
-                <input type="text" class="form-input" id="fRecallNum" placeholder="Ex: 2024-123">
+
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Notes / Détails</label>
+                    <textarea id="insp-notes" placeholder="Points vérifiés, défaillances observées..."></textarea>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Date de complétion</label>
-                <input type="date" class="form-input" id="fDate">
+
+            <!-- PHOTOS INSPECTION -->
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Photos du rapport</label>
+            <div class="photo-zone" id="photo-inspection" onclick="document.getElementById('file-inspection').click()"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="handleDrop(event,'inspection')">
+                <input type="file" id="file-inspection" multiple accept="image/*" onchange="handleFiles(this.files,'inspection')">
+                <div class="pz-icon">&#128247;</div>
+                <div class="pz-text">Glissez vos photos ici ou cliquez pour choisir</div>
+                <div class="pz-hint">PNG, JPG, WEBP — max 5 fichiers, 5 Mo chacun</div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Nom de l'établissement</label>
-                <input type="text" class="form-input" id="fFacility" placeholder="Ex: Concessionnaire Honda Laval">
-            </div>`;
+            <div class="photo-preview" id="preview-inspection"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 8: RAPPEL COMPLÉTÉ -->
+    <div class="section type-section" id="sec-recall" data-type="recall_completion">
+        <div class="section-header" onclick="toggleSection('sec-recall')">
+            <div class="section-icon cyan">&#128276;</div>
+            <div class="section-title">Rappel complété</div>
+            <button class="section-toggle">&#9660;</button>
+        </div>
+        <div class="section-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Numéro du rappel</label>
+                    <input type="text" id="rec-number" placeholder="Ex: 2024-123">
+                </div>
+                <div class="form-group">
+                    <label>Date de complétion</label>
+                    <input type="date" id="rec-date">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div class="form-group">
+                    <label>Établissement</label>
+                    <input type="text" id="rec-facility" placeholder="Concessionnaire ou garage ayant complété le rappel">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="section" id="sec-submit">
+        <div class="submit-section">
+            <div class="submit-confirm" onclick="toggleConfirm()">
+                <div class="check-box" id="confirm-box"></div>
+                <span>Je confirme que ces informations sont exactes et vérifiables.</span>
+            </div>
+            <button class="btn-submit" id="btn-submit" disabled onclick="submitForm()">
+                Soumettre la contribution
+            </button>
+            <div id="submit-status" style="margin-top:12px;font-size:0.85rem;"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success-overlay">
+    <div class="success-card">
+        <div class="success-check">&#9989;</div>
+        <h2>Contribution enregistrée!</h2>
+        <p style="color:var(--text-light);margin-bottom:12px;">Merci pour votre contribution à la base de données véhiculaire du Québec.</p>
+        <div class="ref-number" id="success-ref">REF: --</div>
+        <div class="hash-label">Empreinte cryptographique SHA-256</div>
+        <div class="hash-display" id="success-hash">--</div>
+        <p style="font-size:0.75rem;color:var(--text-light);">Cette empreinte garantit l'intégrité et l'authenticité de votre soumission.</p>
+        <button class="btn-new" onclick="resetForm()">Nouvelle contribution</button>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-brand">Propulsé par <strong>AutoVerif QC</strong> — SeoAI</div>
+    <div class="footer-legal">Les données soumises sont protégées par un système d'intégrité cryptographique SHA-256 à chaîne de blocs. Chaque soumission est liée de manière immuable à la précédente, garantissant l'inaltérabilité de l'historique.</div>
+</footer>
+
+<script>
+// ─── CONFIG ───
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8930'
+    : 'https://seoparai.com/autoverif';
+
+// ─── STATE ───
+let vehicleData = null;
+let selectedTypes = new Set();
+let selectedSeverity = null;
+let selectedImpacts = new Set();
+let selectedSubmitterType = null;
+let inspectionResult = null;
+let confirmed = false;
+let photoFiles = { accident: [], service: [], ownership: [], inspection: [] };
+
+// ─── LOAD STATS ───
+async function loadStats() {
+    try {
+        const r = await fetch(`${API_BASE}/api/collecte/stats`);
+        const d = await r.json();
+        document.getElementById('stat-submissions').textContent = d.total_submissions || 0;
+        document.getElementById('stat-vehicles').textContent = d.total_vehicles || 0;
+        document.getElementById('stat-contributors').textContent = d.total_contributors || 0;
+    } catch(e) {}
+}
+loadStats();
+
+// ─── VIN INPUT ───
+let vinTimeout = null;
+function handleVinInput(el) {
+    el.value = el.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, '');
+    const vin = el.value;
+    const status = document.getElementById('vin-status');
+
+    if (vin.length < 17) {
+        status.innerHTML = `<span style="color:var(--text-light)">${vin.length}/17 caractères</span>`;
+        document.getElementById('vehicle-card').classList.remove('show');
+        vehicleData = null;
+        return;
     }
 
-    container.innerHTML = html;
-    formData = {};
+    status.innerHTML = '<span style="color:var(--accent)"><span class="spinner"></span>Décodage VIN...</span>';
+
+    clearTimeout(vinTimeout);
+    vinTimeout = setTimeout(async () => {
+        try {
+            const r = await fetch(`${API_BASE}/api/collecte/vin-check/${vin}`);
+            const d = await r.json();
+            if (d.error) {
+                status.innerHTML = `<span style="color:var(--red)">${d.error}</span>`;
+                vehicleData = null;
+                return;
+            }
+            vehicleData = d;
+            const v = d.vehicle;
+            document.getElementById('vehicle-name').textContent = `${v.year} ${v.make} ${v.model}`;
+            document.getElementById('vehicle-vin').textContent = vin;
+            document.getElementById('vehicle-img').src = d.image_url;
+            document.getElementById('vehicle-img').style.display = '';
+
+            const specs = document.getElementById('vehicle-specs');
+            specs.innerHTML = '';
+            const tags = [v.body, v.engine ? v.engine + 'L' : '', v.fuel, v.drive, v.transmission].filter(Boolean);
+            tags.forEach(t => { specs.innerHTML += `<span class="spec-tag">${t}</span>`; });
+            if (d.existing_records > 0) {
+                specs.innerHTML += `<span class="spec-tag" style="background:rgba(0,180,216,0.15);color:var(--accent)">${d.existing_records} rapport(s) existant(s)</span>`;
+            }
+
+            document.getElementById('vehicle-card').classList.add('show');
+            status.innerHTML = `<span style="color:var(--green)">&#9989; Véhicule identifié</span>`;
+        } catch(e) {
+            status.innerHTML = `<span style="color:var(--red)">Erreur de connexion</span>`;
+            vehicleData = null;
+        }
+    }, 300);
 }
 
-// ─── Step 3 helpers ───
-function selectSeverity(el, val) {
-    document.querySelectorAll('.severity-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    formData.severity = val;
-}
-function selectImpact(el, val) {
-    document.querySelectorAll('.impact-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    formData.impact_point = val;
-}
-function setToggle(key, val, el) {
-    const group = el.parentElement;
-    group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active-yes', 'active-no'));
-    el.classList.add(val ? 'active-yes' : 'active-no');
-    formData[key === 'airbag' ? 'airbag_deployed' : 'structural_damage'] = val;
-}
-function setParts(val, el) {
-    el.parentElement.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active-yes'));
-    el.classList.add('active-yes');
-    formData.parts_type = val;
-}
-function setInspectionResult(val, el) {
-    el.parentElement.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active-pass', 'active-fail'));
-    el.classList.add(val === 'pass' ? 'active-pass' : 'active-fail');
-    formData.result = val;
+// ─── SECTION TOGGLE ───
+function toggleSection(id) {
+    document.getElementById(id).classList.toggle('collapsed');
 }
 
-let uploadedPhotos = [];
-function handlePhotos(files) {
-    const thumbs = document.getElementById('photoThumbs');
+// ─── RADIO CARDS ───
+function selectRadio(el, groupId, value) {
+    const group = document.getElementById(groupId);
+    group.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+
+    if (groupId === 'submitter-type') selectedSubmitterType = value;
+    if (groupId === 'insp-result') inspectionResult = value;
+}
+
+// ─── REPORT TYPE TOGGLE (multi-select) ───
+function toggleCheck(el, type) {
+    el.classList.toggle('checked');
+    const cb = el.querySelector('input');
+    cb.checked = !cb.checked;
+
+    if (cb.checked) {
+        selectedTypes.add(type);
+    } else {
+        selectedTypes.delete(type);
+    }
+    updateTypeSections();
+}
+
+function updateTypeSections() {
+    document.querySelectorAll('.type-section').forEach(sec => {
+        const t = sec.dataset.type;
+        if (selectedTypes.has(t)) {
+            sec.classList.add('active');
+        } else {
+            sec.classList.remove('active');
+        }
+    });
+}
+
+// ─── SIMPLE CHECKBOX TOGGLE ───
+function toggleCheckSimple(el) {
+    el.classList.toggle('checked');
+    const cb = el.querySelector('input');
+    cb.checked = !cb.checked;
+}
+
+// ─── SEVERITY ───
+function selectSeverity(el, level) {
+    document.querySelectorAll('#severity-sel .severity-btn').forEach(b => {
+        b.className = 'severity-btn';
+    });
+    el.classList.add('sel-' + level);
+    selectedSeverity = level;
+}
+
+// ─── IMPACT ZONES ───
+function toggleImpact(el) {
+    el.classList.toggle('hit');
+    const zone = el.dataset.zone;
+    if (selectedImpacts.has(zone)) {
+        selectedImpacts.delete(zone);
+    } else {
+        selectedImpacts.add(zone);
+    }
+}
+
+// ─── CONFIRM TOGGLE ───
+function toggleConfirm() {
+    confirmed = !confirmed;
+    const box = document.getElementById('confirm-box');
+    box.parentElement.classList.toggle('checked-state');
+    if (confirmed) {
+        box.style.borderColor = 'var(--accent)';
+        box.style.background = 'var(--accent)';
+    } else {
+        box.style.borderColor = '';
+        box.style.background = '';
+    }
+    document.getElementById('btn-submit').disabled = !confirmed;
+}
+
+// ─── PHOTO UPLOAD ───
+function handleFiles(files, category) {
     const maxFiles = 5;
-    for (let i = 0; i < files.length && uploadedPhotos.length < maxFiles; i++) {
-        const f = files[i];
-        if (!f.type.startsWith('image/') || f.size > 5 * 1024 * 1024) continue;
-        uploadedPhotos.push(f);
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.className = 'photo-thumb';
-            thumbs.appendChild(img);
-        };
-        reader.readAsDataURL(f);
+    const maxSize = 5 * 1024 * 1024;
+    const existing = photoFiles[category] || [];
+
+    for (let i = 0; i < files.length && existing.length < maxFiles; i++) {
+        if (files[i].size > maxSize) continue;
+        if (!files[i].type.startsWith('image/')) continue;
+        existing.push(files[i]);
     }
+    photoFiles[category] = existing;
+    renderPhotoPreviews(category);
 }
 
-// ─── Collect form data for step 3 ───
-function collectFormData() {
-    const data = { ...formData };
-    const fDate = document.getElementById('fDate');
-    if (fDate) data.date = fDate.value;
-    const fDesc = document.getElementById('fDesc');
-    if (fDesc) data.description = fDesc.value;
-    const fCost = document.getElementById('fCost');
-    if (fCost && fCost.value) data.estimated_cost = parseFloat(fCost.value);
-    if (fCost && fCost.value && selectedReportType === 'service') data.cost = parseFloat(fCost.value);
-    const fOdo = document.getElementById('fOdometer');
-    if (fOdo && fOdo.value) data.odometer_km = parseInt(fOdo.value);
-    const fST = document.getElementById('fServiceType');
-    if (fST) data.service_type = fST.value;
-    const fFac = document.getElementById('fFacility');
-    if (fFac) data.facility_name = fFac.value;
-    const fPrev = document.getElementById('fPrevOwner');
-    if (fPrev) data.previous_owner_type = fPrev.value;
-    const fNew = document.getElementById('fNewOwner');
-    if (fNew) data.new_owner_type = fNew.value;
-    const fProv = document.getElementById('fProvince');
-    if (fProv) data.province = fProv.value;
-    const fPrice = document.getElementById('fSalePrice');
-    if (fPrice && fPrice.value) data.sale_price = parseFloat(fPrice.value);
-    const fNotes = document.getElementById('fNotes');
-    if (fNotes) data.notes = fNotes.value;
-    const fRecall = document.getElementById('fRecallNum');
-    if (fRecall) data.recall_number = fRecall.value;
+function handleDrop(event, category) {
+    event.preventDefault();
+    event.currentTarget.classList.remove('drag-over');
+    handleFiles(event.dataTransfer.files, category);
+}
+
+function renderPhotoPreviews(category) {
+    const container = document.getElementById('preview-' + category);
+    container.innerHTML = '';
+    photoFiles[category].forEach((file, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'photo-thumb-wrap';
+        const img = document.createElement('img');
+        img.className = 'photo-thumb';
+        img.src = URL.createObjectURL(file);
+        const btn = document.createElement('button');
+        btn.className = 'photo-remove';
+        btn.innerHTML = '&#10005;';
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            photoFiles[category].splice(idx, 1);
+            renderPhotoPreviews(category);
+        };
+        wrap.appendChild(img);
+        wrap.appendChild(btn);
+        container.appendChild(wrap);
+    });
+}
+
+// ─── GATHER CHECKED VALUES ───
+function getCheckedValues(containerId) {
+    const items = [];
+    document.querySelectorAll(`#${containerId} .check-item.checked input, #${containerId} input:checked`).forEach(cb => {
+        if (cb.value) items.push(cb.value);
+    });
+    return items;
+}
+
+// ─── SUBMIT FORM ───
+async function submitForm() {
+    const vin = document.getElementById('vin-input').value.trim().toUpperCase();
+    if (!vin || vin.length !== 17) {
+        showStatus('Veuillez entrer un VIN valide de 17 caractères.', 'red');
+        return;
+    }
+    if (!selectedSubmitterType) {
+        showStatus('Veuillez indiquer qui vous êtes.', 'red');
+        return;
+    }
+    if (selectedTypes.size === 0) {
+        showStatus('Veuillez sélectionner au moins un type de rapport.', 'red');
+        return;
+    }
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Soumission en cours...';
+
+    const submitter = {
+        name: document.getElementById('sub-name').value.trim(),
+        email: document.getElementById('sub-email').value.trim(),
+        type: selectedSubmitterType,
+        company: document.getElementById('sub-company').value.trim(),
+    };
+
+    let lastResult = null;
+    let errorOccurred = false;
+
+    for (const reportType of selectedTypes) {
+        const data = buildReportData(reportType);
+
+        try {
+            const r = await fetch(`${API_BASE}/api/collecte/submit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ vin, report_type: reportType, submitter, data }),
+            });
+            const result = await r.json();
+
+            if (result.error) {
+                showStatus(`Erreur (${reportType}): ${result.error}`, 'red');
+                errorOccurred = true;
+                break;
+            }
+            lastResult = result;
+
+            // Upload photos for this report type if any
+            if (photoFiles[reportType] && photoFiles[reportType].length > 0) {
+                const formData = new FormData();
+                formData.append('submission_id', result.submission_id);
+                photoFiles[reportType].forEach(f => formData.append('photos', f));
+                try {
+                    await fetch(`${API_BASE}/api/collecte/upload`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+                } catch(e) {}
+            }
+        } catch(e) {
+            showStatus('Erreur de connexion au serveur.', 'red');
+            errorOccurred = true;
+            break;
+        }
+    }
+
+    if (!errorOccurred && lastResult) {
+        document.getElementById('success-ref').textContent = `REF: AVQ-${String(lastResult.submission_id).padStart(6, '0')}`;
+        document.getElementById('success-hash').textContent = lastResult.integrity_hash;
+        document.getElementById('success-overlay').classList.add('show');
+        loadStats();
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Soumettre la contribution';
+}
+
+function buildReportData(type) {
+    const data = {};
+
+    if (type === 'accident') {
+        data.date = document.getElementById('acc-date').value || null;
+        data.severity = selectedSeverity || 'minor';
+        data.impact_point = Array.from(selectedImpacts).join(',') || 'unknown';
+        data.airbag_deployed = document.getElementById('acc-airbag')?.checked || false;
+        data.structural_damage = document.getElementById('acc-structural')?.checked || false;
+        data.flood_damage = document.getElementById('acc-flood')?.checked || false;
+        data.fire_damage = document.getElementById('acc-fire')?.checked || false;
+        data.theft_vandalism = document.getElementById('acc-theft')?.checked || false;
+        data.towing_required = document.getElementById('acc-towing')?.checked || false;
+        data.estimated_cost = parseFloat(document.getElementById('acc-cost').value) || null;
+        data.description = document.getElementById('acc-desc').value.trim();
+    }
+
+    else if (type === 'service') {
+        data.date = document.getElementById('svc-date').value || null;
+        data.odometer_km = parseInt(document.getElementById('svc-odo').value) || null;
+        data.service_type = getServiceTypes().join(', ') || 'other';
+        data.facility_name = document.getElementById('svc-facility').value.trim();
+        data.cost = parseFloat(document.getElementById('svc-cost').value) || null;
+        data.parts_type = document.getElementById('svc-parts').value;
+        data.description = document.getElementById('svc-desc').value.trim();
+    }
+
+    else if (type === 'ownership') {
+        data.date = document.getElementById('own-date').value || null;
+        data.sale_price = parseFloat(document.getElementById('own-price').value) || null;
+        data.previous_owner_type = document.getElementById('own-prev').value;
+        data.new_owner_type = document.getElementById('own-new').value;
+        data.province = document.getElementById('own-province').value;
+        data.odometer_km = parseInt(document.getElementById('own-odo').value) || null;
+    }
+
+    else if (type === 'inspection') {
+        data.date = document.getElementById('insp-date').value || null;
+        data.result = inspectionResult || 'pass';
+        data.odometer_km = parseInt(document.getElementById('insp-odo').value) || null;
+        data.notes = document.getElementById('insp-notes').value.trim();
+    }
+
+    else if (type === 'recall_completion') {
+        data.recall_number = document.getElementById('rec-number').value.trim();
+        data.date = document.getElementById('rec-date').value || null;
+        data.facility_name = document.getElementById('rec-facility').value.trim();
+    }
+
     return data;
 }
 
-// ─── Step 4: Build review ───
-function buildReview() {
-    const data = collectFormData();
-    formData = data;
-    const v = vehicleData.vehicle;
-    const typeLabels = {
-        accident: 'Accident', service: 'Entretien / Réparation',
-        ownership: 'Changement de propriétaire', inspection: 'Inspection SAAQ',
-        recall_completion: 'Rappel complété'
-    };
-    const subTypeLabels = { garage: 'Garage', dealer: 'Concessionnaire', insurance: 'Assurance', individual: 'Particulier' };
-    const severityLabels = { minor: 'Mineur', moderate: 'Modéré', major: 'Majeur' };
-    const impactLabels = { front: 'Avant', rear: 'Arrière', left: 'Gauche', right: 'Droite', rollover: 'Tonneau', multiple: 'Multiple' };
-    const serviceLabels = { oil_change: 'Changement d\'huile', brakes: 'Freins', transmission: 'Transmission', engine: 'Moteur', tires: 'Pneus', general_maintenance: 'Entretien général', electrical: 'Électrique', suspension: 'Suspension', other: 'Autre' };
-    const ownerLabels = { personal: 'Personnel', commercial: 'Commercial', fleet: 'Flotte', rental: 'Location', government: 'Gouvernement', unknown: 'Inconnu' };
-    const partsLabels = { oem: 'OEM', aftermarket: 'Après-marché', used: 'Usagées', na: 'N/A' };
-
-    let html = `
-        <div class="review-section">
-            <div class="rs-title">Véhicule</div>
-            <div class="review-row"><span class="rr-label">VIN</span><span class="rr-value" style="font-family:monospace;letter-spacing:1px;">${vinInput.value}</span></div>
-            <div class="review-row"><span class="rr-label">Véhicule</span><span class="rr-value">${v.year} ${v.make} ${v.model}</span></div>
-        </div>
-        <div class="review-section">
-            <div class="rs-title">Contributeur</div>
-            <div class="review-row"><span class="rr-label">Type</span><span class="rr-value">${subTypeLabels[selectedSubmitterType] || selectedSubmitterType}</span></div>
-            <div class="review-row"><span class="rr-label">Nom</span><span class="rr-value">${document.getElementById('subName').value}</span></div>
-            <div class="review-row"><span class="rr-label">Courriel</span><span class="rr-value">${document.getElementById('subEmail').value}</span></div>
-            ${selectedSubmitterType !== 'individual' ? `<div class="review-row"><span class="rr-label">Entreprise</span><span class="rr-value">${document.getElementById('subCompany').value || '—'}</span></div>` : ''}
-        </div>
-        <div class="review-section">
-            <div class="rs-title">${typeLabels[selectedReportType]}</div>`;
-
-    if (data.date) html += `<div class="review-row"><span class="rr-label">Date</span><span class="rr-value">${data.date}</span></div>`;
-
-    if (selectedReportType === 'accident') {
-        if (data.severity) html += `<div class="review-row"><span class="rr-label">Sévérité</span><span class="rr-value">${severityLabels[data.severity]}</span></div>`;
-        if (data.impact_point) html += `<div class="review-row"><span class="rr-label">Point d'impact</span><span class="rr-value">${impactLabels[data.impact_point]}</span></div>`;
-        if (data.airbag_deployed !== undefined) html += `<div class="review-row"><span class="rr-label">Coussins gonflables</span><span class="rr-value">${data.airbag_deployed ? 'Oui' : 'Non'}</span></div>`;
-        if (data.structural_damage !== undefined) html += `<div class="review-row"><span class="rr-label">Dommages structurels</span><span class="rr-value">${data.structural_damage ? 'Oui' : 'Non'}</span></div>`;
-        if (data.estimated_cost) html += `<div class="review-row"><span class="rr-label">Coût estimé</span><span class="rr-value">${parseFloat(data.estimated_cost).toLocaleString('fr-CA')} $</span></div>`;
-        if (data.description) html += `<div class="review-row"><span class="rr-label">Description</span><span class="rr-value" style="max-width:300px">${data.description}</span></div>`;
-    } else if (selectedReportType === 'service') {
-        if (data.odometer_km) html += `<div class="review-row"><span class="rr-label">Odomètre</span><span class="rr-value">${parseInt(data.odometer_km).toLocaleString('fr-CA')} km</span></div>`;
-        if (data.service_type) html += `<div class="review-row"><span class="rr-label">Type de service</span><span class="rr-value">${serviceLabels[data.service_type] || data.service_type}</span></div>`;
-        if (data.facility_name) html += `<div class="review-row"><span class="rr-label">Atelier</span><span class="rr-value">${data.facility_name}</span></div>`;
-        if (data.description) html += `<div class="review-row"><span class="rr-label">Travaux</span><span class="rr-value" style="max-width:300px">${data.description}</span></div>`;
-        if (data.cost) html += `<div class="review-row"><span class="rr-label">Coût</span><span class="rr-value">${parseFloat(data.cost).toLocaleString('fr-CA')} $</span></div>`;
-        if (data.parts_type) html += `<div class="review-row"><span class="rr-label">Pièces</span><span class="rr-value">${partsLabels[data.parts_type]}</span></div>`;
-    } else if (selectedReportType === 'ownership') {
-        if (data.previous_owner_type) html += `<div class="review-row"><span class="rr-label">Ancien proprio</span><span class="rr-value">${ownerLabels[data.previous_owner_type]}</span></div>`;
-        if (data.new_owner_type) html += `<div class="review-row"><span class="rr-label">Nouveau proprio</span><span class="rr-value">${ownerLabels[data.new_owner_type]}</span></div>`;
-        if (data.province) html += `<div class="review-row"><span class="rr-label">Province</span><span class="rr-value">${data.province}</span></div>`;
-        if (data.sale_price) html += `<div class="review-row"><span class="rr-label">Prix de vente</span><span class="rr-value">${parseFloat(data.sale_price).toLocaleString('fr-CA')} $</span></div>`;
-    } else if (selectedReportType === 'inspection') {
-        if (data.result) html += `<div class="review-row"><span class="rr-label">Résultat</span><span class="rr-value" style="color:${data.result === 'pass' ? 'var(--green)' : 'var(--red)'};font-weight:800;">${data.result === 'pass' ? '✅ Réussi' : '❌ Échoué'}</span></div>`;
-        if (data.odometer_km) html += `<div class="review-row"><span class="rr-label">Odomètre</span><span class="rr-value">${parseInt(data.odometer_km).toLocaleString('fr-CA')} km</span></div>`;
-        if (data.notes) html += `<div class="review-row"><span class="rr-label">Notes</span><span class="rr-value" style="max-width:300px">${data.notes}</span></div>`;
-    } else if (selectedReportType === 'recall_completion') {
-        if (data.recall_number) html += `<div class="review-row"><span class="rr-label">Numéro du rappel</span><span class="rr-value">${data.recall_number}</span></div>`;
-        if (data.facility_name) html += `<div class="review-row"><span class="rr-label">Établissement</span><span class="rr-value">${data.facility_name}</span></div>`;
-    }
-
-    html += `</div>`;
-    document.getElementById('reviewContent').innerHTML = html;
-    document.getElementById('confirmCheck').checked = false;
-    document.getElementById('btnSubmit').disabled = true;
-}
-
-function toggleSubmit() {
-    document.getElementById('btnSubmit').disabled = !document.getElementById('confirmCheck').checked;
-}
-
-// ─── Submit ───
-async function submitForm() {
-    const btn = document.getElementById('btnSubmit');
-    btn.disabled = true;
-    btn.textContent = 'Envoi en cours...';
-
-    const payload = {
-        vin: vinInput.value,
-        report_type: selectedReportType,
-        submitter: {
-            name: document.getElementById('subName').value.trim(),
-            email: document.getElementById('subEmail').value.trim(),
-            type: selectedSubmitterType,
-            company: document.getElementById('subCompany').value.trim(),
-        },
-        data: formData,
-    };
-
-    try {
-        const r = await fetch(API_BASE + '/api/collecte/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-        });
-        const d = await r.json();
-        if (d.success) {
-            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-            document.querySelector('.wizard-progress').style.display = 'none';
-            const ss = document.getElementById('successScreen');
-            ss.classList.add('visible');
-            document.getElementById('ssRef').textContent = `Référence: #AV-${String(d.submission_id).padStart(5, '0')}`;
-            if (d.integrity_hash) {
-                document.getElementById('ssHashValue').textContent = d.integrity_hash;
-                document.getElementById('ssHash').style.display = 'block';
-            } else {
-                document.getElementById('ssHash').style.display = 'none';
-            }
-        } else {
-            alert(d.error || 'Erreur lors de la soumission.');
-            btn.disabled = false;
-            btn.innerHTML = 'Soumettre <span class="shimmer"></span>';
+function getServiceTypes() {
+    const types = [];
+    document.querySelectorAll('#svc-types .check-item').forEach(item => {
+        const cb = item.querySelector('input');
+        if (item.classList.contains('checked') || cb.checked) {
+            types.push(cb.value);
         }
-    } catch(e) {
-        alert('Erreur de connexion au serveur.');
-        btn.disabled = false;
-        btn.innerHTML = 'Soumettre <span class="shimmer"></span>';
-    }
+    });
+    return types;
 }
 
-// ─── Reset ───
-function resetWizard() {
-    currentStep = 1;
+function showStatus(msg, color) {
+    const el = document.getElementById('submit-status');
+    el.innerHTML = `<span style="color:var(--${color})">${msg}</span>`;
+    setTimeout(() => el.innerHTML = '', 5000);
+}
+
+// ─── RESET ───
+function resetForm() {
+    document.getElementById('success-overlay').classList.remove('show');
+    document.getElementById('vin-input').value = '';
+    document.getElementById('vehicle-card').classList.remove('show');
     vehicleData = null;
+    selectedTypes.clear();
+    selectedSeverity = null;
+    selectedImpacts.clear();
     selectedSubmitterType = null;
-    selectedReportType = null;
-    formData = {};
-    uploadedPhotos = [];
-    vinInput.value = '';
-    document.getElementById('vinStatus').textContent = '';
-    document.getElementById('vehicleCard').classList.remove('visible');
-    document.getElementById('subName').value = '';
-    document.getElementById('subEmail').value = '';
-    document.getElementById('subCompany').value = '';
-    document.getElementById('companyGroup').style.display = 'block';
-    document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
-    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
-    document.getElementById('btnStep1').disabled = true;
-    document.getElementById('btnStep2').disabled = true;
-    document.getElementById('step3Fields').innerHTML = '';
-    document.getElementById('reviewContent').innerHTML = '';
-    document.getElementById('successScreen').classList.remove('visible');
-    document.querySelector('.wizard-progress').style.display = 'flex';
-    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('step1').classList.add('active');
-    document.querySelectorAll('.wp-step').forEach(s => {
-        s.classList.remove('active', 'done');
-        s.querySelector('.wp-dot').classList.remove('active', 'done');
+    inspectionResult = null;
+    confirmed = false;
+    photoFiles = { accident: [], service: [], ownership: [], inspection: [] };
+
+    // Reset checkboxes
+    document.querySelectorAll('.check-item.checked').forEach(el => el.classList.remove('checked'));
+    document.querySelectorAll('.check-item input').forEach(cb => cb.checked = false);
+    // Reset radio cards
+    document.querySelectorAll('.radio-card.selected').forEach(el => el.classList.remove('selected'));
+    // Reset severity
+    document.querySelectorAll('.severity-btn').forEach(b => b.className = 'severity-btn');
+    // Reset impacts
+    document.querySelectorAll('.impact-zone.hit').forEach(el => el.classList.remove('hit'));
+    // Reset inputs
+    document.querySelectorAll('input[type="text"],input[type="number"],input[type="email"],input[type="date"],textarea').forEach(el => el.value = '');
+    document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+    // Reset photos
+    ['accident','service','ownership','inspection'].forEach(c => {
+        document.getElementById('preview-' + c).innerHTML = '';
     });
-    document.querySelectorAll('.wp-line').forEach(l => l.classList.remove('done'));
-    document.querySelector('.wp-step[data-step="1"]').classList.add('active');
-    document.querySelector('.wp-step[data-step="1"] .wp-dot').classList.add('active');
+    // Reset confirm
+    const box = document.getElementById('confirm-box');
+    box.style.borderColor = '';
+    box.style.background = '';
+    document.getElementById('btn-submit').disabled = true;
+    // Reset type sections
+    updateTypeSections();
+    // Reset VIN status
+    document.getElementById('vin-status').innerHTML = '';
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-// ─── GSAP reveal ───
-gsap.from('.hero-content', { y: 40, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
-gsap.from('.glass-card', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.5 });
 </script>
+
 </body>
 </html>
