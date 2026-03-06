@@ -4177,17 +4177,17 @@
     // Extra safety: refresh again after 1.5s for slow connections
     setTimeout(() => ScrollTrigger.refresh(true), 1500);
 
-    // MOBILE FALLBACK: force all animated elements visible after 3s to prevent blank spaces
-    if (window.innerWidth <= 768) {
-        setTimeout(() => {
-            document.querySelectorAll('.card, .legal-block, .pricing-card, .timeline-item, .finance-card, .section-title, .section-label, .section-subtitle, .highlight-box, .table-wrapper, .accordion-item, .cta-section, .reveal').forEach(el => {
+    // FALLBACK: force all animated elements visible after 3s to prevent blank spaces (desktop + mobile)
+    setTimeout(() => {
+        document.querySelectorAll('.card, .legal-block, .pricing-card, .timeline-item, .finance-card, .section-title, .section-label, .section-subtitle, .highlight-box, .table-wrapper, .accordion-item, .cta-section, .reveal').forEach(el => {
+            if (getComputedStyle(el).opacity === '0') {
                 el.style.opacity = '1';
                 el.style.transform = 'none';
                 el.style.visibility = 'visible';
-            });
-            ScrollTrigger.refresh(true);
-        }, 2500);
-    }
+            }
+        });
+        ScrollTrigger.refresh(true);
+    }, 3000);
 
     // --- Hero stats counter animation (improved) ---
     function animateCounter(el, target, suffix) {
